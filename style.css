@@ -188,44 +188,32 @@ ul {
 }
 
 .header__container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+.header__top-row,
+.header__bottom-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 15px 30px;
 }
 
-.header__left,
-.header__right,
-.header__messengers,
-.header__actions {
+.header__top-row {
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header__section {
     display: flex;
     align-items: center;
-    gap: 8px;
-}
-
-.header__messenger-link {
-    width: 24px;
-    height: 24px;
-    padding: 4px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--green);
-}
-
-.header__messenger-link svg {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    gap: 20px;
 }
 
 .header__logo {
     font-weight: bold;
     font-size: 24px;
-    margin-right: 20px;
 }
 
 .header__lang-switcher ul {
@@ -237,15 +225,68 @@ ul {
     font-weight: 500;
 }
 
-.header__nav a {
-    font-size: 16px;
+.header__contacts {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header__contact-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.header__contact-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.header__contact-text {
     position: relative;
-    padding-bottom: 5px;
+    transition: transform 0.3s ease;
+}
+
+.header__contact-link:hover .header__contact-text {
+    transform: translateX(4px);
+}
+
+.header__contact-text::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: var(--green);
+    bottom: -2px;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.header__contact-link:hover .header__contact-text::after {
+    transform: scaleX(1);
+}
+
+/* --- Navigation Bar (Bottom Row) --- */
+.header__bottom-row {
+    padding: 10px 0;
+}
+
+.header__nav {
+    flex-grow: 1;
 }
 
 .header__nav .header__menu-list {
     display: flex;
     gap: 30px;
+}
+
+.header__nav a {
+    font-size: 16px;
+    position: relative;
+    padding-bottom: 5px;
 }
 
 .header__nav > .header__menu-list > .menu-item > a::after {
@@ -264,105 +305,60 @@ ul {
     width: 100%;
 }
 
-.header__contacts {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-}
 
-.header__contact-link {
+/* --- 4. New Theme Switcher --- */
+.theme-switcher {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.theme-switcher__input {
+    display: none;
+}
+
+.theme-switcher__label {
     position: relative;
+    width: 44px;
+    height: 24px;
+    background-color: var(--grey);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.header__contact-icon {
-    display: inline-flex;
-    width: 20px;
-    height: 20px;
-}
-
-.header__contact-text {
-    position: relative;
-    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.header__contact-link:hover .header__contact-text {
-    transform: translateX(5px);
-}
-
-.header__contact-text::after {
+.theme-switcher__label::after {
     content: '';
     position: absolute;
-    width: 100%;
-    height: 1px;
-    background-color: var(--green);
-    bottom: -2px;
-    left: 0;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.header__contact-link:hover .header__contact-text::after {
-    transform: scaleX(1);
-}
-
-.header__theme-toggle {
-    background: transparent;
-    border: 1px solid var(--border-color);
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background-color: var(--white);
     border-radius: 50%;
-    width: 42px;
-    height: 42px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.3s ease;
-}
-
-.header__theme-icon {
-    width: 24px;
-    height: 24px;
-    transition: all 0.3s ease;
-    color: var(--white);
-}
-
-.header__theme-toggle:hover {
-    transform: rotate(15deg);
-    border-color: var(--green);
-}
-
-body.light-theme .header__theme-icon {
-    color: #f1c40f;
-}
-
-
-/* --- 4. Sub-Menu (Mega Menu) --- */
-.header__nav .menu-item-has-children {
-    position: relative;
-}
-
-.header__nav .menu-item-has-children > a {
-    display: flex; /* Важно для выравнивания иконки */
-    align-items: center;
-    gap: 6px;
-}
-
-.header__menu-chevron {
-    width: 16px;
-    height: 16px;
     transition: transform 0.3s ease;
 }
 
-.header__nav .menu-item-has-children:hover .header__menu-chevron {
-    transform: rotate(180deg);
+.theme-switcher__input:checked + .theme-switcher__label {
+    background-color: var(--green);
 }
 
-.header__nav .sub-menu {
+.theme-switcher__input:checked + .theme-switcher__label::after {
+    transform: translateX(20px);
+}
+
+.theme-switcher__text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.header__bottom-row .menu-item-has-children {
+    position: relative;
+}
+
+.header__bottom-row .sub-menu {
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px);
@@ -379,18 +375,14 @@ body.light-theme .header__theme-icon {
     z-index: 99;
 }
 
-.header__nav .menu-item-has-children:hover > .sub-menu {
+.header__bottom-row .menu-item-has-children:hover > .sub-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
     transition-delay: 0s;
 }
 
-.header__nav .sub-menu li {
-    width: 100%;
-}
-
-.header__nav .sub-menu a {
+.header__bottom-row .sub-menu a {
     display: block;
     padding: 8px 15px;
     font-size: 15px;
@@ -398,10 +390,25 @@ body.light-theme .header__theme-icon {
     transition: background-color 0.2s ease;
 }
 
-.header__nav .sub-menu a:hover {
+.header__bottom-row .sub-menu a:hover {
     background-color: var(--border-color);
 }
 
+.header__bottom-row .menu-item-has-children > a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.header__bottom-row .header__menu-chevron {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+}
+
+.header__bottom-row .menu-item-has-children:hover .header__menu-chevron {
+    transform: rotate(180deg);
+}
 
 /* --- 5. Burger Menu --- */
 .header__burger-button {
@@ -435,7 +442,7 @@ body.light-theme .header__theme-icon {
     transform: translateY(-10.5px) rotate(-45deg);
 }
 
-.mobile-menu__footer {
+.mobile-menu-panel {
     display: none;
 }
 
@@ -443,23 +450,37 @@ body.light-theme .header__theme-icon {
 
 @media (max-width: 1024px) {
     .header__container {
-        padding: 15px 20px;
+        padding: 0; /* Убираем боковые отступы у контейнера */
     }
 
+    /* Верхний ряд становится единственным видимым рядом */
+    .header__top-row {
+        padding: 15px 20px;
+        border-bottom: none; /* Убираем нижнюю границу */
+    }
+
+    /* Полностью скрываем нижний ряд с навигацией и переключателем темы */
+    .header__bottom-row {
+        display: none;
+    }
+
+    /* В верхнем ряду скрываем все, кроме логотипа */
+    .header__section--right .header__contacts,
+    .header__section--right .header__messengers,
+    .header__section--right .header__actions,
+    .header__section--left .header__lang-switcher {
+        display: none;
+    }
+
+    /* Показываем кнопку бургера */
     .header__burger-button {
         display: flex;
-        order: 3;
     }
     
-    .header__right {
-        order: 2;
-    }
-
-    .header__left {
-        order: 1;
-    }
-
-    .header__nav {
+    /* --- Стили для выезжающей панели --- */
+    
+    .mobile-menu-panel {
+        display: block;
         position: fixed;
         top: 0;
         left: 0;
@@ -478,47 +499,39 @@ body.light-theme .header__theme-icon {
         overflow-y: auto;
     }
     
-    .header__nav.is-open {
+    .mobile-menu-panel.is-open {
         transform: translateX(0);
         visibility: visible;
     }
 
-    .header__nav .header__menu-list {
+    .mobile-menu-panel .header__menu-list {
         flex-direction: column;
         text-align: center;
         gap: 15px;
     }
 
-    .header__nav a {
+    .mobile-menu-panel a {
         font-size: 22px;
     }
 
-    .header__lang-switcher,
-    .header__contacts,
-    .header__messengers,
-    .header__actions {
-        display: none;
-    }
-
-    /* Стили для аккордеона */
-    .header__nav .menu-item-has-children > a {
+    .mobile-menu-panel .menu-item-has-children > a {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 8px;
     }
 
-    .header__nav .header__menu-chevron {
+    .mobile-menu-panel .header__menu-chevron {
         width: 16px;
         height: 16px;
         transition: transform 0.3s ease;
     }
 
-    .header__nav .menu-item-has-children.is-open > a > .header__menu-chevron {
+    .mobile-menu-panel .menu-item-has-children.is-open > a > .header__menu-chevron {
         transform: rotate(180deg);
     }
     
-    .header__nav .sub-menu {
+    .mobile-menu-panel .sub-menu {
         overflow: hidden;
         max-height: 0;
         transition: max-height 0.4s ease-in-out;
@@ -534,7 +547,7 @@ body.light-theme .header__theme-icon {
         padding: 0;
     }
 
-    .header__nav .sub-menu a {
+    .mobile-menu-panel .sub-menu a {
         font-size: 18px;
         padding: 12px 10px;
     }
@@ -549,17 +562,18 @@ body.light-theme .header__theme-icon {
         padding-top: 25px;
     }
 
-    .header__nav .header__actions,
-    .header__nav .header__contacts,
-    .header__nav .header__lang-switcher {
+    .mobile-menu__footer .header__actions,
+    .mobile-menu__footer .header__contacts,
+    .mobile-menu__footer .header__lang-switcher {
         display: flex;
     }
 
-    .header__nav .header__contacts {
+    .mobile-menu__footer .header__contacts {
        flex-direction: column;
        gap: 15px;
     }
-    .header__nav .header__lang-switcher ul {
+
+    .mobile-menu__footer .header__lang-switcher ul {
         gap: 20px;
     }
 }
