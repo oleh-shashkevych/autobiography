@@ -4,8 +4,10 @@
 */
 
 function autobiography_scripts() {
-    // Подключаем основной файл стилей style.css
     wp_enqueue_style( 'autobiography-style', get_stylesheet_uri(), array(), '1.0.0' );
+
+    // Добавьте эту строку
+    wp_enqueue_script( 'autobiography-main-js', get_template_directory_uri() . '/assets/js/main.js', array(), '1.0.0', true );
 }
 add_action( 'wp_enqueue_scripts', 'autobiography_scripts' );
 
@@ -89,3 +91,12 @@ function autobiography_acf_add_local_field_groups() {
     }
 }
 add_action('acf/init', 'autobiography_acf_add_local_field_groups');
+
+function autobiography_add_chevron_to_menu_items($title, $item, $args, $depth) {
+    if ( 'header_menu' === $args->theme_location && in_array('menu-item-has-children', $item->classes) ) {
+        $svg_icon = '<svg class="header__menu-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
+        $title .= $svg_icon;
+    }
+    return $title;
+}
+add_filter('nav_menu_item_title', 'autobiography_add_chevron_to_menu_items', 10, 4);
