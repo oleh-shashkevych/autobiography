@@ -12,26 +12,95 @@ function autobiography_scripts() {
     // Подключаем скрипт Swiper.js
     wp_enqueue_script( 'swiper-js', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11.0', true );
 
-    wp_enqueue_script( 'autobiography-main-js', get_template_directory_uri() . '/assets/js/main.js', array('swiper-js'), '1.0.0', true ); // Добавляем swiper-js в зависимости
+    wp_enqueue_script( 'autobiography-main-js', get_template_directory_uri() . '/assets/js/main.js', array('swiper-js'), '1.0.0', true );
 }
 add_action( 'wp_enqueue_scripts', 'autobiography_scripts' );
 
 function autobiography_setup() {
     add_theme_support( 'title-tag' );
+    add_theme_support( 'post-thumbnails' ); // Добавляем поддержку миниатюр для постов
 }
 add_action( 'after_setup_theme', 'autobiography_setup' );
 
 function autobiography_menus() {
     register_nav_menus( array(
         'header_menu'          => 'Головне меню в шапці',
-        'footer_services_menu' => 'Меню послуг в футері', // Добавить
-        'footer_sitemap_menu'  => 'Карта сайту в футері'    // Добавить
+        'footer_services_menu' => 'Меню послуг в футері',
+        'footer_sitemap_menu'  => 'Карта сайту в футері'
     ) );
 }
 add_action( 'init', 'autobiography_menus' );
 
+// --- Custom Post Type for Cars ---
+function autobiography_register_car_post_type() {
+    $labels = array(
+        'name'                  => 'Автомобілі',
+        'singular_name'         => 'Автомобіль',
+        'menu_name'             => 'Каталог Авто',
+        'name_admin_bar'        => 'Автомобіль',
+        'add_new'               => 'Додати авто',
+        'add_new_item'          => 'Додати новий автомобіль',
+        'new_item'              => 'Новий автомобіль',
+        'edit_item'             => 'Редагувати автомобіль',
+        'view_item'             => 'Переглянути автомобіль',
+        'all_items'             => 'Всі автомобілі',
+        'search_items'          => 'Шукати автомобілі',
+        'parent_item_colon'     => 'Батьківський автомобіль:',
+        'not_found'             => 'Автомобілі не знайдено.',
+        'not_found_in_trash'    => 'Автомобілі не знайдено в кошику.',
+    );
+
+    $args = array(
+        'labels'             => $labels,
+        'public'             => true,
+        'publicly_queryable' => true,
+        'show_ui'            => true,
+        'show_in_menu'       => true,
+        'query_var'          => true,
+        'rewrite'            => array( 'slug' => 'cars' ),
+        'capability_type'    => 'post',
+        'has_archive'        => true,
+        'hierarchical'       => false,
+        'menu_position'      => 5,
+        'supports'           => array( 'title', 'editor', 'thumbnail' ),
+        'menu_icon'          => 'dashicons-car',
+    );
+
+    register_post_type( 'car', $args );
+}
+add_action( 'init', 'autobiography_register_car_post_type' );
+
+// --- Custom Taxonomies for Cars ---
+function autobiography_register_car_taxonomies() {
+    // Brand
+    register_taxonomy('brand', 'car', array(
+        'label' => 'Марка',
+        'rewrite' => array('slug' => 'brand'),
+        'hierarchical' => true,
+    ));
+    // Body Type
+    register_taxonomy('body_type', 'car', array(
+        'label' => 'Тип кузова',
+        'rewrite' => array('slug' => 'body-type'),
+        'hierarchical' => true,
+    ));
+    // Fuel Type
+    register_taxonomy('fuel_type', 'car', array(
+        'label' => 'Тип палива',
+        'rewrite' => array('slug' => 'fuel-type'),
+        'hierarchical' => true,
+    ));
+    // Transmission
+    register_taxonomy('transmission', 'car', array(
+        'label' => 'Коробка передач',
+        'rewrite' => array('slug' => 'transmission'),
+        'hierarchical' => true,
+    ));
+}
+add_action( 'init', 'autobiography_register_car_taxonomies' );
+
+
 if ( function_exists('acf_add_options_page') ) {
-    
     acf_add_options_page(array(
         'page_title'    => 'Загальні налаштування теми',
         'menu_title'    => 'Налаштування теми',
@@ -39,7 +108,6 @@ if ( function_exists('acf_add_options_page') ) {
         'capability'    => 'edit_posts',
         'redirect'      => false
     ));
-    
 }
 
 function autobiography_acf_add_local_field_groups() {
@@ -257,6 +325,189 @@ function autobiography_acf_add_local_field_groups() {
                     ),
                 ),
             ),
+        ));
+
+        acf_add_local_field_group(array(
+            'key' => 'group_car_details',
+            'title' => 'Інформація про автомобіль',
+            'fields' => array(
+                // --- Tab: Main Info ---
+                array(
+                    'key' => 'field_tab_main_info',
+                    'label' => 'Основна інформація',
+                    'type' => 'tab',
+                ),
+                array(
+                    'key' => 'field_car_model',
+                    'label' => 'Модель',
+                    'name' => 'car_model',
+                    'type' => 'text',
+                    'required' => 1,
+                ),
+                array(
+                    'key' => 'field_car_year',
+                    'label' => 'Рік випуску',
+                    'name' => 'car_year',
+                    'type' => 'number',
+                    'required' => 1,
+                    'min' => 1900,
+                    'max' => date('Y') + 1,
+                ),
+                array(
+                    'key' => 'field_car_price_usd',
+                    'label' => 'Ціна ($)',
+                    'name' => 'price_usd',
+                    'type' => 'number',
+                    'required' => 1,
+                    'prepend' => '$',
+                ),
+                array(
+                    'key' => 'field_car_price_uah',
+                    'label' => 'Ціна (₴)',
+                    'name' => 'price_uah',
+                    'type' => 'number',
+                    'prepend' => '₴',
+                    'instructions' => 'Якщо залишити пустим, ціна буде розрахована автоматично за курсом.',
+                ),
+                array(
+                    'key' => 'field_car_old_price_usd',
+                    'label' => 'Стара ціна ($)',
+                    'name' => 'old_price_usd',
+                    'type' => 'number',
+                    'prepend' => '$',
+                    'instructions' => 'Буде відображатися закресленою.',
+                ),
+                array(
+                    'key' => 'field_car_status',
+                    'label' => 'Статус',
+                    'name' => 'car_status',
+                    'type' => 'select',
+                    'choices' => array(
+                        'available' => 'В наявності',
+                        'preparing' => 'В підготовці',
+                        'sold' => 'Продано',
+                    ),
+                    'default_value' => 'available',
+                    'required' => 1,
+                ),
+                // --- Tab: Specifications ---
+                array(
+                    'key' => 'field_tab_specifications',
+                    'label' => 'Характеристики',
+                    'type' => 'tab',
+                ),
+                array(
+                    'key' => 'field_car_mileage',
+                    'label' => 'Пробіг (тис. км)',
+                    'name' => 'mileage',
+                    'type' => 'number',
+                    'append' => 'тис. км',
+                ),
+                array(
+                    'key' => 'field_car_engine_volume',
+                    'label' => 'Об\'єм двигуна (л)',
+                    'name' => 'engine_volume',
+                    'type' => 'number',
+                    'step' => 0.1,
+                ),
+                array(
+                    'key' => 'field_car_engine_power',
+                    'label' => 'Потужність двигуна (к.с.)',
+                    'name' => 'engine_power_hp',
+                    'type' => 'number',
+                    'append' => 'к.с.',
+                    'instructions' => 'Для ДВЗ та гібридів.',
+                ),
+                array(
+                    'key' => 'field_car_electric_power',
+                    'label' => 'Потужність електродвигуна (кВт)',
+                    'name' => 'engine_power_kw',
+                    'type' => 'number',
+                    'append' => 'кВт',
+                    'instructions' => 'Для електромобілів та гібридів.',
+                ),
+                array(
+                    'key' => 'field_car_origin',
+                    'label' => 'Походження авто',
+                    'name' => 'car_origin',
+                    'type' => 'select',
+                    'choices' => array(
+                        'usa' => 'З США',
+                        'europe' => 'З Європи',
+                        'korea' => 'З Кореї',
+                        'official' => 'Офіційне авто',
+                    ),
+                ),
+                array(
+                    'key' => 'field_car_vin',
+                    'label' => 'VIN-код',
+                    'name' => 'vin_code',
+                    'type' => 'text',
+                ),
+                // --- Tab: Photos ---
+                array(
+                    'key' => 'field_tab_photos',
+                    'label' => 'Фотографії',
+                    'type' => 'tab',
+                ),
+                array(
+                    'key' => 'field_car_gallery',
+                    'label' => 'Галерея',
+                    'name' => 'car_gallery',
+                    'type' => 'gallery',
+                    'instructions' => 'Перше фото буде головним на картці товару, але ви також можете задати окрему "Мініатюру запису" справа.',
+                    'return_format' => 'array',
+                    'preview_size' => 'medium',
+                    'library' => 'all',
+                ),
+                // --- Tab: Complectation & Buttons ---
+                array(
+                    'key' => 'field_tab_other',
+                    'label' => 'Комплектація та кнопки',
+                    'type' => 'tab',
+                ),
+                array(
+                    'key' => 'field_car_complectation',
+                    'label' => 'Комплектація',
+                    'name' => 'complectation',
+                    'type' => 'wysiwyg',
+                    'tabs' => 'visual',
+                    'media_upload' => 0,
+                    'toolbar' => 'basic',
+                ),
+                array(
+                    'key' => 'field_car_buttons',
+                    'label' => 'Кнопки дій',
+                    'name' => 'action_buttons',
+                    'type' => 'repeater',
+                    'button_label' => 'Додати кнопку',
+                    'sub_fields' => array(
+                        array(
+                            'key' => 'field_button_text',
+                            'label' => 'Текст кнопки',
+                            'name' => 'text',
+                            'type' => 'text',
+                        ),
+                        array(
+                            'key' => 'field_button_link',
+                            'label' => 'Посилання (або # для модального вікна)',
+                            'name' => 'link',
+                            'type' => 'text',
+                        ),
+                    ),
+                ),
+
+            ),
+            'location' => array(
+                array(
+                    array(
+                        'param' => 'post_type',
+                        'operator' => '==',
+                        'value' => 'car',
+                    ),
+                ),
+            ),
+            'style' => 'default',
         ));
     }
 }

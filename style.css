@@ -1058,6 +1058,128 @@ body.light-theme {
     opacity: 0.7;
 }
 
+/* --- 11. Available Cars Section (UPDATED) --- */
+.available-cars {
+    padding: 80px 0;
+    background-color: var(--bg-color);
+}
+
+.available-cars__title {
+    text-align: center;
+    margin-bottom: 60px;
+    font-size: 42px;
+}
+
+.available-cars__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.car-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.car-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--green);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.car-card__image-link {
+    display: block;
+    aspect-ratio: 16 / 10; /* Для одинаковой высоты картинок */
+}
+
+.car-card__image-link img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.car-card__content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.car-card__title {
+    font-size: 20px;
+    margin-bottom: 20px; /* Увеличили отступ */
+    font-weight: 600;
+}
+
+.car-card__title a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* NEW: Pills for specs */
+.car-card__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.car-card__pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--border-color);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.car-card__pill svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+}
+
+
+/* NEW: Footer with price */
+.car-card__footer {
+    margin-top: auto; /* Прижимает футер к низу карточки */
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.car-card__price-block {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.car-card__price--current {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--green);
+}
+
+.car-card__price--old {
+    font-size: 18px;
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.available-cars__footer {
+    text-align: center;
+    margin-top: 60px;
+}
+
 /* --- 6. Responsive Styles --- */
 @media (max-width: 1024px) {
     .header__container {
@@ -1203,6 +1325,10 @@ body.light-theme {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .available-cars__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .footer__main {
         grid-template-columns: 1fr 1fr;
     }
@@ -1232,6 +1358,19 @@ body.light-theme {
     }
 
     .how-we-work__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .available-cars {
+        padding: 60px 0;
+    }
+
+    .available-cars__title {
+        font-size: 32px;
+        margin-bottom: 40px;
+    }
+
+    .available-cars__grid {
         grid-template-columns: 1fr;
     }
 
