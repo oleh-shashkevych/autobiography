@@ -18,7 +18,9 @@ add_action( 'after_setup_theme', 'autobiography_setup' );
 
 function autobiography_menus() {
     register_nav_menus( array(
-        'header_menu' => 'Головне меню в шапці'
+        'header_menu'          => 'Головне меню в шапці',
+        'footer_services_menu' => 'Меню послуг в футері', // Добавить
+        'footer_sitemap_menu'  => 'Карта сайту в футері'    // Добавить
     ) );
 }
 add_action( 'init', 'autobiography_menus' );
@@ -72,6 +74,47 @@ function autobiography_acf_add_local_field_groups() {
                     'name' => 'viber_link',
                     'type' => 'url',
                 ),
+                array(
+                    'key' => 'field_email',
+                    'label' => 'Email',
+                    'name' => 'email',
+                    'type' => 'email',
+                ),
+                array(
+                    'key' => 'field_tab_contact_section',
+                    'label' => 'Секція з формою',
+                    'type' => 'tab',
+                    'placement' => 'top',
+                ),
+                array(
+                    'key' => 'field_contact_section_title',
+                    'label' => 'Заголовок',
+                    'name' => 'contact_section_title',
+                    'type' => 'text',
+                    'default_value' => 'Потрібна консультація?',
+                ),
+                array(
+                    'key' => 'field_contact_section_subtitle',
+                    'label' => 'Підзаголовок',
+                    'name' => 'contact_section_subtitle',
+                    'type' => 'text',
+                    'default_value' => 'Заповніть контактні дані, і ми вам зателефонуємо',
+                ),
+                array(
+                    'key' => 'field_contact_section_image',
+                    'label' => 'Зображення',
+                    'name' => 'contact_section_image',
+                    'type' => 'image',
+                    'return_format' => 'url',
+                    'preview_size' => 'medium',
+                ),
+                array(
+                    'key' => 'field_contact_section_form_shortcode',
+                    'label' => 'Шорткод форми',
+                    'name' => 'contact_section_form_shortcode',
+                    'type' => 'text',
+                    'instructions' => 'Вставте сюди шорткод форми, створеної в Fluent Forms. Наприклад: [fluentform id="1"]',
+                )
             ),
             'location' => array(
                 array(

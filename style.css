@@ -109,14 +109,56 @@ ul {
     padding: 0;
 }
 
+/* --- 1.5. Typography --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--text-color);
+}
+
+h1 {
+    font-size: 48px;
+}
+
+h2 {
+    font-size: 36px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h4 {
+    font-size: 20px;
+}
+
+p {
+    font-size: 16px;
+    line-height: 1.7;
+    opacity: 0.8;
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
 /* --- 2. Button System --- */
 @keyframes shimmer {
     0% {
         left: -60px;
     }
+
     50% {
         left: calc(30px + 100%);
     }
+
     100% {
         left: calc(30px + 100%);
     }
@@ -289,7 +331,7 @@ ul {
     padding-bottom: 5px;
 }
 
-.header__nav > .header__menu-list > .menu-item > a::after {
+.header__nav>.header__menu-list>.menu-item>a::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -300,8 +342,8 @@ ul {
     transition: width 0.3s ease;
 }
 
-.header__nav > .header__menu-list > .menu-item > a:hover::after,
-.header__nav > .header__menu-list > .current-menu-item > a::after {
+.header__nav>.header__menu-list>.menu-item>a:hover::after,
+.header__nav>.header__menu-list>.current-menu-item>a::after {
     width: 100%;
 }
 
@@ -340,11 +382,11 @@ ul {
     transition: transform 0.3s ease;
 }
 
-.theme-switcher__input:checked + .theme-switcher__label {
+.theme-switcher__input:checked+.theme-switcher__label {
     background-color: var(--green);
 }
 
-.theme-switcher__input:checked + .theme-switcher__label::after {
+.theme-switcher__input:checked+.theme-switcher__label::after {
     transform: translateX(20px);
 }
 
@@ -375,7 +417,7 @@ ul {
     z-index: 99;
 }
 
-.header__bottom-row .menu-item-has-children:hover > .sub-menu {
+.header__bottom-row .menu-item-has-children:hover>.sub-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -394,7 +436,7 @@ ul {
     background-color: var(--border-color);
 }
 
-.header__bottom-row .menu-item-has-children > a {
+.header__bottom-row .menu-item-has-children>a {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -435,9 +477,11 @@ ul {
 .header__burger-button.is-open .header__burger-line:nth-child(1) {
     transform: translateY(10.5px) rotate(45deg);
 }
+
 .header__burger-button.is-open .header__burger-line:nth-child(2) {
     opacity: 0;
 }
+
 .header__burger-button.is-open .header__burger-line:nth-child(3) {
     transform: translateY(-10.5px) rotate(-45deg);
 }
@@ -446,17 +490,333 @@ ul {
     display: none;
 }
 
+/* --- 7. Footer --- */
+.footer {
+    background-color: var(--bg-color);
+    /* ИЗМЕНЕНО */
+    color: var(--text-color);
+    /* ИЗМЕНЕНО */
+    padding: 60px 0 0;
+    border-top: 1px solid var(--border-color);
+    position: relative;
+    opacity: 0.8;
+    /* Немного приглушим текст для контраста */
+}
+
+.footer__container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+.footer__main {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 2fr;
+    gap: 40px;
+    padding-bottom: 40px;
+}
+
+.footer__logo {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--text-color);
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.footer__about-text {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.footer__title {
+    color: var(--text-color);
+    font-size: 18px;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer__title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background-color: var(--green);
+}
+
+.footer__list a {
+    font-size: 15px;
+    padding: 8px 0;
+    display: inline-block;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.footer__list a:hover {
+    color: var(--green);
+    transform: translateX(5px);
+}
+
+.footer__contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.footer__contact-item strong {
+    color: var(--text-color);
+    display: block;
+    font-size: 14px;
+}
+
+.footer__contact-item a,
+.footer__contact-item span {
+    font-size: 15px;
+}
+
+.footer__bottom {
+    border-top: 1px solid var(--border-color);
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer__copyright {
+    font-size: 14px;
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--green);
+    color: var(--text-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+}
+
+.back-to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    transform: scale(1.1);
+}
+
+.back-to-top svg {
+    width: 24px;
+    height: auto;
+}
+
+/* --- 8. Contact Section --- */
+.contact-section {
+    padding: 80px 0;
+    background-color: var(--bg-color);
+    border-top: 1px solid var(--border-color);
+}
+
+.contact-section__container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 30px;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    align-items: center;
+    gap: 60px;
+}
+
+.contact-section__image-wrapper {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.contact-section__image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.contact-section__form-wrapper {
+    text-align: left;
+}
+
+.contact-section__title {
+    font-size: 42px;
+}
+
+/* --- Fluent Form Custom Styles --- */
+.contact-section__form .fluentform {
+    margin-top: 30px;
+}
+
+.contact-section__form .ff-el-input--label label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.contact-section__form .ff-el-input--content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.contact-section__form .ff-el-form-check-rad-btns,
+.contact-section__form .ff-el-form-check-checkbox-btns {
+    display: contents;
+}
+
+.contact-section__form .ff-el-form-check-label {
+    flex-grow: 1;
+    display: flex !important;
+}
+
+.contact-section__form .ff-el-form-check-label span {
+    display: block;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+}
+
+.contact-section__form .ff-el-form-check-input {
+    display: none !important;
+}
+
+.contact-section__form .ff-el-form-check-label span:hover {
+    border-color: var(--green);
+    color: var(--green);
+}
+
+.contact-section__form .ff-el-form-check-input:checked+span {
+    background-color: var(--green);
+    border-color: var(--green);
+    color: var(--white);
+}
+
+.contact-section__form .ff-el-form-control {
+    background-color: var(--bg-color) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-color) !important;
+    border-radius: 5px !important;
+    padding: 12px 15px !important;
+    font-size: 16px !important;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.contact-section__form .ff-el-form-control:focus {
+    border-color: var(--green) !important;
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.3) !important;
+}
+
+/* --- Custom Checkbox Styles (Final) --- */
+
+/* Контейнер для чекбокса и текста */
+.contact-section__form .ff-el-tc .ff-el-form-check-label {
+    display: flex !important;
+    align-items: center;
+    cursor: pointer;
+    gap: 12px;
+}
+
+/* Скрываем ненужные элементы */
+.contact-section__form .ff_tc_checkbox input[type="checkbox"],
+.contact-section__form .ff_tc_checkbox span {
+    display: none;
+}
+
+/* Основа кастомного чекбокса */
+.contact-section__form .ff_tc_checkbox {
+    display: block !important;
+    width: 22px !important;
+    height: 22px !important;
+    border: 1px solid var(--border-color) !important;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E%3Cpath d='M4 12.6111L8.92308 17.5L20 6.5' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    background-size: contain;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    padding: 8px !important;
+}
+
+/* Стили для активного состояния по классу .ff_item_selected */
+.contact-section__form .ff-el-tc.ff_item_selected .ff_tc_checkbox {
+    background-color: var(--green);
+    border-color: var(--green);
+}
+
+/* Текст соглашения */
+.contact-section__form .ff_t_c {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.contact-section__form .ff_t_c {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.contact-section__form .ff_submit_btn_wrapper {
+    margin-bottom: 0 !important;
+}
+
+.contact-section__form .ff-btn-submit {
+    width: auto;
+    min-width: 200px;
+    background-color: var(--green) !important;
+    color: var(--white) !important;
+    font-weight: 500 !important;
+    border-radius: 5px !important;
+    padding: 14px 30px !important;
+    border: none !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+}
+
+.contact-section__form .ff-btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+}
+
+.contact-section__form .fluentform .clearfix:after,
+.contact-section__form .fluentform .clearfix:before,
+.contact-section__form .fluentform .ff-el-group:after,
+.contact-section__form .fluentform .ff-el-group:before,
+.contact-section__form .fluentform .ff-el-repeat .ff-el-input--content:after,
+.contact-section__form .fluentform .ff-el-repeat .ff-el-input--content:before,
+.contact-section__form .fluentform .ff-step-body:after,
+.contact-section__form .fluentform .ff-step-body:before {
+    display: none !important;
+}
 /* --- 6. Responsive Styles --- */
 
 @media (max-width: 1024px) {
     .header__container {
-        padding: 0; /* Убираем боковые отступы у контейнера */
+        padding: 0;
+        /* Убираем боковые отступы у контейнера */
     }
 
     /* Верхний ряд становится единственным видимым рядом */
     .header__top-row {
         padding: 15px 20px;
-        border-bottom: none; /* Убираем нижнюю границу */
+        border-bottom: none;
+        /* Убираем нижнюю границу */
     }
 
     /* Полностью скрываем нижний ряд с навигацией и переключателем темы */
@@ -476,9 +836,9 @@ ul {
     .header__burger-button {
         display: flex;
     }
-    
+
     /* --- Стили для выезжающей панели --- */
-    
+
     .mobile-menu-panel {
         display: block;
         position: fixed;
@@ -498,7 +858,7 @@ ul {
         visibility: hidden;
         overflow-y: auto;
     }
-    
+
     .mobile-menu-panel.is-open {
         transform: translateX(0);
         visibility: visible;
@@ -514,7 +874,7 @@ ul {
         font-size: 22px;
     }
 
-    .mobile-menu-panel .menu-item-has-children > a {
+    .mobile-menu-panel .menu-item-has-children>a {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -527,10 +887,10 @@ ul {
         transition: transform 0.3s ease;
     }
 
-    .mobile-menu-panel .menu-item-has-children.is-open > a > .header__menu-chevron {
+    .mobile-menu-panel .menu-item-has-children.is-open>a>.header__menu-chevron {
         transform: rotate(180deg);
     }
-    
+
     .mobile-menu-panel .sub-menu {
         overflow: hidden;
         max-height: 0;
@@ -551,7 +911,7 @@ ul {
         font-size: 18px;
         padding: 12px 10px;
     }
-    
+
     .mobile-menu__footer {
         display: flex;
         flex-direction: column;
@@ -569,11 +929,30 @@ ul {
     }
 
     .mobile-menu__footer .header__contacts {
-       flex-direction: column;
-       gap: 15px;
+        flex-direction: column;
+        gap: 15px;
     }
 
     .mobile-menu__footer .header__lang-switcher ul {
         gap: 20px;
+    }
+
+    .contact-section__container {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-section__image-wrapper {
+        display: none;
+        /* На мобильных скрываем картинку для экономии места */
+    }
+
+    .footer__main {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer__main {
+        grid-template-columns: 1fr;
     }
 }
