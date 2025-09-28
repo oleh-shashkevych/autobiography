@@ -991,6 +991,73 @@ body.light-theme {
     height: 8px;
 }
 
+/* --- 10. How We Work Section --- */
+.how-we-work {
+    padding: 80px 0;
+    background-color: var(--bg-color);
+}
+
+.how-we-work__title {
+    text-align: center;
+    margin-bottom: 60px;
+    font-size: 42px;
+}
+
+.how-we-work__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.how-we-work__item {
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.how-we-work__item:hover {
+    transform: translateY(-5px);
+    border-color: var(--green);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.how-we-work__item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.how-we-work__icon-wrapper {
+    width: 48px;
+    height: 48px;
+    color: var(--green); /* Цвет для SVG иконки */
+}
+
+.how-we-work__icon-wrapper svg {
+    width: 100%;
+    height: 100%;
+}
+
+.how-we-work__step-number {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.3;
+}
+
+.how-we-work__item-title {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.how-we-work__item-description {
+    font-size: 15px;
+    opacity: 0.7;
+}
+
 /* --- 6. Responsive Styles --- */
 @media (max-width: 1024px) {
     .header__container {
@@ -1132,6 +1199,10 @@ body.light-theme {
         /* На мобильных скрываем картинку для экономии места */
     }
 
+    .how-we-work__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .footer__main {
         grid-template-columns: 1fr 1fr;
     }
@@ -1149,6 +1220,19 @@ body.light-theme {
         position: unset;
         transform: unset;
         margin: 40px 30px 0;
+    }
+
+    .how-we-work {
+        padding: 60px 0;
+    }
+
+    .how-we-work__title {
+        font-size: 32px;
+        margin-bottom: 40px;
+    }
+
+    .how-we-work__grid {
+        grid-template-columns: 1fr;
     }
 
     .footer__main {

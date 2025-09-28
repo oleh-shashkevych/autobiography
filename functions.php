@@ -136,9 +136,132 @@ function autobiography_acf_add_local_field_groups() {
             'label_placement' => 'top',
             'instruction_placement' => 'label',
         ));
+        
+        // Группа полей для главной страницы
+        acf_add_local_field_group(array(
+            'key' => 'group_front_page_settings',
+            'title' => 'Налаштування Головної Сторінки',
+            'fields' => array(
+                array(
+                    'key' => 'field_hero_slider',
+                    'label' => 'Слайдер в шапці',
+                    'name' => 'hero_slider',
+                    'type' => 'repeater',
+                    'layout' => 'block',
+                    'button_label' => 'Додати слайд',
+                    'sub_fields' => array(
+                        array(
+                            'key' => 'field_slide_background_type',
+                            'label' => 'Тип фону',
+                            'name' => 'background_type',
+                            'type' => 'button_group',
+                            'choices' => array(
+                                'image' => 'Зображення',
+                                'video' => 'Відео',
+                            ),
+                            'default_value' => 'image',
+                        ),
+                        array(
+                            'key' => 'field_slide_image',
+                            'label' => 'Фонове зображення',
+                            'name' => 'image',
+                            'type' => 'image',
+                            'return_format' => 'url',
+                            'conditional_logic' => array(
+                                array(
+                                    array(
+                                        'field' => 'field_slide_background_type',
+                                        'operator' => '==',
+                                        'value' => 'image',
+                                    ),
+                                ),
+                            ),
+                        ),
+                        array(
+                            'key' => 'field_slide_video',
+                            'label' => 'Фонове відео',
+                            'name' => 'video',
+                            'type' => 'file',
+                            'return_format' => 'url',
+                            'library' => 'all',
+                            'mime_types' => 'mp4',
+                            'conditional_logic' => array(
+                                array(
+                                    array(
+                                        'field' => 'field_slide_background_type',
+                                        'operator' => '==',
+                                        'value' => 'video',
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                array(
+                    'key' => 'field_hero_form_shortcode',
+                    'label' => 'Шорткод форми в шапці',
+                    'name' => 'hero_form_shortcode',
+                    'type' => 'text',
+                    'instructions' => 'Вставте сюди шорткод єдиної форми для блоку в шапці',
+                ),
+                // Новая вкладка и поля для секции "Як ми працюємо"
+                array(
+                    'key' => 'field_tab_how_we_work',
+                    'label' => 'Секція "Як ми працюємо"',
+                    'type' => 'tab',
+                    'placement' => 'top',
+                ),
+                array(
+                    'key' => 'field_how_we_work_title',
+                    'label' => 'Заголовок секції',
+                    'name' => 'how_we_work_title',
+                    'type' => 'text',
+                    'default_value' => 'Як ми працюємо',
+                ),
+                array(
+                    'key' => 'field_how_we_work_steps',
+                    'label' => 'Етапи роботи',
+                    'name' => 'how_we_work_steps',
+                    'type' => 'repeater',
+                    'layout' => 'block',
+                    'button_label' => 'Додати етап',
+                    'sub_fields' => array(
+                        array(
+                            'key' => 'field_step_icon',
+                            'label' => 'Іконка етапу (SVG)',
+                            'name' => 'step_icon',
+                            'type' => 'textarea',
+                            'instructions' => 'Вставте SVG-код іконки.',
+                        ),
+                        array(
+                            'key' => 'field_step_title',
+                            'label' => 'Назва етапу',
+                            'name' => 'step_title',
+                            'type' => 'text',
+                        ),
+                        array(
+                            'key' => 'field_step_description',
+                            'label' => 'Опис етапу',
+                            'name' => 'step_description',
+                            'type' => 'textarea',
+                        ),
+                    ),
+                ),
+            ),
+            'location' => array(
+                array(
+                    array(
+                        'param' => 'page_type',
+                        'operator' => '==',
+                        'value' => 'front_page',
+                    ),
+                ),
+            ),
+        ));
     }
 }
 add_action('acf/init', 'autobiography_acf_add_local_field_groups');
+
 
 function autobiography_add_chevron_to_menu_items($title, $item, $args, $depth) {
     if ( 'header_menu' === $args->theme_location && in_array('menu-item-has-children', $item->classes) ) {
@@ -148,82 +271,3 @@ function autobiography_add_chevron_to_menu_items($title, $item, $args, $depth) {
     return $title;
 }
 add_filter('nav_menu_item_title', 'autobiography_add_chevron_to_menu_items', 10, 4);
-
-// Группа полей для главной страницы
-acf_add_local_field_group(array(
-    'key' => 'group_front_page_settings',
-    'title' => 'Налаштування Головної Сторінки',
-    'fields' => array(
-        array(
-            'key' => 'field_hero_slider',
-            'label' => 'Слайдер в шапці',
-            'name' => 'hero_slider',
-            'type' => 'repeater',
-            'layout' => 'block',
-            'button_label' => 'Додати слайд',
-            'sub_fields' => array(
-                array(
-                    'key' => 'field_slide_background_type',
-                    'label' => 'Тип фону',
-                    'name' => 'background_type',
-                    'type' => 'button_group',
-                    'choices' => array(
-                        'image' => 'Зображення',
-                        'video' => 'Відео',
-                    ),
-                    'default_value' => 'image',
-                ),
-                array(
-                    'key' => 'field_slide_image',
-                    'label' => 'Фонове зображення',
-                    'name' => 'image',
-                    'type' => 'image',
-                    'return_format' => 'url',
-                    'conditional_logic' => array(
-                        array(
-                            array(
-                                'field' => 'field_slide_background_type',
-                                'operator' => '==',
-                                'value' => 'image',
-                            ),
-                        ),
-                    ),
-                ),
-                array(
-                    'key' => 'field_slide_video',
-                    'label' => 'Фонове відео',
-                    'name' => 'video',
-                    'type' => 'file',
-                    'return_format' => 'url',
-                    'library' => 'all',
-                    'mime_types' => 'mp4',
-                    'conditional_logic' => array(
-                        array(
-                            array(
-                                'field' => 'field_slide_background_type',
-                                'operator' => '==',
-                                'value' => 'video',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-        array(
-            'key' => 'field_hero_form_shortcode',
-            'label' => 'Шорткод форми в шапці',
-            'name' => 'hero_form_shortcode',
-            'type' => 'text',
-            'instructions' => 'Вставте сюди шорткод єдиної форми для блоку в шапці',
-        )
-    ),
-    'location' => array(
-        array(
-            array(
-                'param' => 'page_type',
-                'operator' => '==',
-                'value' => 'front_page',
-            ),
-        ),
-    ),
-));

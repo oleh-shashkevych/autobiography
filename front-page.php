@@ -50,6 +50,47 @@ get_header();
         </div>
     </section>
     <?php endif; ?>
+
+    <?php
+    $how_we_work_title = get_field('how_we_work_title');
+    $how_we_work_steps = get_field('how_we_work_steps');
+
+    if( $how_we_work_steps ):
+    ?>
+    <section class="how-we-work">
+        <div class="container">
+            <?php if ($how_we_work_title): ?>
+                <h2 class="how-we-work__title"><?php echo esc_html($how_we_work_title); ?></h2>
+            <?php endif; ?>
+
+            <div class="how-we-work__grid">
+                <?php foreach( $how_we_work_steps as $index => $step ): 
+                    $step_icon        = $step['step_icon'];
+                    $step_title       = $step['step_title'];
+                    $step_description = $step['step_description'];
+                ?>
+                <div class="how-we-work__item">
+                    <div class="how-we-work__item-header">
+                        <?php if ($step_icon): ?>
+                            <div class="how-we-work__icon-wrapper">
+                                <?php echo $step_icon; // Выводим SVG как есть ?>
+                            </div>
+                        <?php endif; ?>
+                        <span class="how-we-work__step-number"><?php echo str_pad($index + 1, 2, '0', STR_PAD_LEFT); ?></span>
+                    </div>
+                    <?php if ($step_title): ?>
+                        <h3 class="how-we-work__item-title"><?php echo esc_html($step_title); ?></h3>
+                    <?php endif; ?>
+                    <?php if ($step_description): ?>
+                        <p class="how-we-work__item-description"><?php echo esc_html($step_description); ?></p>
+                    <?php endif; ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
+
 </main>
 
 <?php
