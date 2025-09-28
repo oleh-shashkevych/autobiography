@@ -6,8 +6,13 @@
 function autobiography_scripts() {
     wp_enqueue_style( 'autobiography-style', get_stylesheet_uri(), array(), '1.0.0' );
 
-    // Добавьте эту строку
-    wp_enqueue_script( 'autobiography-main-js', get_template_directory_uri() . '/assets/js/main.js', array(), '1.0.0', true );
+    // Подключаем стили Swiper.js
+    wp_enqueue_style( 'swiper-css', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', array(), '11.0' );
+    
+    // Подключаем скрипт Swiper.js
+    wp_enqueue_script( 'swiper-js', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11.0', true );
+
+    wp_enqueue_script( 'autobiography-main-js', get_template_directory_uri() . '/assets/js/main.js', array('swiper-js'), '1.0.0', true ); // Добавляем swiper-js в зависимости
 }
 add_action( 'wp_enqueue_scripts', 'autobiography_scripts' );
 
@@ -143,3 +148,82 @@ function autobiography_add_chevron_to_menu_items($title, $item, $args, $depth) {
     return $title;
 }
 add_filter('nav_menu_item_title', 'autobiography_add_chevron_to_menu_items', 10, 4);
+
+// Группа полей для главной страницы
+acf_add_local_field_group(array(
+    'key' => 'group_front_page_settings',
+    'title' => 'Налаштування Головної Сторінки',
+    'fields' => array(
+        array(
+            'key' => 'field_hero_slider',
+            'label' => 'Слайдер в шапці',
+            'name' => 'hero_slider',
+            'type' => 'repeater',
+            'layout' => 'block',
+            'button_label' => 'Додати слайд',
+            'sub_fields' => array(
+                array(
+                    'key' => 'field_slide_background_type',
+                    'label' => 'Тип фону',
+                    'name' => 'background_type',
+                    'type' => 'button_group',
+                    'choices' => array(
+                        'image' => 'Зображення',
+                        'video' => 'Відео',
+                    ),
+                    'default_value' => 'image',
+                ),
+                array(
+                    'key' => 'field_slide_image',
+                    'label' => 'Фонове зображення',
+                    'name' => 'image',
+                    'type' => 'image',
+                    'return_format' => 'url',
+                    'conditional_logic' => array(
+                        array(
+                            array(
+                                'field' => 'field_slide_background_type',
+                                'operator' => '==',
+                                'value' => 'image',
+                            ),
+                        ),
+                    ),
+                ),
+                array(
+                    'key' => 'field_slide_video',
+                    'label' => 'Фонове відео',
+                    'name' => 'video',
+                    'type' => 'file',
+                    'return_format' => 'url',
+                    'library' => 'all',
+                    'mime_types' => 'mp4',
+                    'conditional_logic' => array(
+                        array(
+                            array(
+                                'field' => 'field_slide_background_type',
+                                'operator' => '==',
+                                'value' => 'video',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        array(
+            'key' => 'field_hero_form_shortcode',
+            'label' => 'Шорткод форми в шапці',
+            'name' => 'hero_form_shortcode',
+            'type' => 'text',
+            'instructions' => 'Вставте сюди шорткод єдиної форми для блоку в шапці',
+        )
+    ),
+    'location' => array(
+        array(
+            array(
+                'param' => 'page_type',
+                'operator' => '==',
+                'value' => 'front_page',
+            ),
+        ),
+    ),
+));

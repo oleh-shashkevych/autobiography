@@ -804,8 +804,194 @@ p {
 .contact-section__form .fluentform .ff-step-body:before {
     display: none !important;
 }
-/* --- 6. Responsive Styles --- */
 
+/* --- 9. Hero Section --- */
+.hero {
+    position: relative;
+    height: auto;
+    min-height: 700px;
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.hero-slider {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.hero-slide { 
+    position: relative; 
+    overflow: hidden; 
+}
+
+.hero-slide__background { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+}
+
+.hero-slide__background img, 
+.hero-slide__background video { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+.hero-slide__overlay { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.5); 
+}
+
+.hero__content-overlay {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
+.hero-form {
+    /* Адаптация под темы */
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 30px;
+    width: 100%;
+    max-width: 450px;
+}
+
+/* --- ОБЩИЕ СТИЛИ ДЛЯ ФОРМ (Hero + Footer) --- */
+.hero-form .ff-el-input--label label,
+.contact-section__form .ff-el-input--label label {
+    color: var(--text-color) !important;
+}
+
+.hero-form .ff-el-form-control,
+.contact-section__form .ff-el-form-control {
+    background-color: var(--bg-color) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+.hero-form .ff-el-form-control::placeholder {
+    color: var(--text-color) !important;
+    opacity: 0.6 !important;
+}
+
+.hero-form .ff-el-form-control:focus,
+.contact-section__form .ff-el-form-control:focus {
+    border-color: var(--green) !important;
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.3) !important;
+}
+
+.hero-form .ff-btn-submit,
+.contact-section__form .ff-btn-submit {
+    width: 100%;
+    min-width: 200px;
+    background-color: var(--green) !important;
+    color: var(--white) !important;
+    font-weight: 500 !important;
+    border-radius: 5px !important;
+    padding: 14px 30px !important;
+    border: none !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+}
+
+/* Навигация слайдера */
+.hero__navigation {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Адаптация под темы */
+    background: rgba(var(--bg-color-rgb), 0.7); /* Используем RGB для прозрачности */
+    backdrop-filter: blur(5px);
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
+}
+
+/* Добавляем RGB переменные для поддержки прозрачности в обеих темах */
+body.dark-theme {
+    --bg-color-rgb: 18, 18, 18;
+}
+body.light-theme {
+    --bg-color-rgb: 255, 255, 255;
+}
+
+.hero .swiper-button-next,
+.hero .swiper-button-prev {
+    position: static;
+    margin: 0;
+    width: 24px; /* Задаем размер контейнера */
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Стили для SVG иконки */
+.hero-arrow-icon {
+    width: 100%;
+    height: 100%;
+    fill: var(--text-color); /* Цвет будет меняться вместе с темой */
+    transition: fill 0.3s, transform 0.3s;
+}
+
+.hero .swiper-button-next:hover .hero-arrow-icon,
+.hero .swiper-button-prev:hover .hero-arrow-icon {
+    fill: var(--green);
+}
+
+/* Поворачиваем левую стрелку */
+.hero .swiper-button-prev .hero-arrow-icon {
+    transform: rotate(180deg);
+}
+
+.hero .swiper-pagination {
+    position: static;
+    width: auto;
+    bottom: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.hero .swiper-pagination-bullet {
+    background: var(--text-color);
+    width: 16px;
+    height: 8px;
+    opacity: 1;
+    transition: background-color 0.3s;
+    border-radius: 8px;
+    transition: all .3s ease;
+    margin: 0 !important;
+}
+
+.hero .swiper-pagination-bullet-active {
+    background: var(--green);
+    width: 90px;
+    height: 8px;
+}
+
+/* --- 6. Responsive Styles --- */
 @media (max-width: 1024px) {
     .header__container {
         padding: 0;
@@ -952,6 +1138,19 @@ p {
 }
 
 @media (max-width: 768px) {
+    .hero-form {
+        max-width: 100%;
+        margin-top: 50px; /* Отступ от верха на мобильных */
+    }
+
+    .hero__navigation {
+        gap: 15px;
+        padding: 8px 15px;
+        position: unset;
+        transform: unset;
+        margin: 40px 30px 0;
+    }
+
     .footer__main {
         grid-template-columns: 1fr;
     }
