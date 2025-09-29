@@ -1,10 +1,15 @@
 <?php
-$phone_number     = get_field('phone_number', 'option');
-$address          = get_field('address', 'option');
-$google_maps_link = get_field('google_maps_link', 'option');
-$telegram_link    = get_field('telegram_link', 'option');
-$viber_link       = get_field('viber_link', 'option');
-$phone_tel        = preg_replace('/[^0-9\+]/', '', $phone_number);
+// Отримуємо ВСІ значення з ACF
+$phone_number = pll__(get_field('phone_number', 'option'));
+$address = pll__(get_field('address', 'option'));
+$google_maps_link = pll__(get_field('google_maps_link', 'option'));
+$telegram_link = get_field('telegram_link', 'option');
+$viber_link = get_field('viber_link', 'option');
+$phone_tel = preg_replace('/[^0-9\+]/', '', $phone_number);
+
+// Наші нові змінні для перекладу
+$header_button_text = pll__(get_field('header_button_text', 'option'));
+$theme_switcher_text = pll__(get_field('theme_switcher_text', 'option'));
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -18,7 +23,6 @@ $phone_tel        = preg_replace('/[^0-9\+]/', '', $phone_number);
 
 <header class="header">
     <div class="header__container">
-        
         <div class="header__top-row">
             <div class="header__section header__section--left">
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="header__logo" rel="home">
@@ -51,12 +55,12 @@ $phone_tel        = preg_replace('/[^0-9\+]/', '', $phone_number);
                     <?php endif; ?>
                 </div>
                 <div class="header__messengers">
-                    </div>
+                </div>
                 <div class="header__actions">
-                    <button class="header__button button button--primary">Потрібна консультація</button>
+                    <button class="header__button button button--primary"><?php echo esc_html($header_button_text); ?></button>
                 </div>
             </div>
-            <button class="header__burger-button" aria-label="Open menu" aria-expanded="false">
+            <button class="header__burger-button" aria-label="<?php esc_attr_e('Open menu', 'autobiography'); ?>" aria-expanded="false">
                 <span class="header__burger-line"></span>
                 <span class="header__burger-line"></span>
                 <span class="header__burger-line"></span>
@@ -76,7 +80,7 @@ $phone_tel        = preg_replace('/[^0-9\+]/', '', $phone_number);
             <div class="theme-switcher">
                 <input type="checkbox" id="theme-switcher-toggle" class="theme-switcher__input">
                 <label for="theme-switcher-toggle" class="theme-switcher__label"></label>
-                <span class="theme-switcher__text">ТЕМА</span>
+                <span class="theme-switcher__text"><?php echo esc_html($theme_switcher_text); ?></span>
             </div>
         </div>
     </div>
@@ -93,7 +97,7 @@ $phone_tel        = preg_replace('/[^0-9\+]/', '', $phone_number);
         </div>
         <div class="mobile-menu__footer">
             <div class="header__actions">
-                <button class="header__button button button--primary">Потрібна консультація</button>
+                <button class="header__button button button--primary"><?php echo esc_html($header_button_text); ?></button>
             </div>
             <div class="header__contacts">
                 <?php if ($phone_number) : ?>
