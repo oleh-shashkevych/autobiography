@@ -119,4 +119,15 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
+    // --- НОВОЕ: Parallax for Page Hero ---
+    const heroWithImage = document.querySelector('.page-hero[style*="background-image"]');
+    if (heroWithImage) {
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Заменили строку ниже, чтобы фон начинался с центра (50%)
+            heroWithImage.style.backgroundPosition = `center calc(50% + ${scrollTop * 0.3}px)`;
+        });
+    }
 });

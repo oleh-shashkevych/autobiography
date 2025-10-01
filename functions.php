@@ -197,3 +197,100 @@ function autobiography_register_options_strings() {
     }
 }
 add_action('acf/init', 'autobiography_register_options_strings');
+
+acf_add_local_field_group(array(
+    'key' => 'group_car_buyback_page',
+    'title' => 'Налаштування сторінки "Викуп Авто"',
+    'fields' => array(
+        array(
+            'key' => 'field_buyback_hero_tab',
+            'label' => 'Налаштування заголовка',
+            'type' => 'tab',
+        ),
+        array(
+            'key' => 'field_buyback_hero_image',
+            'label' => 'Фонове зображення заголовка',
+            'name' => 'buyback_hero_image',
+            'type' => 'image',
+            'instructions' => 'Необов\'язково. Якщо вибрано, буде показано як фон для заголовка сторінки.',
+            'return_format' => 'url',
+        ),
+        array(
+            'key' => 'field_buyback_hero_overlay',
+            'label' => 'Увімкнути оверлей',
+            'name' => 'buyback_hero_overlay',
+            'type' => 'true_false',
+            'instructions' => 'Затемнює фонове зображення для кращої читабельності тексту.',
+            'ui' => 1,
+            'default_value' => 1,
+        ),
+        array(
+            'key' => 'field_buyback_content_tab',
+            'label' => 'Контент сторінки',
+            'type' => 'tab',
+        ),
+        array(
+            'key' => 'field_buyback_seo_content',
+            'label' => 'SEO-опис послуги',
+            'name' => 'buyback_seo_content',
+            'type' => 'wysiwyg',
+            'instructions' => 'Основний текст, що описує послугу викупу авто.',
+        ),
+        array(
+            'key' => 'field_buyback_criteria_tab',
+            'label' => 'Критерії викупу',
+            'type' => 'tab',
+        ),
+        array(
+            'key' => 'field_buyback_criteria_title',
+            'label' => 'Заголовок секції критеріїв',
+            'name' => 'buyback_criteria_title',
+            'type' => 'text',
+            'default_value' => 'Які автомобілі ми викуповуємо?',
+        ),
+        array(
+            'key' => 'field_buyback_criteria_list',
+            'label' => 'Список критеріїв',
+            'name' => 'buyback_criteria_list',
+            'type' => 'repeater',
+            'button_label' => 'Додати критерій',
+            'sub_fields' => array(
+                array('key' => 'field_criteria_icon', 'label' => 'Іконка (SVG)', 'name' => 'icon', 'type' => 'textarea'),
+                array('key' => 'field_criteria_title', 'label' => 'Назва критерію', 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_criteria_description', 'label' => 'Опис критерію', 'name' => 'description', 'type' => 'textarea'),
+            ),
+        ),
+        array(
+            'key' => 'field_buyback_steps_tab',
+            'label' => 'Етапи викупу',
+            'type' => 'tab',
+        ),
+        array(
+            'key' => 'field_buyback_steps_title',
+            'label' => 'Заголовок секції етапів',
+            'name' => 'buyback_steps_title',
+            'type' => 'text',
+            'default_value' => 'Етапи процедури викупу',
+        ),
+        array(
+            'key' => 'field_buyback_steps_list',
+            'label' => 'Список етапів',
+            'name' => 'buyback_steps_list',
+            'type' => 'repeater',
+            'button_label' => 'Додати етап',
+            'sub_fields' => array(
+                array('key' => 'field_step_title_new', 'label' => 'Назва етапу', 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_step_description_new', 'label' => 'Опис етапу', 'name' => 'description', 'type' => 'textarea'),
+            ),
+        ),
+    ),
+    'location' => array(
+        array(
+            array(
+                'param' => 'page_template',
+                'operator' => '==',
+                'value' => 'template-car-buyback.php',
+            ),
+        ),
+    ),
+));

@@ -1459,6 +1459,71 @@ body.light-theme {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* --- 15. Car Buyback Page --- */
+.page-hero {
+    padding: 60px 0;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    background-size: cover;
+    background-position: center center;
+    transition: padding 0.3s ease;
+}
+
+.page-hero__title {
+    font-size: 52px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--white);
+}
+
+/* Стилі для фону та оверлею */
+.page-hero[style] { /* Застосовується тільки, якщо є фонове зображення */
+    padding: 120px 0;
+    color: var(--white);
+    border-bottom: none;
+}
+
+.page-hero.has-overlay::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(18, 18, 18, 0.6);
+    z-index: 1;
+}
+
+.page-hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+.page-content {
+    padding: 80px 0;
+}
+
+.buyback-criteria,
+.buyback-steps {
+    padding: 80px 0;
+    background-color: var(--bg-color);
+    border-top: 1px solid var(--border-color);
+}
+
+.buyback-criteria__title,
+.buyback-steps__title {
+    text-align: center;
+    margin-bottom: 60px;
+    font-size: 42px;
+}
+
+/* Стили для сетки с этапами немного адаптируем, т.к. нет иконки */
+.buyback-steps .how-we-work__item-header {
+    justify-content: flex-end; /* Номер этапа будет справа */
+    margin-bottom: 25px;
+}
+
 /* --- 6. Responsive Styles --- */
 @media (max-width: 1024px) {
     .header__container {
@@ -1721,6 +1786,23 @@ body.light-theme {
     }
     .our-services__tab-item.is-active {
         border-bottom: 2px solid var(--green);
+    }
+    
+    .page-hero {
+        padding: 40px 0;
+    }
+    .page-hero__title {
+        font-size: 36px;
+    }
+    .page-content,
+    .buyback-criteria,
+    .buyback-steps {
+        padding: 60px 0;
+    }
+    .buyback-criteria__title,
+    .buyback-steps__title {
+        font-size: 32px;
+        margin-bottom: 40px;
     }
 
     .footer__main {
