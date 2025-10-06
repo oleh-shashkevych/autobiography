@@ -26,7 +26,15 @@ $theme_switcher_text = pll__(get_field('theme_switcher_text', 'option'));
         <div class="header__top-row">
             <div class="header__section header__section--left">
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="header__logo" rel="home">
-                    <?php bloginfo( 'name' ); ?>
+                    <?php
+                    if ( has_custom_logo() ) {
+                        $custom_logo_id = get_theme_mod( 'custom_logo' );
+                        $logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+                        echo '<img src="' . esc_url( $logo[0] ) . '" alt="' . get_bloginfo( 'name' ) . '">';
+                    } else {
+                        echo esc_html( get_bloginfo( 'name' ) );
+                    }
+                    ?>
                 </a>
                 <div class="header__lang-switcher">
                     <ul>

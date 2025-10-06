@@ -262,6 +262,12 @@ p {
     font-size: 24px;
 }
 
+.header__logo img {
+    max-height: 40px; /* Можете змінити висоту за вашим бажанням */
+    width: auto;
+    display: block;
+}
+
 .header__lang-switcher ul {
     display: flex;
 }
