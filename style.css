@@ -2040,8 +2040,9 @@ body.light-theme {
     font-size: 16px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    opacity: 0.6;
+    opacity: 1;
     margin-bottom: 15px;
+    color: var(--green);
 }
 .contact-item__text {
     font-size: 18px;
@@ -2087,7 +2088,12 @@ body.light-theme {
     height: 24px;
 }
 
-.contact-socials__link svg path {
+.contact-socials__link svg path,
+.contact-socials__link svg circle {
+    stroke: var(--text-color);
+    transition: stroke 0.3s;
+}
+.contact-socials__link svg circle:last-child {
     fill: var(--text-color);
     transition: fill 0.3s;
 }
@@ -2095,14 +2101,52 @@ body.light-theme {
     border-color: var(--green);
     background-color: var(--green);
 }
-.contact-socials__link:hover svg path {
+.contact-socials__link:hover svg path,
+.contact-socials__link:hover svg circle {
+    stroke: var(--white);
+}
+
+.contact-socials__link:hover svg circle:last-child {
     fill: var(--white);
+}
+
+.contact-messengers {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.contact-messengers__link svg {
+  width: 28px;
+  height: 28px;
+}
+
+.contact-messengers__link svg path {
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.contact-messengers__link:hover svg path {
+  color: var(--green);
+}
+
+.contact-item__phones {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-item__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .map-embed-wrapper {
     position: relative;
     width: 100%;
-    padding-top: 75%; /* Aspect ratio 4:3 */
+    padding-top: 75%;
     overflow: hidden;
     border-radius: 8px;
 }

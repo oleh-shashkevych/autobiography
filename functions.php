@@ -82,10 +82,10 @@ function autobiography_acf_add_local_field_groups() {
             array('key' => 'field_tab_general_settings', 'label' => 'Загальні', 'type' => 'tab'),
             array('key' => 'field_uah_to_usd_rate', 'label' => 'Курс UAH до USD', 'name' => 'uah_to_usd_rate', 'type' => 'number', 'instructions' => 'Вкажіть поточний курс гривні до долара для конвертації цін. Використовуйте крапку як роздільник.', 'prepend' => '1 USD =', 'append' => 'UAH'),
             array('key' => 'field_tab_header_settings', 'label' => 'Хедер', 'type' => 'tab'),
-            array('key' => 'field_phone_number', 'label' => 'Номер телефону', 'name' => 'phone_number', 'type' => 'text'),
+            array('key' => 'field_phone_number', 'label' => 'Номер телефону', 'name' => 'phone_number', 'type' => 'text', 'instructions' => 'Основний номер, відображається в хедері та футері.'),
             array('key' => 'field_address', 'label' => 'Адреса', 'name' => 'address', 'type' => 'text'),
             array('key' => 'field_google_maps_link', 'label' => 'Посилання на Google Maps', 'name' => 'google_maps_link', 'type' => 'url'),
-            array('key' => 'field_email', 'label' => 'Email', 'name' => 'email', 'type' => 'email'),
+            array('key' => 'field_email', 'label' => 'Email', 'name' => 'email', 'type' => 'email', 'instructions' => 'Основний email, відображається в хедері та футері.'),
             array('key' => 'field_header_button_text', 'label' => 'Текст кнопки в хедері', 'name' => 'header_button_text', 'type' => 'text', 'default_value' => 'Потрібна консультація'),
             array('key' => 'field_theme_switcher_text', 'label' => 'Текст біля перемикача теми', 'name' => 'theme_switcher_text', 'type' => 'text', 'default_value' => 'ТЕМА'),
             array('key' => 'field_tab_contact_section', 'label' => 'Секція з формою', 'type' => 'tab'),
@@ -114,20 +114,8 @@ function autobiography_acf_add_local_field_groups() {
                 'type' => 'repeater',
                 'button_label' => 'Додати рядок',
                 'sub_fields' => array(
-                    array(
-                        'key' => 'field_wh_days',
-                        'label' => 'Дні тижня',
-                        'name' => 'days',
-                        'type' => 'text',
-                        'wrapper' => array('width' => '50'),
-                    ),
-                    array(
-                        'key' => 'field_wh_hours',
-                        'label' => 'Години роботи',
-                        'name' => 'hours',
-                        'type' => 'text',
-                        'wrapper' => array('width' => '50'),
-                    ),
+                    array('key' => 'field_wh_days', 'label' => 'Дні тижня', 'name' => 'days', 'type' => 'text', 'wrapper' => array('width' => '50')),
+                    array('key' => 'field_wh_hours', 'label' => 'Години роботи', 'name' => 'hours', 'type' => 'text', 'wrapper' => array('width' => '50')),
                 ),
             ),
             array(
@@ -135,47 +123,60 @@ function autobiography_acf_add_local_field_groups() {
                 'label' => 'Соціальні мережі',
                 'name' => 'social_media',
                 'type' => 'repeater',
+                'instructions' => 'Іконки, що відображаються у блоці "Ми в соцмережах" на сторінці контактів.',
                 'button_label' => 'Додати соцмережу',
                 'sub_fields' => array(
-                    array(
-                        'key' => 'field_sm_icon',
-                        'label' => 'Іконка (SVG)',
-                        'name' => 'icon',
-                        'type' => 'textarea',
-                    ),
-                    array(
-                        'key' => 'field_sm_link',
-                        'label' => 'Посилання',
-                        'name' => 'link',
-                        'type' => 'url',
-                    ),
+                    array('key' => 'field_sm_icon', 'label' => 'Іконка (SVG)', 'name' => 'icon', 'type' => 'textarea'),
+                    array('key' => 'field_sm_link', 'label' => 'Посилання', 'name' => 'link', 'type' => 'url'),
                 ),
             ),
+            // START: НОВІ ПОЛЯ
+            array(
+                'key' => 'field_contact_phones',
+                'label' => 'Телефони для сторінки контактів',
+                'name' => 'contact_phones',
+                'type' => 'repeater',
+                'instructions' => 'Ці номери будуть відображені в окремому блоці на сторінці "Контакти".',
+                'button_label' => 'Додати телефон',
+                'sub_fields' => array(
+                    array('key' => 'field_contact_phone_number', 'label' => 'Номер телефону', 'name' => 'phone_number', 'type' => 'text'),
+                ),
+            ),
+            array(
+                'key' => 'field_contact_messengers',
+                'label' => 'Месенджери для сторінки контактів',
+                'name' => 'contact_messengers',
+                'type' => 'repeater',
+                'instructions' => 'Іконки месенджерів, що відображаються під телефонами на сторінці контактів.',
+                'button_label' => 'Додати месенджер',
+                'sub_fields' => array(
+                    array('key' => 'field_contact_messenger_icon', 'label' => 'Іконка (SVG)', 'name' => 'icon', 'type' => 'textarea'),
+                    array('key' => 'field_contact_messenger_link', 'label' => 'Посилання на чат', 'name' => 'link', 'type' => 'url'),
+                ),
+            ),
+            array(
+                'key' => 'field_contact_emails',
+                'label' => 'E-mail адреси для сторінки контактів',
+                'name' => 'contact_emails',
+                'type' => 'repeater',
+                'instructions' => 'Ці email будуть відображені в окремому блоці на сторінці "Контакти".',
+                'button_label' => 'Додати e-mail',
+                'sub_fields' => array(
+                    array('key' => 'field_contact_email_address', 'label' => 'E-mail адреса', 'name' => 'email', 'type' => 'email'),
+                ),
+            ),
+            // END: НОВІ ПОЛЯ
             array('key' => 'field_tab_catalog_settings', 'label' => 'Сторінка каталогу', 'type' => 'tab'),
             array('key' => 'field_catalog_title', 'label' => 'Заголовок сторінки каталогу', 'name' => 'catalog_title', 'type' => 'text'),
             array('key' => 'field_catalog_seo_text', 'label' => 'SEO-текст під каталогом', 'name' => 'catalog_seo_text', 'type' => 'wysiwyg'),
             array('key' => 'field_sold_cars_title', 'label' => 'Заголовок блоку проданих авто', 'name' => 'sold_cars_title', 'type' => 'text'),
-            array(
-                'key' => 'field_catalog_hero_image',
-                'label' => 'Фонове зображення заголовка',
-                'name' => 'catalog_hero_image',
-                'type' => 'image',
-                'instructions' => 'Це зображення буде фоном для заголовка на сторінці каталогу.',
-                'return_format' => 'url',
-            ),
-            array(
-                'key' => 'field_catalog_hero_overlay',
-                'label' => 'Увімкнути оверлей',
-                'name' => 'catalog_hero_overlay',
-                'type' => 'true_false',
-                'instructions' => 'Додає темний шар поверх зображення для кращої читабельності тексту.',
-                'ui' => 1,
-                'default_value' => 1,
-            ),
+            array('key' => 'field_catalog_hero_image', 'label' => 'Фонове зображення заголовка', 'name' => 'catalog_hero_image', 'type' => 'image', 'instructions' => 'Це зображення буде фоном для заголовка на сторінці каталогу.', 'return_format' => 'url'),
+            array('key' => 'field_catalog_hero_overlay', 'label' => 'Увімкнути оверлей', 'name' => 'catalog_hero_overlay', 'type' => 'true_false', 'instructions' => 'Додає темний шар поверх зображення для кращої читабельності тексту.', 'ui' => 1, 'default_value' => 1),
         ),
         'location' => array(array(array('param' => 'options_page', 'operator' => '==', 'value' => 'theme-general-settings'))),
     ));
     
+    // ... (РЕШТА ВАШИХ ACF ГРУП БЕЗ ЗМІН)
     // Group: Front Page Settings
     acf_add_local_field_group(array(
         'key' => 'group_front_page_settings', 'title' => 'Налаштування Головної Сторінки',
@@ -751,6 +752,28 @@ function autobiography_register_options_strings() {
             }
         }
     }
+
+    // START: РЕЄСТРАЦІЯ НОВИХ РЯДКІВ
+    if ( function_exists('pll_register_string') ) {
+        $contact_phones = get_field('contact_phones', 'option');
+        if ( $contact_phones ) {
+            foreach ( $contact_phones as $index => $row ) {
+                if ( ! empty( $row['phone_number'] ) ) {
+                    pll_register_string( 'contact_phone_' . $index, $row['phone_number'], 'Контактні телефони' );
+                }
+            }
+        }
+
+        $contact_emails = get_field('contact_emails', 'option');
+        if ( $contact_emails ) {
+            foreach ( $contact_emails as $index => $row ) {
+                if ( ! empty( $row['email'] ) ) {
+                    pll_register_string( 'contact_email_' . $index, $row['email'], 'Контактні E-mails' );
+                }
+            }
+        }
+    }
+    // END: РЕЄСТРАЦІЯ НОВИХ РЯДКІВ
 }
 add_action('acf/init', 'autobiography_register_options_strings');
 
@@ -887,3 +910,9 @@ function autobiography_translate_string($uk, $en) {
     // По умолчанию или для любого другого языка возвращаем английский
     return $en;
 }
+
+function autobiography_allow_viber_protocol( $protocols ) {
+    $protocols[] = 'viber';
+    return $protocols;
+}
+add_filter( 'kses_allowed_protocols', 'autobiography_allow_viber_protocol' );
