@@ -1,23 +1,33 @@
 <?php
 // Отримуємо значення з Налаштувань теми і пропускаємо через функцію перекладу Polylang
-$phone_number     = pll__(get_field('phone_number', 'option'));
-$phone_tel        = preg_replace('/[^0-9\+]/', '', $phone_number);
-$address          = pll__(get_field('address', 'option'));
-$email            = pll__(get_field('email', 'option'));
+$footer_about_text      = pll__(get_field('footer_about_text', 'option'));
+$footer_services_title  = pll__(get_field('footer_services_title', 'option'));
+$footer_sitemap_title   = pll__(get_field('footer_sitemap_title', 'option'));
+$footer_contacts_title  = pll__(get_field('footer_contacts_title', 'option'));
+$footer_copyright_text  = pll__(get_field('footer_copyright_text', 'option'));
+
+// Отримуємо дані для контактів
+$address                = pll__(get_field('address', 'option'));
+$google_maps_link       = get_field('google_maps_link', 'option');
+$email                  = pll__(get_field('email', 'option'));
+$contact_phones         = get_field('contact_phones', 'option');
+
+// Отримуємо мітки
+$footer_address_label   = pll__(get_field('footer_address_label', 'option'));
+$footer_phone_label     = pll__(get_field('footer_phone_label', 'option'));
+$footer_email_label     = pll__(get_field('footer_email_label', 'option'));
+
+// Отримуємо дані для секції з формою
 $contact_title      = pll__(get_field('contact_section_title', 'option'));
 $contact_subtitle   = pll__(get_field('contact_section_subtitle', 'option'));
 $contact_image_url  = get_field('contact_section_image', 'option');
 $contact_shortcode  = pll__(get_field('contact_section_form_shortcode', 'option'));
 
-// Нові змінні для футера
-$footer_about_text      = pll__(get_field('footer_about_text', 'option'));
-$footer_services_title  = pll__(get_field('footer_services_title', 'option'));
-$footer_sitemap_title   = pll__(get_field('footer_sitemap_title', 'option'));
-$footer_contacts_title  = pll__(get_field('footer_contacts_title', 'option'));
-$footer_address_label   = pll__(get_field('footer_address_label', 'option'));
-$footer_phone_label     = pll__(get_field('footer_phone_label', 'option'));
-$footer_email_label     = pll__(get_field('footer_email_label', 'option'));
-$footer_copyright_text  = pll__(get_field('footer_copyright_text', 'option'));
+// Отримуємо логотипи для футера
+$light_logo_url = get_field('light_theme_logo', 'option');
+
+// Отримуємо дані соцмереж
+$social_media = get_field('social_media', 'option');
 ?>
 
 <section class="contact-section">
@@ -52,12 +62,43 @@ $footer_copyright_text  = pll__(get_field('footer_copyright_text', 'option'));
     <div class="footer__container">
         <div class="footer__main">
             <div class="footer__column footer__column--about">
-                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="footer__logo">
-                    <?php bloginfo( 'name' ); ?>
+                
+                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="footer__logo" rel="home">
+                    <?php
+                    if ( has_custom_logo() ) {
+                        $custom_logo_id = get_theme_mod( 'custom_logo' );
+                        $logo_dark = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+                        // Выводим стандартный (темный) логотип
+                        echo '<img src="' . esc_url( $logo_dark[0] ) . '" alt="' . get_bloginfo( 'name' ) . '" class="logo-dark">';
+                    } else {
+                        // Если стандартного лого нет, выводим текстом
+                        echo '<span class="logo-dark">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+                    }
+
+                    // Выводим лого для светлой темы, если оно загружено
+                    if ( $light_logo_url ) {
+                         echo '<img src="' . esc_url( $light_logo_url ) . '" alt="' . get_bloginfo( 'name' ) . ' (Light theme logo)" class="logo-light">';
+                    } else if ( !has_custom_logo() ) {
+                        // Если НИКАКИХ лого нет, выводим текст и для светлой темы
+                        echo '<span class="logo-light">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+                    }
+                    ?>
                 </a>
+
                 <?php if ($footer_about_text) : ?>
                     <p class="footer__about-text"><?php echo esc_html($footer_about_text); ?></p>
                 <?php endif; ?>
+
+                <?php if ($social_media): ?>
+                <div class="footer__socials">
+                    <?php foreach($social_media as $sm): ?>
+                        <a href="<?php echo esc_url($sm['link']); ?>" target="_blank" rel="noopener noreferrer" class="footer__social-link">
+                            <?php echo $sm['icon']; ?>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+
             </div>
             <div class="footer__column footer__column--links">
                 <h3 class="footer__title"><?php echo esc_html($footer_services_title); ?></h3>
@@ -82,29 +123,46 @@ $footer_copyright_text  = pll__(get_field('footer_copyright_text', 'option'));
                 ?>
             </div>
             <div class="footer__column footer__column--contacts">
-                <h3 class="footer__title"><?php echo esc_html($footer_contacts_title); ?></h3>
+                <h3 class="footer__title"><?php echo esc_html($footer_contacts_title ?? pll__('Контакти')); ?></h3>
                 <ul class="footer__contact-list">
+                    <?php if ($address) : ?>
                     <li class="footer__contact-item">
-                        <span class="footer__contact-icon"></span>
                         <div class="footer__contact-details">
                             <strong><?php echo esc_html($footer_address_label); ?></strong>
-                            <span><?php echo esc_html($address); ?></span>
+                            <?php if ($google_maps_link): ?>
+                                <a href="<?php echo esc_url($google_maps_link); ?>" target="_blank" rel="noopener noreferrer">
+                                    <?php echo esc_html($address); ?>
+                                </a>
+                            <?php else: ?>
+                                <span><?php echo esc_html($address); ?></span>
+                            <?php endif; ?>
                         </div>
                     </li>
+                    <?php endif; ?>
+
+                    <?php if ( !empty($contact_phones) ) : ?>
                     <li class="footer__contact-item">
-                        <span class="footer__contact-icon"></span>
                         <div class="footer__contact-details">
                             <strong><?php echo esc_html($footer_phone_label); ?></strong>
-                            <a href="tel:<?php echo esc_attr($phone_tel); ?>"><?php echo esc_html($phone_number); ?></a>
+                            <?php foreach($contact_phones as $phone) : 
+                                if (empty($phone['phone_number'])) continue;
+                                $phone_num = $phone['phone_number'];
+                                $phone_tel = preg_replace('/[^0-9\+]/', '', $phone_num);
+                            ?>
+                                <a href="tel:<?php echo esc_attr($phone_tel); ?>"><?php echo esc_html(pll__($phone_num)); ?></a>
+                            <?php endforeach; ?>
                         </div>
                     </li>
+                    <?php endif; ?>
+
+                    <?php if ($email) : ?>
                     <li class="footer__contact-item">
-                        <span class="footer__contact-icon"></span>
                         <div class="footer__contact-details">
                             <strong><?php echo esc_html($footer_email_label); ?></strong>
                             <a href="mailto:<?php echo esc_attr($email); ?>"><?php echo esc_html($email); ?></a>
                         </div>
                     </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

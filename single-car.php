@@ -48,6 +48,7 @@ if ($power_string) {
 <main id="primary" class="site-main">
     <div class="container single-car-container">
         <?php while ( have_posts() ) : the_post(); ?>
+            <?php autobiography_breadcrumbs(); ?>
             <h1 class="single-car__title"><?php echo strip_tags($brand); ?> <?php echo $model; ?>, <?php echo $year; ?></h1>
 
             <div class="single-car-grid">

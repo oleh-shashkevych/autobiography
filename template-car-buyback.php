@@ -24,6 +24,7 @@ $steps_list = get_field('buyback_steps_list');
 
     <section class="<?php echo esc_attr($hero_classes); ?>" <?php echo $hero_style; ?>>
         <div class="container">
+            <?php autobiography_breadcrumbs(); ?>
             <h1 class="page-hero__title"><?php the_title(); ?></h1>
         </div>
     </section>

@@ -28,6 +28,7 @@ $models = $wpdb->get_col("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE 
 
     <section class="<?php echo esc_attr($hero_classes); ?>" <?php echo $hero_style; ?>>
         <div class="container">
+            <?php autobiography_breadcrumbs(); ?>
             <h1 class="page-hero__title"><?php echo esc_html($catalog_title); ?></h1>
         </div>
     </section>

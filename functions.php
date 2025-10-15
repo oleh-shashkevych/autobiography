@@ -17,6 +17,7 @@ function autobiography_scripts() {
     wp_enqueue_script( 'baguettebox-js', 'https://cdn.jsdelivr.net/npm/baguettebox.js@1.11.1/dist/baguetteBox.min.js', array(), '1.11.1', true );
     // noUiSlider JS
     wp_enqueue_script( 'nouislider-js', 'https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js', array(), '15.7.1', true );
+    wp_enqueue_script( 'inputmask-js', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js', array('jquery'), '5.0.8', true );
     
     // Main JS file
     wp_enqueue_script( 'autobiography-main-js', get_template_directory_uri() . '/assets/js/main.js', array('swiper-js', 'baguettebox-js', 'nouislider-js'), '1.0.5', true );
@@ -82,6 +83,14 @@ function autobiography_acf_add_local_field_groups() {
             array('key' => 'field_tab_general_settings', 'label' => 'Загальні', 'type' => 'tab'),
             array('key' => 'field_uah_to_usd_rate', 'label' => 'Курс UAH до USD', 'name' => 'uah_to_usd_rate', 'type' => 'number', 'instructions' => 'Вкажіть поточний курс гривні до долара для конвертації цін. Використовуйте крапку як роздільник.', 'prepend' => '1 USD =', 'append' => 'UAH'),
             array('key' => 'field_tab_header_settings', 'label' => 'Хедер', 'type' => 'tab'),
+            array(
+                'key' => 'field_light_theme_logo',
+                'label' => 'Логотип для світлої теми',
+                'name' => 'light_theme_logo',
+                'type' => 'image',
+                'instructions' => 'Завантажте логотип, який буде відображатись на білому фоні. Якщо поле пусте, буде використовуватись стандартний логотип.',
+                'return_format' => 'url', // Будем получать сразу ссылку на изображение
+            ),
             array('key' => 'field_phone_number', 'label' => 'Номер телефону', 'name' => 'phone_number', 'type' => 'text', 'instructions' => 'Основний номер, відображається в хедері та футері.'),
             array('key' => 'field_address', 'label' => 'Адреса', 'name' => 'address', 'type' => 'text'),
             array('key' => 'field_google_maps_link', 'label' => 'Посилання на Google Maps', 'name' => 'google_maps_link', 'type' => 'url'),
@@ -186,7 +195,28 @@ function autobiography_acf_add_local_field_groups() {
                 array('key' => 'field_slide_image', 'label' => 'Фонове зображення', 'name' => 'image', 'type' => 'image', 'return_format' => 'url', 'conditional_logic' => array(array(array('field' => 'field_slide_background_type', 'operator' => '==', 'value' => 'image')))),
                 array('key' => 'field_slide_video', 'label' => 'Фонове відео', 'name' => 'video', 'type' => 'file', 'return_format' => 'url', 'conditional_logic' => array(array(array('field' => 'field_slide_background_type', 'operator' => '==', 'value' => 'video')))),
             )),
+            array(
+                'key' => 'field_hero_form_title',
+                'label' => 'Заголовок форми в шапці',
+                'name' => 'hero_form_title',
+                'type' => 'text',
+                'instructions' => 'Цей заголовок буде відображатись над формою зворотнього зв\'язку на головній.',
+            ),
             array('key' => 'field_hero_form_shortcode', 'label' => 'Шорткод форми в шапці', 'name' => 'hero_form_shortcode', 'type' => 'text'),
+            array(
+                'key' => 'field_hero_content_title',
+                'label' => 'Головний заголовок Hero',
+                'name' => 'hero_content_title',
+                'type' => 'text',
+                'instructions' => 'Буде відображатись зліва від форми.',
+            ),
+            array(
+                'key' => 'field_hero_content_subtitle',
+                'label' => 'Підзаголовок Hero',
+                'name' => 'hero_content_subtitle',
+                'type' => 'textarea',
+                'instructions' => 'Буде відображатись під головним заголовком.',
+            ),
             array('key' => 'field_tab_how_we_work', 'label' => 'Секція "Як ми працюємо"', 'type' => 'tab'),
             array('key' => 'field_how_we_work_title', 'label' => 'Заголовок секції', 'name' => 'how_we_work_title', 'type' => 'text'),
             array('key' => 'field_how_we_work_steps', 'label' => 'Етапи роботи', 'name' => 'how_we_work_steps', 'type' => 'repeater', 'sub_fields' => array(
@@ -194,6 +224,14 @@ function autobiography_acf_add_local_field_groups() {
                 array('key' => 'field_step_title', 'label' => 'Назва етапу', 'name' => 'step_title', 'type' => 'text'),
                 array('key' => 'field_step_description', 'label' => 'Опис етапу', 'name' => 'step_description', 'type' => 'textarea'),
             )),
+            array(
+                'key' => 'field_how_we_work_button',
+                'label' => 'Кнопка під секцією',
+                'name' => 'how_we_work_button',
+                'type' => 'link',
+                'instructions' => 'Додає кнопку по центру під блоком з етапами.',
+                'return_format' => 'array', // Важно, чтобы возвращался массив (url, title, target)
+            ),
             array('key' => 'field_tab_fp_available_cars', 'label' => 'Секція "Авто в наявності"', 'type' => 'tab'),
             array('key' => 'field_fp_available_cars_title', 'label' => 'Заголовок секції', 'name' => 'fp_available_cars_title', 'type' => 'text'),
             array('key' => 'field_fp_available_cars_button', 'label' => 'Текст кнопки "Показати більше"', 'name' => 'fp_available_cars_button_text', 'type' => 'text'),
@@ -916,3 +954,54 @@ function autobiography_allow_viber_protocol( $protocols ) {
     return $protocols;
 }
 add_filter( 'kses_allowed_protocols', 'autobiography_allow_viber_protocol' );
+
+// --- 9. BREADCRUMBS FUNCTION (Updated for Styling) ---
+function autobiography_breadcrumbs() {
+    // Настройки
+    $separator_html = '<span class="separator">/</span>';
+    $home_title = autobiography_translate_string('Головна', 'Home');
+
+    echo '<nav class="breadcrumbs" aria-label="breadcrumb">';
+    echo '<ol itemscope itemtype="https://schema.org/BreadcrumbList">';
+
+    echo '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
+    echo '<a itemprop="item" href="' . get_home_url() . '"><span itemprop="name">' . esc_html($home_title) . '</span></a>';
+    echo '<meta itemprop="position" content="1" />';
+    echo '</li>';
+
+    $position = 2;
+
+    if (is_post_type_archive()) {
+        echo $separator_html;
+        echo '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
+        echo '<span itemprop="name">' . post_type_archive_title('', false) . '</span>';
+        echo '<meta itemprop="position" content="' . $position . '" />';
+        echo '</li>';
+    } 
+    elseif (is_singular('car')) {
+        $post_type = get_post_type_object(get_post_type());
+        if ($post_type) {
+            echo $separator_html;
+            echo '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
+            echo '<a itemprop="item" href="' . get_post_type_archive_link(get_post_type()) . '"><span itemprop="name">' . $post_type->labels->name . '</span></a>';
+            echo '<meta itemprop="position" content="' . $position . '" />';
+            echo '</li>';
+            $position++;
+        }
+        echo $separator_html;
+        echo '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
+        echo '<span itemprop="name">' . get_the_title() . '</span>';
+        echo '<meta itemprop="position" content="' . $position . '" />';
+        echo '</li>';
+    }
+    elseif (is_page()) {
+        echo $separator_html;
+        echo '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
+        echo '<span itemprop="name">' . get_the_title() . '</span>';
+        echo '<meta itemprop="position" content="' . $position . '" />';
+        echo '</li>';
+    }
+
+    echo '</ol>';
+    echo '</nav>';
+}

@@ -24,6 +24,7 @@ $services_list = get_field('about_services_list');
     <?php if ($hero_image || $hero_title): ?>
     <section class="about-hero">
         <div class="container">
+            <?php autobiography_breadcrumbs(); ?>
             <div class="about-hero__grid">
                 <?php if ($hero_image): ?>
                 <div class="about-hero__image-wrapper">

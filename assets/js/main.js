@@ -304,4 +304,14 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
+    // --- Phone Number Input Mask (using Inputmask library) ---
+    jQuery(document).ready(function($) {
+        if ($('.custom-phone').length > 0) {
+            $('.custom-phone').inputmask({
+                "mask": "+380 (99) 999-99-99",
+                "clearIncomplete": true
+            });
+        }
+    });
 });
