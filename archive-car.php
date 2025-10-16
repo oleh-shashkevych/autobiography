@@ -21,93 +21,211 @@ $min_price = $wpdb->get_var("SELECT min(cast(meta_value as unsigned)) FROM $wpdb
 $max_price = $wpdb->get_var("SELECT max(cast(meta_value as unsigned)) FROM $wpdb->postmeta WHERE meta_key = 'price_usd'");
 $min_year = $wpdb->get_var("SELECT min(cast(meta_value as unsigned)) FROM $wpdb->postmeta WHERE meta_key = 'car_year'");
 $max_year = $wpdb->get_var("SELECT max(cast(meta_value as unsigned)) FROM $wpdb->postmeta WHERE meta_key = 'car_year'");
+$min_mileage = $wpdb->get_var("SELECT min(cast(meta_value as unsigned)) FROM $wpdb->postmeta WHERE meta_key = 'mileage'");
+$max_mileage = $wpdb->get_var("SELECT max(cast(meta_value as unsigned)) FROM $wpdb->postmeta WHERE meta_key = 'mileage'");
+$min_engine_volume = $wpdb->get_var("SELECT min(cast(meta_value as decimal(10,1))) FROM $wpdb->postmeta WHERE meta_key = 'engine_volume'");
+$max_engine_volume = $wpdb->get_var("SELECT max(cast(meta_value as decimal(10,1))) FROM $wpdb->postmeta WHERE meta_key = 'engine_volume'");
 $models = $wpdb->get_col("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = 'car_model' ORDER BY meta_value ASC");
 ?>
 
 <main id="primary" class="site-main">
 
-    <section class="<?php echo esc_attr($hero_classes); ?>" <?php echo $hero_style; ?>>
+    <!-- <section class="<?php echo esc_attr($hero_classes); ?>" <?php echo $hero_style; ?>>
         <div class="container">
             <?php autobiography_breadcrumbs(); ?>
             <h1 class="page-hero__title"><?php echo esc_html($catalog_title); ?></h1>
         </div>
-    </section>
+    </section> -->
 
     <div class="catalog-page-content container">
+        <?php autobiography_breadcrumbs(); ?>
         <aside class="catalog-filters">
             <form id="car-filters-form">
                 <div class="filters-header">
                     <h3><?php echo esc_html(autobiography_translate_string('Фільтри', 'Filters')); ?></h3>
                     <button type="reset" class="reset-filters"><?php echo esc_html(autobiography_translate_string('Скинути', 'Reset')); ?></button>
                 </div>
-                
-                <div class="filter-group">
-                    <label for="brand"><?php echo esc_html(autobiography_translate_string('Марка', 'Brand')); ?></label>
-                    <select name="brand" id="brand">
-                        <option value=""><?php echo esc_html(autobiography_translate_string('Всі марки', 'All brands')); ?></option>
-                        <?php $brands = get_terms(array('taxonomy' => 'brand', 'hide_empty' => true));
-                        foreach ($brands as $brand) { echo '<option value="' . $brand->slug . '">' . $brand->name . '</option>'; } ?>
-                    </select>
-                </div>
 
                 <div class="filter-group">
-                    <label for="model"><?php echo esc_html(autobiography_translate_string('Модель', 'Model')); ?></label>
-                    <select name="model" id="model">
-                        <option value=""><?php echo esc_html(autobiography_translate_string('Всі моделі', 'All models')); ?></option>
-                        <?php foreach ($models as $model) { echo '<option value="' . esc_attr($model) . '">' . esc_html($model) . '</option>'; } ?>
-                    </select>
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Марка', 'Brand')); ?></label>
+                        <span class="filter-group__toggle"></span>
+                    </div>
+                    <div class="filter-group__content">
+                        <select name="brand" id="brand">
+                            <option value=""><?php echo esc_html(autobiography_translate_string('Всі марки', 'All brands')); ?></option>
+                            <?php 
+                            $brands = get_terms(array('taxonomy' => 'brand', 'hide_empty' => false));
+                            foreach ($brands as $brand) {
+                                $disabled = $brand->count === 0 ? 'disabled' : '';
+                                echo '<option value="' . esc_attr($brand->slug) . '" ' . $disabled . '>' . esc_html($brand->name) . '</option>';
+                            } 
+                            ?>
+                        </select>
+                    </div>
                 </div>
                 
                 <div class="filter-group filter-group-range">
-                    <label><?php echo esc_html(autobiography_translate_string('Ціна, $', 'Price, $')); ?></label>
-                    <div id="price-slider"></div>
-                    <div class="range-inputs">
-                        <input type="number" name="min_price" id="min_price" min="<?php echo $min_price; ?>" max="<?php echo $max_price; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('Від', 'From')); ?>">
-                        <input type="number" name="max_price" id="max_price" min="<?php echo $min_price; ?>" max="<?php echo $max_price; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('До', 'To')); ?>">
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Ціна, $', 'Price, $')); ?></label>
+                        <span class="filter-group__toggle"></span>
                     </div>
-                </div>
-
-                <div class="filter-group filter-group-range">
-                    <label><?php echo esc_html(autobiography_translate_string('Рік випуску', 'Year')); ?></label>
-                    <div id="year-slider"></div>
-                    <div class="range-inputs">
-                        <input type="number" name="min_year" id="min_year" min="<?php echo $min_year; ?>" max="<?php echo $max_year; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('Від', 'From')); ?>">
-                        <input type="number" name="max_year" id="max_year" min="<?php echo $min_year; ?>" max="<?php echo $max_year; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('До', 'To')); ?>">
+                    <div class="filter-group__content">
+                        <div id="price-slider"></div>
+                        <div class="range-inputs">
+                            <input type="number" name="min_price" id="min_price" min="<?php echo $min_price; ?>" max="<?php echo $max_price; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('Від', 'From')); ?>">
+                            <input type="number" name="max_price" id="max_price" min="<?php echo $min_price; ?>" max="<?php echo $max_price; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('До', 'To')); ?>">
+                        </div>
                     </div>
                 </div>
 
                 <div class="filter-group">
-                    <label for="fuel_type"><?php echo esc_html(autobiography_translate_string('Паливо', 'Fuel type')); ?></label>
-                    <select name="fuel_type" id="fuel_type">
-                        <option value=""><?php echo esc_html(autobiography_translate_string('Всі', 'All')); ?></option>
-                        <?php $fuel_types = get_terms(array('taxonomy' => 'fuel_type', 'hide_empty' => true));
-                        foreach ($fuel_types as $type) { echo '<option value="' . $type->slug . '">' . $type->name . '</option>'; } ?>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="transmission"><?php echo esc_html(autobiography_translate_string('Коробка передач', 'Transmission')); ?></label>
-                    <select name="transmission" id="transmission">
-                        <option value=""><?php echo esc_html(autobiography_translate_string('Всі', 'All')); ?></option>
-                        <?php $transmissions = get_terms(array('taxonomy' => 'transmission', 'hide_empty' => true));
-                        foreach ($transmissions as $type) { echo '<option value="' . $type->slug . '">' . $type->name . '</option>'; } ?>
-                    </select>
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Модель', 'Model')); ?></label>
+                        <span class="filter-group__toggle"></span>
+                    </div>
+                    <div class="filter-group__content">
+                        <select name="model" id="model">
+                            <option value=""><?php echo esc_html(autobiography_translate_string('Всі моделі', 'All models')); ?></option>
+                            <?php foreach ($models as $model) { echo '<option value="' . esc_attr($model) . '">' . esc_html($model) . '</option>'; } ?>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="filter-group">
-                    <label for="body_type"><?php echo esc_html(autobiography_translate_string('Тип кузова', 'Body type')); ?></label>
-                    <select name="body_type" id="body_type">
-                        <option value=""><?php echo esc_html(autobiography_translate_string('Всі', 'All')); ?></option>
-                        <?php $body_types = get_terms(array('taxonomy' => 'body_type', 'hide_empty' => true));
-                        foreach ($body_types as $type) { echo '<option value="' . $type->slug . '">' . $type->name . '</option>'; } ?>
-                    </select>
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Рік випуску', 'Year')); ?></label>
+                        <span class="filter-group__toggle"></span>
+                    </div>
+                    <div class="filter-group__content">
+                        <div class="range-inputs">
+                            <input type="number" name="min_year" id="min_year" min="<?php echo $min_year; ?>" max="<?php echo $max_year; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('Від', 'From')); ?>">
+                            <input type="number" name="max_year" id="max_year" min="<?php echo $min_year; ?>" max="<?php echo $max_year; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('До', 'To')); ?>">
+                        </div>
+                    </div>
                 </div>
 
-                 <div class="filter-group">
-                    <label><?php echo esc_html(autobiography_translate_string('Статус', 'Status')); ?></label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="status" value="available" checked> <?php echo esc_html(autobiography_translate_string('В наявності', 'Available')); ?></label>
-                        <label><input type="checkbox" name="status" value="preparing" checked> <?php echo esc_html(autobiography_translate_string('В підготовці', 'Preparing')); ?></label>
+                <div class="filter-group">
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Пробіг, тис. км', 'Mileage, k km')); ?></label>
+                        <span class="filter-group__toggle"></span>
+                    </div>
+                    <div class="filter-group__content">
+                        <div class="range-inputs">
+                            <input type="number" name="min_mileage" id="min_mileage" min="<?php echo $min_mileage; ?>" max="<?php echo $max_mileage; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('Від', 'From')); ?>">
+                            <input type="number" name="max_mileage" id="max_mileage" min="<?php echo $min_mileage; ?>" max="<?php echo $max_mileage; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('До', 'To')); ?>">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Об\'єм двигуна, л', 'Engine Volume, L')); ?></label>
+                        <span class="filter-group__toggle"></span>
+                    </div>
+                    <div class="filter-group__content">
+                        <div class="range-inputs">
+                            <input type="number" name="min_engine_volume" id="min_engine_volume" step="0.1" min="<?php echo $min_engine_volume; ?>" max="<?php echo $max_engine_volume; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('Від', 'From')); ?>">
+                            <input type="number" name="max_engine_volume" id="max_engine_volume" step="0.1" min="<?php echo $min_engine_volume; ?>" max="<?php echo $max_engine_volume; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('До', 'To')); ?>">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Паливо', 'Fuel type')); ?></label>
+                        <span class="filter-group__toggle"></span>
+                    </div>
+                    <div class="filter-group__content">
+                        <select name="fuel_type" id="fuel_type">
+                            <option value=""><?php echo esc_html(autobiography_translate_string('Всі', 'All')); ?></option>
+                            <?php 
+                            $fuel_types = get_terms(array('taxonomy' => 'fuel_type', 'hide_empty' => false));
+                            foreach ($fuel_types as $type) {
+                                $disabled = $type->count === 0 ? 'disabled' : '';
+                                echo '<option value="' . esc_attr($type->slug) . '" ' . $disabled . '>' . esc_html($type->name) . '</option>';
+                            } 
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Коробка передач', 'Transmission')); ?></label>
+                        <span class="filter-group__toggle"></span>
+                    </div>
+                    <div class="filter-group__content">
+                        <select name="transmission" id="transmission">
+                            <option value=""><?php echo esc_html(autobiography_translate_string('Всі', 'All')); ?></option>
+                            <?php 
+                            $transmissions = get_terms(array('taxonomy' => 'transmission', 'hide_empty' => false));
+                            foreach ($transmissions as $type) {
+                                $disabled = $type->count === 0 ? 'disabled' : '';
+                                echo '<option value="' . esc_attr($type->slug) . '" ' . $disabled . '>' . esc_html($type->name) . '</option>';
+                            } 
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Привід', 'Drivetrain')); ?></label>
+                        <span class="filter-group__toggle"></span>
+                    </div>
+                    <div class="filter-group__content">
+                        <select name="drivetrain" id="drivetrain">
+                            <option value=""><?php echo esc_html(autobiography_translate_string('Всі', 'All')); ?></option>
+                            <?php
+                            $drivetrains = get_terms(array('taxonomy' => 'drivetrain', 'hide_empty' => false));
+                            foreach ($drivetrains as $drive) {
+                                $disabled = $drive->count === 0 ? 'disabled' : '';
+                                echo '<option value="' . esc_attr($drive->slug) . '" ' . $disabled . '>' . esc_html($drive->name) . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Тип кузова', 'Body type')); ?></label>
+                        <span class="filter-group__toggle"></span>
+                    </div>
+                    <div class="filter-group__content">
+                        <select name="body_type" id="body_type">
+                            <option value=""><?php echo esc_html(autobiography_translate_string('Всі', 'All')); ?></option>
+                            <?php 
+                            $body_types = get_terms(array('taxonomy' => 'body_type', 'hide_empty' => false));
+                            foreach ($body_types as $type) {
+                                $disabled = $type->count === 0 ? 'disabled' : '';
+                                echo '<option value="' . esc_attr($type->slug) . '" ' . $disabled . '>' . esc_html($type->name) . '</option>';
+                            } 
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Статус', 'Status')); ?></label>
+                        <span class="filter-group__toggle"></span>
+                    </div>
+                    <div class="filter-group__content">
+                        <div class="checkbox-group">
+                            
+                            <div>
+                                <input type="checkbox" name="status" value="available" id="status_available" checked>
+                                <label for="status_available" class="label"><?php echo esc_html(autobiography_translate_string('В наявності', 'Available')); ?></label>
+                            </div>
+
+                            <div>
+                                <input type="checkbox" name="status" value="preparing" id="status_preparing" checked>
+                                <label for="status_preparing" class="label"><?php echo esc_html(autobiography_translate_string('В підготовці', 'Preparing')); ?></label>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
@@ -120,9 +238,10 @@ $models = $wpdb->get_col("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE 
                     <label for="sort-by"><?php echo esc_html(autobiography_translate_string('Сортувати:', 'Sort by:')); ?></label>
                     <select name="sort" id="sort-by" form="car-filters-form">
                         <option value=""><?php echo esc_html(autobiography_translate_string('За замовчуванням', 'Default')); ?></option>
-                        <option value="price_asc"><?php echo esc_html(autobiography_translate_string('За ціною (зростання)', 'Price (ascending)')); ?></option>
-                        <option value="price_desc"><?php echo esc_html(autobiography_translate_string('За ціною (спадання)', 'Price (descending)')); ?></option>
-                        <option value="year_desc"><?php echo esc_html(autobiography_translate_string('За роком (новіші)', 'Year (newest)')); ?></option>
+                        <option value="price_asc"><?php echo esc_html(autobiography_translate_string('За ціною (спочатку дешевші)', 'Price (cheapest first)')); ?></option>
+                        <option value="price_desc"><?php echo esc_html(autobiography_translate_string('За ціною (спочатку дорожчі)', 'Price (expensive first)')); ?></option>
+                        <option value="year_desc"><?php echo esc_html(autobiography_translate_string('За роком (спочатку новіші)', 'Year (newest first)')); ?></option>
+                        <option value="year_asc"><?php echo esc_html(autobiography_translate_string('За роком (спочатку старіші)', 'Year (oldest first)')); ?></option>
                     </select>
                 </div>
                 <div class="catalog-view-switcher">
@@ -164,7 +283,15 @@ $models = $wpdb->get_col("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE 
     <?php endif; ?>
 
     <?php 
-    $sold_cars = new WP_Query(array( 'post_type' => 'car', 'posts_per_page' => 4, 'meta_query' => array(array('key' => 'car_status', 'value' => 'sold', 'compare' => '=')), ));
+    $sold_cars = new WP_Query(array( 
+        'post_type' => 'car', 
+        'posts_per_page' => 4, 
+        'meta_query' => array(array(
+            'key' => 'car_status', 
+            'value' => array('sold', 'reserved'), // --- ИЗМЕНЕНО ---
+            'compare' => 'IN'                     // --- ИЗМЕНЕНО ---
+        )), 
+    ));
     if ($sold_cars->have_posts()):
     ?>
     <section class="sold-cars-section">

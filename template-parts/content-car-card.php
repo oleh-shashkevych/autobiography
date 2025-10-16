@@ -8,6 +8,9 @@ $old_price_usd = get_field('old_price_usd');
 $status_slug = get_field('car_status');
 $status_info = get_car_status_info($status_slug);
 
+$category_slug = get_field('car_category');
+$category_info = get_car_category_info($category_slug);
+
 $image_url = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'large') : get_template_directory_uri() . '/assets/images/placeholder.png';
 ?>
 
@@ -20,6 +23,12 @@ $image_url = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'la
         <?php if ($status_info): ?>
             <div class="car-card__status-badge status--<?php echo esc_attr($status_info['class']); ?>">
                 <?php echo esc_html($status_info['label']); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($category_info): ?>
+            <div class="car-card__category-badge category--<?php echo esc_attr($category_info['class']); ?>">
+                <?php echo esc_html($category_info['label']); ?>
             </div>
         <?php endif; ?>
     </div>

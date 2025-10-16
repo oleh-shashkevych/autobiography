@@ -11,6 +11,7 @@ function autobiography_scripts() {
     wp_enqueue_style( 'baguettebox-css', 'https://cdn.jsdelivr.net/npm/baguettebox.js@1.11.1/dist/baguetteBox.min.css', array(), '1.11.1' );
     // noUiSlider for price range filter
     wp_enqueue_style( 'nouislider-css', 'https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css', array(), '15.7.1' );
+    wp_enqueue_style( 'choices-css', 'https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css', array(), '10.2.0' );
 
     // JS
     wp_enqueue_script( 'swiper-js', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11.0', true );
@@ -18,9 +19,10 @@ function autobiography_scripts() {
     // noUiSlider JS
     wp_enqueue_script( 'nouislider-js', 'https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js', array(), '15.7.1', true );
     wp_enqueue_script( 'inputmask-js', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js', array('jquery'), '5.0.8', true );
+    wp_enqueue_script( 'choices-js', 'https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js', array(), '10.2.0', true );
     
     // Main JS file
-    wp_enqueue_script( 'autobiography-main-js', get_template_directory_uri() . '/assets/js/main.js', array('swiper-js', 'baguettebox-js', 'nouislider-js'), '1.0.5', true );
+    wp_enqueue_script( 'autobiography-main-js', get_template_directory_uri() . '/assets/js/main.js', array('swiper-js', 'baguettebox-js', 'nouislider-js', 'choices-js'), '1.0.6', true );
 
     // Localize script for AJAX
     wp_localize_script( 'autobiography-main-js', 'autobiography_ajax', array(
@@ -64,6 +66,7 @@ function autobiography_register_car_taxonomies() {
     register_taxonomy('body_type', 'car', array('label' => 'Тип кузова', 'rewrite' => array('slug' => 'body-type'), 'hierarchical' => true));
     register_taxonomy('fuel_type', 'car', array('label' => 'Тип палива', 'rewrite' => array('slug' => 'fuel-type'), 'hierarchical' => true));
     register_taxonomy('transmission', 'car', array('label' => 'Коробка передач', 'rewrite' => array('slug' => 'transmission'), 'hierarchical' => true));
+    register_taxonomy('drivetrain', 'car', array('label' => 'Привід', 'rewrite' => array('slug' => 'drivetrain'), 'hierarchical' => true));
 }
 add_action( 'init', 'autobiography_register_car_taxonomies' );
 
@@ -266,6 +269,19 @@ function autobiography_acf_add_local_field_groups() {
         array('key' => 'field_car_price_usd', 'label' => 'Ціна ($)', 'name' => 'price_usd', 'type' => 'number', 'required' => 1),
         array('key' => 'field_car_old_price_usd', 'label' => 'Стара ціна ($)', 'name' => 'old_price_usd', 'type' => 'number'),
         array('key' => 'field_car_status', 'label' => 'Статус', 'name' => 'car_status', 'type' => 'select', 'choices' => array('available' => 'В наявності', 'preparing' => 'В підготовці', 'reserved' => 'Заброньовано', 'sold' => 'Продано'), 'required' => 1),
+        array(
+            'key' => 'field_car_category',
+            'label' => 'Категорія авто',
+            'name' => 'car_category',
+            'type' => 'select',
+            'instructions' => 'Вкажіть категорію для внутрішнього обліку та відображення на сайті.',
+            'choices' => array(
+                'our_car' => 'Наше авто',
+                'verified_car' => 'Перевірене авто',
+            ),
+            'allow_null' => 1, // Разрешить пустое значение
+            'ui' => 1, // Улучшенный интерфейс
+        ),
         array('key' => 'field_tab_specifications', 'label' => 'Характеристики', 'type' => 'tab'),
         array('key' => 'field_car_mileage', 'label' => 'Пробіг (тис. км)', 'name' => 'mileage', 'type' => 'number'),
         array('key' => 'field_car_engine_volume', 'label' => 'Об\'єм двигуна (л)', 'name' => 'engine_volume', 'type' => 'number', 'step' => '0.1', 'instructions' => 'Для бензинових/дизельних/гібридних авто'),
@@ -727,14 +743,28 @@ function get_car_status_info($status_slug) {
     return isset($statuses[$status_slug]) ? $statuses[$status_slug] : null;
 }
 
-// --- ОБНОВЛЕННАЯ ФУНКЦИЯ: Устанавливает кол-во постов и ИСКЛЮЧАЕТ "ПРОДАННЫЕ" ---
+function get_car_category_info($category_slug) {
+    $categories = array(
+        'our_car' => array(
+            'label' => autobiography_translate_string('Наше авто', 'Our Car'), 
+            'class' => 'our-car'
+        ),
+        'verified_car' => array(
+            'label' => autobiography_translate_string('Перевірене авто', 'Verified Car'), 
+            'class' => 'verified-car'
+        ),
+    );
+    return isset($categories[$category_slug]) ? $categories[$category_slug] : null;
+}
+
+// --- 🏆 ОБНОВЛЕННАЯ ФУНКЦИЯ: Устанавливает кол-во постов, ИСКЛЮЧАЕТ "ПРОДАННЫЕ" и "ЗАБРОНИРОВАННЫЕ", и ЗАДАЕТ ПРИОРИТЕТНУЮ СОРТИРОВКУ ---
 function autobiography_set_cars_per_page( $query ) {
     if ( ! is_admin() && $query->is_main_query() && is_post_type_archive( 'car' ) ) {
         
         // Устанавливаем количество постов на странице
         $query->set( 'posts_per_page', 20 );
         
-        // Добавляем условие для мета-поля, чтобы исключить проданные авто
+        // 1. Исключаем проданные и забронированные авто
         $meta_query = $query->get( 'meta_query' );
         if ( ! is_array( $meta_query ) ) {
             $meta_query = [];
@@ -742,14 +772,46 @@ function autobiography_set_cars_per_page( $query ) {
         
         $meta_query[] = array(
             'key'     => 'car_status',
-            'value'   => 'sold',
-            'compare' => '!=',
+            'value'   => array('sold', 'reserved'), // --- ИЗМЕНЕНО ---
+            'compare' => 'NOT IN',
         );
         
         $query->set( 'meta_query', $meta_query );
+
+        // 2. Добавляем сложную сортировку через SQL-фильтры
+        // Эта проверка нужна, чтобы наша сортировка не применялась при AJAX-фильтрации
+        if ( ! wp_doing_ajax() ) {
+            add_filter( 'posts_join', 'autobiography_car_archive_join' );
+            add_filter( 'posts_orderby', 'autobiography_car_archive_orderby' );
+        }
     }
 }
 add_action( 'pre_get_posts', 'autobiography_set_cars_per_page' );
+
+// Новая функция для присоединения таблиц метаданных
+function autobiography_car_archive_join( $join ) {
+    global $wpdb;
+    $join .= " LEFT JOIN {$wpdb->postmeta} AS mt_category ON ({$wpdb->posts}.ID = mt_category.post_id AND mt_category.meta_key = 'car_category')";
+    $join .= " LEFT JOIN {$wpdb->postmeta} AS mt_status ON ({$wpdb->posts}.ID = mt_status.post_id AND mt_status.meta_key = 'car_status')";
+    return $join;
+}
+
+// Новая функция для кастомной сортировки
+function autobiography_car_archive_orderby( $orderby ) {
+    global $wpdb;
+    $orderby = " CASE
+        WHEN mt_category.meta_value = 'our_car' AND mt_status.meta_value = 'available' THEN 1
+        WHEN mt_category.meta_value = 'our_car' AND mt_status.meta_value = 'preparing' THEN 2
+        WHEN mt_category.meta_value = 'verified_car' THEN 3
+        ELSE 4
+    END, {$wpdb->posts}.post_date DESC";
+
+    // Убираем фильтры после использования, чтобы они не влияли на другие запросы
+    remove_filter( 'posts_join', 'autobiography_car_archive_join' );
+    remove_filter( 'posts_orderby', 'autobiography_car_archive_orderby' );
+
+    return $orderby;
+}
 
 
 // --- 7. POLYLANG STRING REGISTRATION ---
@@ -851,12 +913,86 @@ function autobiography_filter_cars_ajax_handler() {
     }
     
     // Year Filter
-     if (isset($_POST['min_year']) && isset($_POST['max_year'])) {
+    $min_year = !empty($_POST['min_year']) ? sanitize_text_field($_POST['min_year']) : null;
+    $max_year = !empty($_POST['max_year']) ? sanitize_text_field($_POST['max_year']) : null;
+
+    if ($min_year && $max_year) {
+        // Если заданы оба значения
         $meta_query[] = array(
             'key' => 'car_year',
-            'value' => array($_POST['min_year'], $_POST['max_year']),
+            'value' => array($min_year, $max_year),
             'type' => 'numeric',
             'compare' => 'BETWEEN',
+        );
+    } elseif ($min_year) {
+        // Если задано только "от"
+        $meta_query[] = array(
+            'key' => 'car_year',
+            'value' => $min_year,
+            'type' => 'numeric',
+            'compare' => '>=',
+        );
+    } elseif ($max_year) {
+        // Если задано только "до"
+        $meta_query[] = array(
+            'key' => 'car_year',
+            'value' => $max_year,
+            'type' => 'numeric',
+            'compare' => '<=',
+        );
+    }
+
+    // Mileage Filter
+    $min_mileage = !empty($_POST['min_mileage']) ? sanitize_text_field($_POST['min_mileage']) : null;
+    $max_mileage = !empty($_POST['max_mileage']) ? sanitize_text_field($_POST['max_mileage']) : null;
+
+    if ($min_mileage && $max_mileage) {
+        $meta_query[] = array(
+            'key' => 'mileage',
+            'value' => array($min_mileage, $max_mileage),
+            'type' => 'numeric',
+            'compare' => 'BETWEEN',
+        );
+    } elseif ($min_mileage) {
+        $meta_query[] = array(
+            'key' => 'mileage',
+            'value' => $min_mileage,
+            'type' => 'numeric',
+            'compare' => '>=',
+        );
+    } elseif ($max_mileage) {
+        $meta_query[] = array(
+            'key' => 'mileage',
+            'value' => $max_mileage,
+            'type' => 'numeric',
+            'compare' => '<=',
+        );
+    }
+
+    // Engine Volume Filter
+    $min_engine_volume = !empty($_POST['min_engine_volume']) ? sanitize_text_field($_POST['min_engine_volume']) : null;
+    $max_engine_volume = !empty($_POST['max_engine_volume']) ? sanitize_text_field($_POST['max_engine_volume']) : null;
+
+    if ($min_engine_volume && $max_engine_volume) {
+        $meta_query[] = array(
+            'key' => 'engine_volume',
+            'value' => array($min_engine_volume, $max_engine_volume),
+            'type' => 'DECIMAL(10,1)',
+            'compare' => 'BETWEEN',
+        );
+    } elseif ($min_engine_volume) {
+        $meta_query[] = array(
+            'key' => 'engine_volume',
+            'value' => $min_engine_volume,
+            'type' => 'DECIMAL(10,1)',
+            'compare' => '>=',
+        );
+    } elseif ($max_engine_volume) {
+        $meta_query[] = array(
+            'key' => 'engine_volume',
+            'value' => $max_engine_volume,
+            'type' => 'DECIMAL(10,1)',
+            'compare' => '<=',
         );
     }
 
@@ -870,7 +1006,7 @@ function autobiography_filter_cars_ajax_handler() {
     }
 
     // Taxonomy Filters
-    $taxonomies = ['brand', 'body_type', 'fuel_type', 'transmission'];
+    $taxonomies = ['brand', 'body_type', 'fuel_type', 'transmission', 'drivetrain'];
     foreach ($taxonomies as $tax) {
         if (isset($_POST[$tax]) && !empty($_POST[$tax])) {
             $tax_query[] = array(
@@ -906,6 +1042,11 @@ function autobiography_filter_cars_ajax_handler() {
                 $args['meta_key'] = 'car_year';
                 $args['orderby'] = 'meta_value_num';
                 $args['order'] = 'DESC';
+                break;
+            case 'year_asc':
+                $args['meta_key'] = 'car_year';
+                $args['orderby'] = 'meta_value_num';
+                $args['order'] = 'ASC';
                 break;
         }
     }

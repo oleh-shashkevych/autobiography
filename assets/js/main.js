@@ -243,7 +243,6 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         if (priceSlider) createSlider(priceSlider, minPriceInput, maxPriceInput);
-        if (yearSlider) createSlider(yearSlider, minYearInput, maxYearInput);
 
         const sortBySelect = document.getElementById('sort-by');
         if (sortBySelect) {
@@ -313,5 +312,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 "clearIncomplete": true
             });
         }
+    });
+
+    // --- Custom Filters Logic ---
+    const filtersContainer = document.querySelector('.catalog-filters');
+    if (!filtersContainer) return;
+
+    // 1. Accordion functionality
+    const filterHeaders = filtersContainer.querySelectorAll('.filter-group__header');
+    filterHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            header.parentElement.classList.toggle('is-collapsed');
+        });
+    });
+
+    // 2. Initialize custom selects with Choices.js
+    const selectElements = document.querySelectorAll('.catalog-filters select, .catalog-sort select'); 
+    selectElements.forEach(select => {
+        new Choices(select, {
+            searchEnabled: false, 
+            itemSelectText: '', 
+            shouldSort: false, 
+        });
     });
 });

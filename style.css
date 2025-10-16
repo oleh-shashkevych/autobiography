@@ -1790,6 +1790,14 @@ body.light-theme {
     padding: 60px 30px;
 }
 
+.catalog-page-content .breadcrumbs {
+    grid-column: span 2;
+}
+
+.catalog-page-content .breadcrumbs ol {
+    justify-content: flex-start;
+}
+
 /* Filters Sidebar */
 .catalog-filters {
     border: 1px solid var(--border-color);
@@ -1838,6 +1846,10 @@ body.light-theme {
     color: var(--text-color);
     font-size: 15px;
 }
+.filter-group select option:disabled {
+    color: #999;
+    background-color: rgba(128, 128, 128, 0.1);
+}
 .filter-group input[type="number"] {
     -moz-appearance: textfield;
 }
@@ -1850,6 +1862,10 @@ body.light-theme {
     display: flex;
     gap: 10px;
     margin-top: 10px;
+}
+.filter-group .range-inputs {
+    display: flex;
+    gap: 10px;
 }
 .checkbox-group {
     display: flex;
@@ -1868,31 +1884,31 @@ body.light-theme {
 
 /* Range Slider Styles (noUiSlider) */
 .noUi-target {
-    background: var(--border-color);
-    border: none;
-    border-radius: 4px;
-    height: 6px;
-    box-shadow: none;
+    background: var(--border-color) !important;
+    border: none !important;
+    border-radius: 4px !important;
+    height: 6px !important;
+    box-shadow: none !important;
 }
 .noUi-connect {
-    background: var(--green);
+    background: var(--green) !important;
 }
 .noUi-handle {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 3px solid var(--bg-color);
-    background: var(--green);
-    right: -9px;
-    top: -6px;
-    box-shadow: none;
-    cursor: grab;
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 50% !important;
+    border: 3px solid var(--bg-color) !important;
+    background: var(--text-color) !important;
+    right: -9px !important;
+    top: -6px !important;
+    box-shadow: none !important;
+    cursor: grab !important;
 }
 .noUi-handle:focus {
-    outline: none;
+    outline: none !important;
 }
 .noUi-handle::before, .noUi-handle::after {
-    display: none;
+    display: none !important;
 }
 
 /* Main Catalog Area */
@@ -1909,6 +1925,9 @@ body.light-theme {
 }
 .catalog-sort label {
     flex-shrink: 0;
+}
+.catalog-sort .choices {
+    min-width: 250px;
 }
 .catalog-view-switcher {
     display: flex;
@@ -2008,6 +2027,20 @@ body.light-theme {
 .status--preparing { background-color: #f39c12; }
 .status--reserved { background-color: #3498db; }
 .status--sold { background-color: #e74c3c; }
+
+.car-card__category-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px; /* Размещаем справа */
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+    z-index: 2;
+}
+.category--our-car { background-color: #3498db; } /* Синий цвет для "Наше авто" */
+.category--verified-car { background-color: #8e44ad; } /* Фиолетовый для "Перевірене авто" */
 
 .car-card__image-overlay {
     position: absolute;
@@ -2109,6 +2142,159 @@ body.light-theme {
     text-align: center;
     margin-bottom: 60px;
     font-size: 42px;
+}
+
+/* --- 1. Filter Accordion Styles --- */
+.filter-group__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    padding: 5px 0; /* Небольшой отступ для удобства клика */
+}
+
+.filter-group__header label {
+    margin-bottom: 0;
+    font-weight: 600; /* Делаем заголовки жирнее */
+    font-size: 16px;
+}
+
+.filter-group__toggle {
+    width: 16px;
+    height: 16px;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.filter-group__toggle::before,
+.filter-group__toggle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 2px;
+    background-color: currentColor;
+    transform-origin: center;
+}
+
+.filter-group__toggle::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.filter-group__toggle::before {
+     transform: translate(-50%, -50%);
+}
+
+.filter-group.is-collapsed .filter-group__toggle::after {
+    transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.filter-group__content {
+    max-height: 1000px; /* Достаточно большая высота */
+    /* overflow: hidden; */
+    padding-top: 10px; /* Отступ сверху от контента */
+    transition: max-height 0.4s ease, padding-top 0.4s ease;
+}
+
+.filter-group.is-collapsed .filter-group__content {
+    max-height: 0;
+    padding-top: 0;
+    overflow: hidden;
+}
+
+/* --- 2. Custom Checkbox Styles --- */
+.checkbox-group .label { /* Изменил селектор для избежания конфликтов */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+    display: none; /* Скрываем стандартный чекбокс */
+}
+
+.checkbox-group .label::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.checkbox-group input[type="checkbox"]:checked + .label::before {
+    background-color: var(--green);
+    border-color: var(--green);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: 14px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* --- 3. Custom Select (Choices.js) Styles --- */
+.choices {
+    margin-bottom: 0;
+}
+
+.choices__inner {
+    background-color: var(--bg-color) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 5px;
+    color: var(--text-color);
+    padding: 6px 10px !important;
+    font-size: 15px !important;
+    min-height: auto !important;
+    transition: border-color 0.3s; /* Добавляем плавный переход */
+}
+
+.choices.is-focused .choices__inner {
+    border-color: var(--green) !important;
+}
+
+.choices[data-type*="select-one"]::after {
+    border-color: var(--text-color) transparent transparent !important;
+    right: 12.5px;
+    margin-top: -3px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.choices.is-open[data-type*="select-one"]::after {
+    border-color: transparent transparent var(--text-color) !important;
+    margin-top: -8px;
+}
+
+.choices__list--dropdown,
+.choices__list[aria-expanded] {
+    background-color: var(--bg-color) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 5px;
+    z-index: 15 !important;
+}
+
+.choices__list--dropdown .choices__item--selectable {
+    padding-right: 10px;
+}
+
+.choices__list--dropdown .choices__item--selectable.is-highlighted {
+    background-color: var(--border-color) !important;
+}
+
+.choices__item {
+    font-size: 15px;
+    color: var(--text-color) !important;
+}
+.choices__list--dropdown .choices__item--selectable[data-disabled] {
+    background-color: transparent !important;
+    opacity: 0.5; /* Немного уменьшим прозрачность для лучшей читаемости */
+    color: var(--text-color) !important;
 }
 
 /* --- 17. Single Car Page --- */
@@ -2706,6 +2892,10 @@ body.page-template-template-about .breadcrumbs .separator {
 
     .catalog-page-content {
         grid-template-columns: 1fr;
+    }
+
+    .catalog-page-content .breadcrumbs {
+        grid-column: span 1;
     }
     .catalog-filters {
         position: static;
