@@ -292,7 +292,47 @@ function autobiography_acf_add_local_field_groups() {
         array('key' => 'field_tab_photos', 'label' => 'Фотографії', 'type' => 'tab'),
         array('key' => 'field_car_gallery', 'label' => 'Галерея', 'name' => 'car_gallery', 'type' => 'gallery', 'instructions' => 'Перше фото буде головним.'),
         array('key' => 'field_tab_other', 'label' => 'Комплектація та кнопки', 'type' => 'tab'),
-        array('key' => 'field_car_complectation', 'label' => 'Комплектація', 'name' => 'complectation', 'type' => 'wysiwyg'),
+        array(
+                'key' => 'field_car_test_drive_button',
+                'label' => 'Кнопка "Записатись на тест-драйв"',
+                'name' => 'test_drive_button',
+                'type' => 'link',
+                'instructions' => 'Додайте посилання на модальне вікно (напр. #test-drive-popup). Текст кнопки можна змінити тут.',
+                'return_format' => 'array',
+            ),
+        array(
+                'key' => 'field_car_features_repeater',
+                'label' => 'Комплектація (за категоріями)',
+                'name' => 'car_features',
+                'type' => 'repeater',
+                'instructions' => 'Додайте групи характеристик. Кожна група буде окремою колонкою.',
+                'button_label' => 'Додати категорію',
+                'sub_fields' => array(
+                    array(
+                        'key' => 'field_car_feature_category',
+                        'label' => 'Категорія',
+                        'name' => 'category_title',
+                        'type' => 'select',
+                        'choices' => array(
+                            'safety' => 'Безпека',
+                            'comfort' => 'Комфорт та функціональність',
+                            'exterior' => 'Екстер’єр',
+                            'interior' => 'Інтер’єр',
+                            'additional' => 'Додатково',
+                        ),
+                    ),
+                    array(
+                        'key' => 'field_car_feature_list',
+                        'label' => 'Список опцій',
+                        'name' => 'features_list',
+                        'type' => 'wysiwyg',
+                        'instructions' => 'Найкраще використовувати маркований список.',
+                        'tabs' => 'visual',
+                        'media_upload' => 0,
+                        'toolbar' => 'basic',
+                    ),
+                ),
+            ),
         array('key' => 'field_action_buttons', 'label' => 'Кнопки дій', 'name' => 'action_buttons', 'type' => 'repeater', 'button_label' => 'Додати кнопку', 'sub_fields' => array(
             array('key' => 'field_button_text', 'label' => 'Текст кнопки', 'name' => 'button_text', 'type' => 'text'),
             array('key' => 'field_button_link', 'label' => 'Посилання або ID модального вікна', 'name' => 'button_link', 'type' => 'text'),
@@ -1146,3 +1186,19 @@ function autobiography_breadcrumbs() {
     echo '</ol>';
     echo '</nav>';
 }
+
+// --- AJAX HANDLER FOR LOADING FLUENT FORMS IN POPUP ---
+function autobiography_load_fluent_form_ajax() {
+    // Проверяем, передан ли ID формы и является ли он числом
+    if ( isset($_POST['form_id']) && is_numeric($_POST['form_id']) ) {
+        $form_id = intval($_POST['form_id']);
+        
+        // Создаем шорткод и выводим его HTML
+        echo do_shortcode('[fluentform id="' . $form_id . '"]');
+    }
+    
+    // Важно завершить выполнение, чтобы не выводить лишний код (0 или -1)
+    wp_die(); 
+}
+add_action('wp_ajax_load_fluent_form', 'autobiography_load_fluent_form_ajax');
+add_action('wp_ajax_nopriv_load_fluent_form', 'autobiography_load_fluent_form_ajax');

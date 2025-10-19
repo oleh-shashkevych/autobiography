@@ -49,7 +49,6 @@ if ($power_string) {
     <div class="container single-car-container">
         <?php while ( have_posts() ) : the_post(); ?>
             <?php autobiography_breadcrumbs(); ?>
-            <h1 class="single-car__title"><?php echo strip_tags($brand); ?> <?php echo $model; ?>, <?php echo $year; ?></h1>
 
             <div class="single-car-grid">
                 <div class="single-car__gallery">
@@ -80,16 +79,32 @@ if ($power_string) {
                 </div>
 
                 <div class="single-car__details">
+                    <h1 class="single-car__title"><?php echo strip_tags($brand); ?> <?php echo $model; ?>, <?php echo $year; ?></h1>
+                    <?php 
+                    $test_drive_button = get_field('test_drive_button');
+                    if ( $test_drive_button ):
+                        // Устанавливаем текст по умолчанию, если он не задан в админке
+                        $link_title = !empty($test_drive_button['title']) ? esc_html($test_drive_button['title']) : esc_html(autobiography_translate_string('Записатись на тест-драйв', 'Sign up for a test drive'));
+                        $link_url = esc_url($test_drive_button['url']);
+                        $link_target = esc_attr($test_drive_button['target'] ? $test_drive_button['target'] : '_self');
+                    ?>
+                    <div class="car-test-drive-block">
+                        <a href="<?php echo $link_url; ?>" target="<?php echo $link_target; ?>" class="button button--primary">
+                            <?php echo $link_title; ?>
+                        </a>
+                    </div>
+                    <?php endif; ?>
                     <div class="car-price-block">
                         <div class="car-price--current">
                             <span class="price-usd">$<?php echo number_format_i18n($price_usd, 0); ?></span>
                             <?php if ($price_uah): ?>
                                 <span class="price-uah">≈ <?php echo $price_uah; ?> <?php echo esc_html(autobiography_translate_string('грн', 'UAH')); ?></span>
                             <?php endif; ?>
+
+                            <?php if ($old_price_usd): ?>
+                                <span class="car-price--old">$<?php echo number_format_i18n($old_price_usd, 0); ?></span>
+                            <?php endif; ?>
                         </div>
-                        <?php if ($old_price_usd): ?>
-                             <span class="car-price--old">$<?php echo number_format_i18n($old_price_usd, 0); ?></span>
-                        <?php endif; ?>
                     </div>
 
                     <div class="car-specs-block">
@@ -127,11 +142,47 @@ if ($power_string) {
                     </div>
                 <?php endif; ?>
                 
-                <?php if ($complectation = get_field('complectation')): ?>
-                    <div class="car-complectation content-styles">
-                        <h2><?php echo esc_html(autobiography_translate_string('Комплектація', 'Features')); ?></h2>
-                        <?php echo $complectation; ?>
+                <?php
+                $car_features = get_field('car_features');
+                if ($car_features):
+                ?>
+                <div class="car-features">
+                    <h2><?php echo esc_html(autobiography_translate_string('Комплектація', 'Features')); ?></h2>
+                    <div class="car-features-grid">
+                        <?php foreach ($car_features as $feature_group): 
+                            $category_key = $feature_group['category_title']; // 'safety', 'comfort', etc.
+                            $features_list = $feature_group['features_list'];
+                            
+                            // Определяем украинское название по ключу
+                            $field_obj = get_field_object('field_car_feature_category');
+                            $category_label_uk = isset($field_obj['choices'][$category_key]) ? $field_obj['choices'][$category_key] : '';
+
+                            // Определяем английский перевод для каждого ключа
+                            $category_label_en = $category_label_uk; // По умолчанию
+                            if ($category_key === 'safety') {
+                                $category_label_en = 'Safety';
+                            } elseif ($category_key === 'comfort') {
+                                $category_label_en = 'Comfort and functionality';
+                            } elseif ($category_key === 'exterior') {
+                                $category_label_en = 'Exterior';
+                            } elseif ($category_key === 'interior') {
+                                $category_label_en = 'Interior';
+                            } elseif ($category_key === 'additional') {
+                                $category_label_en = 'Additionally';
+                            }
+
+                            // Используем вашу функцию для вывода нужного языка
+                            $translated_title = autobiography_translate_string($category_label_uk, $category_label_en);
+                        ?>
+                            <div class="car-features-column">
+                                <h3 class="car-features-column__title"><?php echo esc_html($translated_title); ?></h3>
+                                <div class="car-features-column__list content-styles">
+                                    <?php echo $features_list; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
+                </div>
                 <?php endif; ?>
             </div>
 

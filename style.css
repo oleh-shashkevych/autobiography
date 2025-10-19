@@ -874,34 +874,41 @@ body.light-theme .footer__logo .logo-light {
 }
 
 /* --- Fluent Form Custom Styles --- */
-.contact-section__form .fluentform {
+.contact-section__form .fluentform,
+.popup-form-container .fluentform {
     margin-top: 30px;
 }
 
-.contact-section__form .ff-el-input--label label {
+.contact-section__form .ff-el-input--label label,
+.popup-form-container .ff-el-input--label label{
     font-size: 16px;
     font-weight: 500;
     margin-bottom: 15px;
     color: var(--text-color);
 }
 
-.contact-section__form .ff-el-input--content {
+.contact-section__form .ff-el-input--content,
+.popup-form-container .ff-el-input--content  {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
 .contact-section__form .ff-el-form-check-rad-btns,
-.contact-section__form .ff-el-form-check-checkbox-btns {
+.contact-section__form .ff-el-form-check-checkbox-btns,
+.popup-form-container .ff-el-form-check-rad-btns,
+.popup-form-container .ff-el-form-check-checkbox-btns {
     display: contents;
 }
 
-.contact-section__form .ff-el-form-check-label {
+.contact-section__form .ff-el-form-check-label,
+.popup-form-container .ff-el-form-check-label {
     flex-grow: 1;
     display: flex !important;
 }
 
-.contact-section__form .ff-el-form-check-label span {
+.contact-section__form .ff-el-form-check-label span,
+.popup-form-container .ff-el-form-check-label span {
     display: block;
     padding: 10px 15px;
     border: 1px solid var(--border-color);
@@ -912,22 +919,26 @@ body.light-theme .footer__logo .logo-light {
     transition: all 0.2s ease-in-out;
 }
 
-.contact-section__form .ff-el-form-check-input {
+.contact-section__form .ff-el-form-check-input,
+.popup-form-container .ff-el-form-check-input {
     display: none !important;
 }
 
-.contact-section__form .ff-el-form-check-label span:hover {
+.contact-section__form .ff-el-form-check-label span:hover,
+.popup-form-container .ff-el-form-check-label span:hover {
     border-color: var(--green);
     color: var(--green);
 }
 
-.contact-section__form .ff-el-form-check-input:checked+span {
+.contact-section__form .ff-el-form-check-input:checked+span,
+.popup-form-container .ff-el-form-check-input:checked+span {
     background-color: var(--green);
     border-color: var(--green);
     color: var(--white);
 }
 
-.contact-section__form .ff-el-form-control {
+.contact-section__form .ff-el-form-control,
+.popup-form-container .ff-el-form-control {
     background-color: var(--bg-color) !important;
     border: 1px solid var(--border-color) !important;
     color: var(--text-color) !important;
@@ -937,7 +948,8 @@ body.light-theme .footer__logo .logo-light {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.contact-section__form .ff-el-form-control:focus {
+.contact-section__form .ff-el-form-control:focus,
+.popup-form-container .ff-el-form-control:focus {
     border-color: var(--green) !important;
     box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.3) !important;
 }
@@ -945,7 +957,8 @@ body.light-theme .footer__logo .logo-light {
 /* --- Custom Checkbox Styles (Final) --- */
 
 /* Контейнер для чекбокса и текста */
-.contact-section__form .ff-el-tc .ff-el-form-check-label {
+.contact-section__form .ff-el-tc .ff-el-form-check-label,
+.popup-form-container .ff-el-tc .ff-el-form-check-label {
     display: flex !important;
     align-items: center;
     cursor: pointer;
@@ -954,12 +967,15 @@ body.light-theme .footer__logo .logo-light {
 
 /* Скрываем ненужные элементы */
 .contact-section__form .ff_tc_checkbox input[type="checkbox"],
-.contact-section__form .ff_tc_checkbox span {
+.contact-section__form .ff_tc_checkbox span,
+.popup-form-container .ff_tc_checkbox input[type="checkbox"],
+.popup-form-container .ff_tc_checkbox span {
     display: none;
 }
 
 /* Основа кастомного чекбокса */
-.contact-section__form .ff_tc_checkbox {
+.contact-section__form .ff_tc_checkbox,
+.popup-form-container .ff_tc_checkbox {
     display: block !important;
     width: 22px !important;
     height: 22px !important;
@@ -974,27 +990,32 @@ body.light-theme .footer__logo .logo-light {
 }
 
 /* Стили для активного состояния по классу .ff_item_selected */
-.contact-section__form .ff-el-tc.ff_item_selected .ff_tc_checkbox {
+.contact-section__form .ff-el-tc.ff_item_selected .ff_tc_checkbox,
+.popup-form-container .ff-el-tc.ff_item_selected .ff_tc_checkbox {
     background-color: var(--green);
     border-color: var(--green);
 }
 
 /* Текст соглашения */
-.contact-section__form .ff_t_c {
+.contact-section__form .ff_t_c,
+.popup-form-container .ff_t_c {
     font-size: 14px;
     opacity: 0.8;
 }
 
-.contact-section__form .ff_t_c {
+.contact-section__form .ff_t_c,
+.popup-form-container .ff_t_c {
     font-size: 14px;
     opacity: 0.8;
 }
 
-.contact-section__form .ff_submit_btn_wrapper {
+.contact-section__form .ff_submit_btn_wrapper,
+.popup-form-container .ff_submit_btn_wrapper {
     margin-bottom: 0 !important;
 }
 
-.contact-section__form .ff-btn-submit {
+.contact-section__form .ff-btn-submit,
+.popup-form-container .ff-btn-submit {
     width: auto;
     min-width: 200px;
     background-color: var(--green) !important;
@@ -1006,7 +1027,8 @@ body.light-theme .footer__logo .logo-light {
     transition: transform 0.2s, box-shadow 0.2s !important;
 }
 
-.contact-section__form .ff-btn-submit:hover {
+.contact-section__form .ff-btn-submit:hover,
+.popup-form-container .ff-btn-submit:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
 }
@@ -1018,7 +1040,9 @@ body.light-theme .footer__logo .logo-light {
 .contact-section__form .fluentform .ff-el-repeat .ff-el-input--content:after,
 .contact-section__form .fluentform .ff-el-repeat .ff-el-input--content:before,
 .contact-section__form .fluentform .ff-step-body:after,
-.contact-section__form .fluentform .ff-step-body:before {
+.contact-section__form .fluentform .ff-step-body:before,
+.popup-form-container .fluentform .clearfix:after,
+.popup-form-container .fluentform .clearfix:before {
     display: none !important;
 }
 
@@ -1096,7 +1120,8 @@ body.light-theme .footer__logo .logo-light {
     color: var(--text-color);
 }
 
-.hero-form .fluentform .ff-el-group {
+.hero-form .fluentform .ff-el-group,
+.popup-form-container .fluentform .ff-el-group {
     margin-bottom: 15px;
 }
 
@@ -1129,30 +1154,35 @@ body.light-theme .footer__logo .logo-light {
 
 /* --- ОБЩИЕ СТИЛИ ДЛЯ ФОРМ (Hero + Footer) --- */
 .hero-form .ff-el-input--label label,
-.contact-section__form .ff-el-input--label label {
+.contact-section__form .ff-el-input--label label,
+.popup-form-container .ff-el-input--label label {
     color: var(--text-color) !important;
 }
 
 .hero-form .ff-el-form-control,
-.contact-section__form .ff-el-form-control {
+.contact-section__form .ff-el-form-control,
+.popup-form-container .ff-el-form-control {
     background-color: var(--bg-color) !important;
     border: 1px solid var(--border-color) !important;
     color: var(--text-color) !important;
 }
 
-.hero-form .ff-el-form-control::placeholder {
+.hero-form .ff-el-form-control::placeholder,
+.popup-form-container .ff-el-form-control::placeholder {
     color: var(--text-color) !important;
     opacity: 0.6 !important;
 }
 
 .hero-form .ff-el-form-control:focus,
-.contact-section__form .ff-el-form-control:focus {
+.contact-section__form .ff-el-form-control:focus,
+.popup-form-container .ff-el-form-control:focus {
     border-color: var(--green) !important;
     box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.3) !important;
 }
 
 .hero-form .ff-btn-submit,
-.contact-section__form .ff-btn-submit {
+.contact-section__form .ff-btn-submit,
+.popup-form-container .ff-btn-submit {
     width: 100%;
     min-width: 200px;
     background-color: var(--green) !important;
@@ -2376,7 +2406,7 @@ body.light-theme {
     padding: 40px 30px;
 }
 .single-car__title {
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     font-size: 36px;
 }
 .single-car-grid {
@@ -2419,49 +2449,56 @@ body.light-theme {
 }
 
 .car-price-block {
-    background-color: var(--border-color);
-    padding: 20px;
-    border-radius: 8px;
+    /* Убираем фон и добавляем нижнюю границу для разделения */
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 0 20px; /* Убираем боковой и верхний padding, оставляем нижний */
     margin-bottom: 30px;
 }
+
 .car-price--current {
     display: flex;
-    align-items: baseline;
+    align-items: center; /* Идеально для выравнивания текстов разного размера */
     gap: 15px;
+    flex-wrap: wrap; /* На случай узких экранов */
 }
+
 .price-usd {
-    font-size: 32px;
+    font-size: 36px; /* Немного увеличим для акцента */
     font-weight: 700;
     color: var(--green);
+    line-height: 1; /* Убираем лишнюю высоту строки */
 }
+
 .price-uah {
     font-size: 18px;
     opacity: 0.7;
 }
+
 .car-price--old {
-    font-size: 20px;
+    font-size: 22px; /* Делаем крупнее, чем UAH, но меньше основного */
     text-decoration: line-through;
     opacity: 0.5;
-    margin-top: 5px;
-    display: block;
+    margin-left: auto; /* ✨ Эта магия сдвигает старую цену вправо */
+    padding-left: 20px; /* Добавляем отступ на случай, если элементы будут близко */
 }
 
 .car-specs__title {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--border-color);
 }
 .car-specs__list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
 }
 .car-specs__list li {
     display: flex;
     justify-content: space-between;
     font-size: 15px;
-    border-bottom: 1px dotted var(--border-color);
-    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
 }
 .car-specs__list li:last-child {
     border-bottom: none;
@@ -2496,6 +2533,45 @@ body.light-theme {
 .single-car-content h2 {
     font-size: 28px;
     margin-bottom: 20px;
+}
+
+/* --- Single Car Page - Features Grid (Комплектація) --- */
+.car-features {
+    margin-bottom: 40px;
+}
+
+.car-features-grid {
+    display: grid;
+    gap: 30px 40px; /* Вертикальный и горизонтальный отступ */
+    /* 5 колонок на больших десктопах */
+    grid-template-columns: repeat(5, 1fr); 
+}
+
+.car-features-column__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.car-features-column__list ul {
+    list-style-position: inside;
+    padding-left: 0;
+}
+
+.car-features-column__list p:last-child,
+.car-features-column__list ul:last-child {
+    margin-bottom: 0;
+}
+
+/* --- Single Car Page Test Drive Button --- */
+.car-test-drive-block {
+    margin-bottom: 15px; /* Отступ от блока с ценой */
+}
+
+.car-test-drive-block .button {
+    width: 100%;
+    text-align: center;
 }
 
 /* --- About Us Page Hero --- */
@@ -2809,7 +2885,97 @@ body.post-type-archive-car .breadcrumbs .separator {
     display: none;
 }
 
+/* --- 19. Fluent Form Popup Styles --- */
+.popup-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1010;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    
+    /* Скрываем по умолчанию */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0s 0.3s;
+}
+
+.popup-wrapper.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+}
+
+.popup-content {
+    position: relative;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 40px;
+    width: 100%;
+    max-width: 550px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.popup-wrapper.is-open .popup-content {
+    transform: scale(1);
+}
+
+.popup-close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: var(--text-color);
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+.popup-close-button:hover {
+    opacity: 1;
+}
+.popup-close-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Стили для контейнера формы внутри попапа */
+.popup-form-container .fluentform {
+    margin-top: 0 !important;
+}
+
+/* Блокируем скролл основной страницы при открытом попапе */
+body.popup-open {
+    overflow: hidden;
+}
+
 /* --- 6. Responsive Styles --- */
+@media (max-width: 1200px) {
+    .car-features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media (max-width: 1024px) {
     .header__container {
         padding: 0;
@@ -3087,6 +3253,10 @@ body.post-type-archive-car .breadcrumbs .separator {
     .catalog-controls {
         align-items: center; /* Выравниваем элементы по центру */
     }
+    
+    .car-features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
@@ -3258,6 +3428,10 @@ body.post-type-archive-car .breadcrumbs .separator {
 
     .car-card__pill {
         flex-shrink: 0;
+    }
+    .car-features-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
     }
 
     .footer__main {

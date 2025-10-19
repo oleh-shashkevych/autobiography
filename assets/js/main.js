@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             navigator.clipboard.writeText(this.dataset.copyText).then(() => {
                 const originalText = this.querySelector('.header__contact-text').textContent;
-                this.querySelector('.header__contact-text').textContent = 'Скопійовано!';
+                this.querySelector('.header__contact-text').textContent = 'Скопійовано!';
                 setTimeout(() => { this.querySelector('.header__contact-text').textContent = originalText; }, 1500);
             }).catch(err => console.error('Could not copy text: ', err));
         });
@@ -315,47 +315,143 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // --- Custom Filters Logic ---
+    // --- ✅ ИСПРАВЛЕННАЯ ЛОГИКА ДЛЯ ФИЛЬТРОВ ---
     const filtersContainer = document.querySelector('.catalog-filters');
-    if (!filtersContainer) return;
-
-    // 1. Accordion functionality
-    const filterHeaders = filtersContainer.querySelectorAll('.filter-group__header');
-    filterHeaders.forEach(header => {
-        header.addEventListener('click', () => {
-            header.parentElement.classList.toggle('is-collapsed');
+    if (filtersContainer) { // Теперь вся логика ВНУТРИ этого if
+        // 1. Accordion functionality
+        const filterHeaders = filtersContainer.querySelectorAll('.filter-group__header');
+        filterHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                header.parentElement.classList.toggle('is-collapsed');
+            });
         });
-    });
 
-    // 2. Initialize custom selects with Choices.js
-    const selectElements = document.querySelectorAll('.catalog-filters select, .catalog-sort select'); 
-    selectElements.forEach(select => {
-        new Choices(select, {
-            searchEnabled: false, 
-            itemSelectText: '', 
-            shouldSort: false, 
+        // 2. Initialize custom selects with Choices.js
+        const selectElements = document.querySelectorAll('.catalog-filters select, .catalog-sort select'); 
+        selectElements.forEach(select => {
+            new Choices(select, {
+                searchEnabled: false, 
+                itemSelectText: '', 
+                shouldSort: false, 
+            });
         });
-    });
 
-    // --- Mobile Filters Toggle ---
-    const filtersToggleButton = document.querySelector('.filters-toggle-button');
-    const closeFiltersButton = document.querySelector('.close-filters-button');
-    const filtersPanel = document.querySelector('.catalog-filters');
-    const filtersOverlay = document.querySelector('.filters-overlay');
+        // 3. Mobile Filters Toggle
+        const filtersToggleButton = document.querySelector('.filters-toggle-button');
+        const closeFiltersButton = document.querySelector('.close-filters-button');
+        const filtersPanel = document.querySelector('.catalog-filters');
+        const filtersOverlay = document.querySelector('.filters-overlay');
 
-    if (filtersToggleButton && filtersPanel && closeFiltersButton && filtersOverlay) {
-        const openFilters = () => {
-            filtersPanel.classList.add('is-open');
-            document.body.classList.add('filters-open');
+        if (filtersToggleButton && filtersPanel && closeFiltersButton && filtersOverlay) {
+            const openFilters = () => {
+                filtersPanel.classList.add('is-open');
+                document.body.classList.add('filters-open');
+            };
+
+            const closeFilters = () => {
+                filtersPanel.classList.remove('is-open');
+                document.body.classList.remove('filters-open');
+            };
+
+            filtersToggleButton.addEventListener('click', openFilters);
+            closeFiltersButton.addEventListener('click', closeFilters);
+            filtersOverlay.addEventListener('click', closeFilters);
+        }
+    }
+
+    // --- Universal Fluent Form Popup Handler ---
+    const popupWrapper = document.getElementById('fluent-form-popup');
+    if (popupWrapper) {
+        const formContainer = popupWrapper.querySelector('.popup-form-container');
+        const closeButton = popupWrapper.querySelector('.popup-close-button');
+        const overlay = popupWrapper.querySelector('.popup-overlay');
+
+        const openPopup = () => {
+            popupWrapper.setAttribute('aria-hidden', 'false');
+            popupWrapper.classList.add('is-open');
+            document.body.classList.add('popup-open');
         };
 
-        const closeFilters = () => {
-            filtersPanel.classList.remove('is-open');
-            document.body.classList.remove('filters-open');
+        const closePopup = () => {
+            popupWrapper.setAttribute('aria-hidden', 'true');
+            popupWrapper.classList.remove('is-open');
+            document.body.classList.remove('popup-open');
+            // Очищаем контейнер после закрытия
+            setTimeout(() => { formContainer.innerHTML = ''; }, 300);
         };
 
-        filtersToggleButton.addEventListener('click', openFilters);
-        closeFiltersButton.addEventListener('click', closeFilters);
-        filtersOverlay.addEventListener('click', closeFilters);
+        // Слушаем клики по всему документу
+        document.addEventListener('click', function(e) {
+            // Ищем ближайшую ссылку-триггер
+            const trigger = e.target.closest('a[href^="#form-"]');
+            
+            if (trigger) {
+                e.preventDefault();
+                const formId = trigger.getAttribute('href').replace('#form-', '');
+
+                if (!formId || !/^\d+$/.test(formId)) {
+                    console.error('Invalid Form ID.');
+                    return;
+                }
+                
+                // Показываем состояние загрузки
+                formContainer.innerHTML = '<h4>...</h4>';
+                openPopup();
+
+                // Готовим и отправляем AJAX запрос
+                const formData = new FormData();
+                formData.append('action', 'load_fluent_form');
+                formData.append('form_id', formId);
+
+                fetch(autobiography_ajax.ajax_url, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(html => {
+                    // Вставляем полученный HTML в контейнер
+                    formContainer.innerHTML = html;
+
+                    // ✨ МАГИЯ ЗДЕСЬ: Находим все скрипты, которые пришли вместе с формой
+                    const scripts = formContainer.querySelectorAll('script');
+                    
+                    // и выполняем их вручную
+                    scripts.forEach(script => {
+                        const newScript = document.createElement('script');
+                        // Копируем содержимое старого скрипта в новый
+                        newScript.textContent = script.textContent; 
+                        // Добавляем новый скрипт на страницу, чтобы он выполнился
+                        document.body.appendChild(newScript).remove();
+                    });
+
+                    // Также нужно вручную применить маску для телефона, если он есть
+                    jQuery('.popup-form-container .custom-phone').inputmask({
+                        "mask": "+380 (99) 999-99-99",
+                        "clearIncomplete": true
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    formContainer.innerHTML = '<p>Помилка завантаження форми.</p>';
+                });
+            }
+        });
+
+        // Назначаем события закрытия
+        closeButton.addEventListener('click', closePopup);
+        overlay.addEventListener('click', closePopup);
+
+        // ✅ START: НОВЫЙ КОД ДЛЯ УПРАВЛЕНИЯ ЗАКРЫТИЕМ ПОПАПА
+        // Используем jQuery, так как Fluent Forms работает на нем
+        jQuery(document).on('fluentform_submission_success', function(event, data) {
+            // data.formId содержит ID отправленной формы
+            // data.response.message содержит текст успешного сообщения
+            
+            // Ждем 3 секунды, чтобы пользователь успел прочитать сообщение,
+            // а затем плавно закрываем попап.
+            setTimeout(function() {
+                closePopup();
+            }, 3000); // 3000 миллисекунд = 3 секунды
+        });
     }
 });
