@@ -232,8 +232,17 @@ $models = $wpdb->get_col("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE 
             </form>
         </aside>
 
+        <div class="filters-overlay"></div>
+        <button type="button" class="close-filters-button" aria-label="<?php echo esc_attr(autobiography_translate_string('Закрити фільтри', 'Close filters')); ?>">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
         <div class="catalog-main">
             <div class="catalog-controls">
+                <button class="filters-toggle-button">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 6H19M5 12H19M5 18H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span><?php echo esc_html(autobiography_translate_string('Фільтр', 'Filter')); ?></span>
+                </button>
                 <div class="catalog-sort">
                     <label for="sort-by"><?php echo esc_html(autobiography_translate_string('Сортувати:', 'Sort by:')); ?></label>
                     <select name="sort" id="sort-by" form="car-filters-form">

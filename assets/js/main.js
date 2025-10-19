@@ -1,31 +1,32 @@
 document.addEventListener('DOMContentLoaded', function () {
     // --- Theme Toggler ---
-    const themeSwitch = document.getElementById('theme-switcher-toggle');
+    const themeSwitches = document.querySelectorAll('.theme-switcher__input'); // Находим ОБА переключателя по классу
+
     function applyTheme(theme) {
-        if (theme === 'light-theme') {
-            document.body.classList.remove('dark-theme');
-            document.body.classList.add('light-theme');
-            if(themeSwitch) themeSwitch.checked = true;
-        } else {
-            document.body.classList.remove('light-theme');
-            document.body.classList.add('dark-theme');
-            if(themeSwitch) themeSwitch.checked = false;
-        }
+        const isLightTheme = theme === 'light-theme';
+        
+        document.body.classList.toggle('light-theme', isLightTheme);
+        document.body.classList.toggle('dark-theme', !isLightTheme);
+
+        // Синхронизируем состояние всех переключателей
+        themeSwitches.forEach(sw => {
+            sw.checked = isLightTheme;
+        });
     }
+
     function toggleTheme() {
-        if (document.body.classList.contains('dark-theme')) {
-            localStorage.setItem('theme', 'light-theme');
-            applyTheme('light-theme');
-        } else {
-            localStorage.setItem('theme', 'dark-theme');
-            applyTheme('dark-theme');
-        }
+        const newTheme = document.body.classList.contains('dark-theme') ? 'light-theme' : 'dark-theme';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
     }
+
     const savedTheme = localStorage.getItem('theme') || 'dark-theme';
     applyTheme(savedTheme);
-    if (themeSwitch) {
-        themeSwitch.addEventListener('change', toggleTheme);
-    }
+
+    // Применяем обработчик к каждому найденному переключателю
+    themeSwitches.forEach(sw => {
+        sw.addEventListener('change', toggleTheme);
+    });
 
     // --- Phone Number Copy ---
     document.querySelectorAll('.header__contact-link[data-copy-text]').forEach(phoneLink => {
@@ -335,4 +336,26 @@ document.addEventListener('DOMContentLoaded', function () {
             shouldSort: false, 
         });
     });
+
+    // --- Mobile Filters Toggle ---
+    const filtersToggleButton = document.querySelector('.filters-toggle-button');
+    const closeFiltersButton = document.querySelector('.close-filters-button');
+    const filtersPanel = document.querySelector('.catalog-filters');
+    const filtersOverlay = document.querySelector('.filters-overlay');
+
+    if (filtersToggleButton && filtersPanel && closeFiltersButton && filtersOverlay) {
+        const openFilters = () => {
+            filtersPanel.classList.add('is-open');
+            document.body.classList.add('filters-open');
+        };
+
+        const closeFilters = () => {
+            filtersPanel.classList.remove('is-open');
+            document.body.classList.remove('filters-open');
+        };
+
+        filtersToggleButton.addEventListener('click', openFilters);
+        closeFiltersButton.addEventListener('click', closeFilters);
+        filtersOverlay.addEventListener('click', closeFilters);
+    }
 });

@@ -147,11 +147,6 @@ $theme_switcher_text = pll__(get_field('theme_switcher_text', 'option'));
                 <button class="header__button button button--primary"><?php echo esc_html($header_button_text); ?></button>
             </div>
             <div class="header__contacts">
-                <?php if ($phone_number) : ?>
-                    <a href="tel:<?php echo esc_attr($phone_tel); ?>" class="header__contact-link">
-                        <span class="header__contact-text"><?php echo esc_html($phone_number); ?></span>
-                    </a>
-                <?php endif; ?>
                  <?php if ($contact_phones) : ?>
                     <?php foreach($contact_phones as $phone_item) : 
                         $phone_num = $phone_item['phone_number'];
@@ -167,6 +162,11 @@ $theme_switcher_text = pll__(get_field('theme_switcher_text', 'option'));
                         <span class="header__contact-text"><?php echo esc_html($address); ?></span>
                     </a>
                 <?php endif; ?>
+            </div>
+            <div class="theme-switcher">
+                <input type="checkbox" id="theme-switcher-toggle-mobile" class="theme-switcher__input">
+                <label for="theme-switcher-toggle-mobile" class="theme-switcher__label"></label>
+                <span class="theme-switcher__text"><?php echo esc_html($theme_switcher_text); ?></span>
             </div>
             <div class="header__lang-switcher">
                 <ul>
