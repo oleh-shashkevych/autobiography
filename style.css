@@ -46,6 +46,11 @@ svg {
     }
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 160px;
+}
+
 /* Базовые настройки для body */
 body {
     min-height: 100vh;
@@ -1808,6 +1813,10 @@ body.page-template-template-leasing .content-styles ul li::before {
     color: var(--white);
 }
 
+body.page-template-template-faq .page-hero__title {
+    font-size: 36px;
+}
+
 /* Стилі для фону та оверлею */
 .page-hero[style] { /* Застосовується тільки, якщо є фонове зображення */
     padding: 120px 0;
@@ -1856,8 +1865,14 @@ body.page-template-template-commission .page-hero:not(.has-overlay) .page-hero__
 body.page-template-template-car-buyback .page-hero:not(.has-overlay) ~ .page-content,
 body.page-template-template-trade-in .page-hero:not(.has-overlay) ~ .page-content,
 body.page-template-template-leasing .page-hero:not(.has-overlay) ~ .page-content,
-body.page-template-template-commission .page-hero:not(.has-overlay) ~ .page-content {
+body.page-template-template-commission .page-hero:not(.has-overlay) ~ .page-content,
+body.page-template-template-faq .page-hero:not(.has-overlay) ~ .page-content {
     padding-top: 0;
+}
+
+body.page-template-template-faq .page-hero:not(.has-overlay) ~ .page-content {
+    text-align: center;
+    padding-bottom: 0;
 }
 
 .buyback-criteria,
@@ -2859,6 +2874,20 @@ body.page-template-template-commission .page-hero:not(.has-overlay) ~ .page-cont
 .faq-section {
     padding: 80px 0;
 }
+.faq-category-title {
+    font-size: 32px;
+    text-align: center;
+    margin-top: 60px; /* Відступ над новою категорією */
+    margin-bottom: 40px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+    scroll-padding-top: 200px;
+}
+
+/* Прибираємо зайвий відступ у першого заголовка */
+.faq-accordion > .faq-category-title:first-of-type {
+    margin-top: 0;
+}
 .faq-accordion {
     max-width: 800px;
     margin: 0 auto;
@@ -2914,6 +2943,54 @@ body.page-template-template-commission .page-hero:not(.has-overlay) ~ .page-cont
 }
 .faq-answer__content {
     padding-bottom: 25px;
+}
+/* --- FAQ Page - Anchor Links Menu --- */
+.faq-anchors {
+    margin-bottom: 60px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.faq-anchors__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Дозволяє переносити посилання на новий рядок */
+    gap: 20px 40px; /* Вертикальний та горизонтальний відступи */
+}
+
+.faq-anchors__list a {
+    position: relative;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-color);
+    padding-bottom: 8px; /* Залишаємо місце для лінії */
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.faq-anchors__list a:hover {
+    opacity: 1;
+}
+
+/* Створюємо лінію підкреслення */
+.faq-anchors__list a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--green);
+    transform: scaleX(0); /* Початково лінія "стиснута" до 0 */
+    transform-origin: left; /* Анімація буде починатися зліва */
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* При наведенні "розтягуємо" лінію до повної ширини */
+.faq-anchors__list a:hover::after {
+    transform: scaleX(1);
 }
 
 /* --- 18. Breadcrumbs --- */
@@ -3645,6 +3722,11 @@ body.popup-open {
         margin-bottom: 40px;
     }
 
+    .faq-category-title {
+        font-size: 28px;
+        margin-top: 50px;
+        margin-bottom: 30px;
+    }
     .footer__main {
         grid-template-columns: 1fr;
     }

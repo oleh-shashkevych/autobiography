@@ -25,34 +25,52 @@ $seo_content = get_field('faq_seo_content');
             <h1 class="page-hero__title"><?php the_title(); ?></h1>
         </div>
     </section>
-    
-    <?php if ($faq_list): ?>
-    <section class="faq-section">
+
+    <?php if ($seo_content): ?>
+    <section class="page-content">
         <div class="container content-container">
-            <div class="faq-accordion">
-                <?php foreach($faq_list as $item): ?>
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span><?php echo esc_html($item['question']); ?></span>
-                            <span class="faq-icon"></span>
-                        </button>
-                        <div class="faq-answer">
-                            <div class="faq-answer__content content-styles">
-                                <?php echo $item['answer']; ?>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+            <div class="content-styles">
+                <?php echo $seo_content; ?>
             </div>
         </div>
     </section>
     <?php endif; ?>
+    
+    <?php 
+    // Отримуємо зовнішній повторювач (категорії)
+    $faq_categories = get_field('faq_categories');
 
-    <?php if ($seo_content): ?>
-    <section class="page-content" style="border-top: 1px solid var(--border-color);">
+    if ($faq_categories): 
+    ?>
+    <section class="faq-section">
         <div class="container content-container">
-            <div class="content-styles">
-                <?php echo $seo_content; ?>
+            <div class="faq-accordion">
+                <?php // Зовнішній цикл по категоріях
+                foreach($faq_categories as $category): 
+                    $category_title = $category['category_title'];
+                    $faq_list = $category['faq_list']; // Внутрішній повторювач
+                ?>
+                    <?php if ($category_title): ?>
+                        <h2 class="faq-category-title"><?php echo esc_html($category_title); ?></h2>
+                    <?php endif; ?>
+
+                    <?php // Внутрішній цикл по питаннях
+                    if ($faq_list):
+                        foreach($faq_list as $item): ?>
+                            <div class="faq-item">
+                                <button class="faq-question">
+                                    <span><?php echo esc_html($item['question']); ?></span>
+                                    <span class="faq-icon"></span>
+                                </button>
+                                <div class="faq-answer">
+                                    <div class="faq-answer__content content-styles">
+                                        <?php echo $item['answer']; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; 
+                    endif; ?>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>

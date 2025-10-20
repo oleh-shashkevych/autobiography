@@ -454,4 +454,59 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 3000); // 3000 миллисекунд = 3 секунды
         });
     }
+
+    // --- FAQ Page Anchor Link Generator ---
+    const faqAccordion = document.querySelector('.faq-accordion');
+    // Запускаємо скрипт, тільки якщо ми на сторінці FAQ
+    if (faqAccordion) {
+        const categoryTitles = faqAccordion.querySelectorAll('.faq-category-title');
+
+        // Якщо є хоча б одна категорія
+        if (categoryTitles.length > 0) {
+            
+            // Функція для перетворення кирилиці в URL-дружній рядок (slug)
+            function slugify(text) {
+                const a = {"Ё":"YO","Й":"I","Ц":"TS","У":"U","К":"K","Е":"E","Н":"N","Г":"G","Ш":"SH","Щ":"SCH","З":"Z","Х":"H","Ъ":"","Ф":"F","Ы":"Y","В":"V","А":"a","П":"P","Р":"R","О":"O","Л":"L","Д":"D","Ж":"ZH","Э":"E","Я":"Ya","Ч":"CH","С":"S","М":"M","И":"I","Т":"T","Ь":"","Б":"B","Ю":"YU","ё":"yo","й":"i","ц":"ts","у":"u","к":"k","е":"e","н":"n","г":"g","ш":"sh","щ":"sch","з":"z","х":"h","ъ":"","ф":"f","ы":"y","в":"v","а":"a","п":"p","р":"r","о":"o","л":"l","д":"d","ж":"zh","э":"e","я":"ya","ч":"ch","с":"s","м":"m","и":"i","т":"t","ь":"","б":"b","ю":"yu", "і":"i", "ї":"yi", "є":"ye"};
+
+                return text.split('').map(function (char) {
+                    return a[char] || char;
+                }).join("").toLowerCase()
+                  .replace(/\s+/g, '-')       // Замінити пробіли на -
+                  .replace(/[^\w\-]+/g, '')   // Видалити всі не-словесні символи
+                  .replace(/\-\-+/g, '-')     // Замінити кілька - на один -
+                  .replace(/^-+/, '')          // Обрізати - з початку
+                  .replace(/-+$/, '');         // Обрізати - з кінця
+            }
+
+            // Створюємо контейнер для нашого меню
+            const anchorContainer = document.createElement('div');
+            anchorContainer.className = 'faq-anchors';
+            
+            const anchorList = document.createElement('div');
+            anchorList.className = 'faq-anchors__list';
+            
+            // Проходимо по кожному знайденому заголовку
+            categoryTitles.forEach(title => {
+                const titleText = title.textContent;
+                const anchorId = slugify(titleText);
+
+                // 1. Присвоюємо ID самому заголовку H2
+                title.id = anchorId;
+
+                // 2. Створюємо посилання для меню
+                const link = document.createElement('a');
+                link.href = `#${anchorId}`;
+                link.textContent = titleText;
+                
+                // 3. Додаємо посилання до списку
+                anchorList.appendChild(link);
+            });
+
+            // Додаємо список у головний контейнер
+            anchorContainer.appendChild(anchorList);
+
+            // Вставляємо наше меню перед акордеоном
+            faqAccordion.parentNode.insertBefore(anchorContainer, faqAccordion);
+        }
+    }
 });

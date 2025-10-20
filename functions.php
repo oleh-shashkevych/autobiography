@@ -856,23 +856,40 @@ function autobiography_acf_add_local_field_groups() {
                 'type' => 'tab',
             ),
             array(
-                'key' => 'field_faq_list',
-                'label' => 'Список "Питання/Відповідь"',
-                'name' => 'faq_list',
+                'key' => 'field_faq_categories',
+                'label' => 'Категорії FAQ',
+                'name' => 'faq_categories',
                 'type' => 'repeater',
-                'button_label' => 'Додати питання',
+                'button_label' => 'Додати категорію',
                 'sub_fields' => array(
+                    // Поле для назви категорії
                     array(
-                        'key' => 'field_faq_question',
-                        'label' => 'Питання',
-                        'name' => 'question',
+                        'key' => 'field_faq_category_title',
+                        'label' => 'Назва категорії',
+                        'name' => 'category_title',
                         'type' => 'text',
                     ),
+                    // Вкладений повторювач для питань та відповідей
                     array(
-                        'key' => 'field_faq_answer',
-                        'label' => 'Відповідь',
-                        'name' => 'answer',
-                        'type' => 'wysiwyg',
+                        'key' => 'field_faq_list_nested', // Новий унікальний ключ
+                        'label' => 'Список "Питання/Відповідь"',
+                        'name' => 'faq_list',
+                        'type' => 'repeater',
+                        'button_label' => 'Додати питання',
+                        'sub_fields' => array(
+                            array(
+                                'key' => 'field_faq_question_nested', // Новий унікальний ключ
+                                'label' => 'Питання',
+                                'name' => 'question',
+                                'type' => 'text',
+                            ),
+                            array(
+                                'key' => 'field_faq_answer_nested', // Новий унікальний ключ
+                                'label' => 'Відповідь',
+                                'name' => 'answer',
+                                'type' => 'wysiwyg',
+                            ),
+                        ),
                     ),
                 ),
             ),
