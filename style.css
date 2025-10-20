@@ -541,7 +541,7 @@ body.light-theme .header__logo .logo-light {
     background-color: var(--bg-color);
     border: 1px solid var(--border-color);
     padding: 10px;
-    min-width: 200px;
+    min-width: 230px;
     border-radius: 5px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     z-index: 99;
@@ -1368,6 +1368,11 @@ body.light-theme {
     padding: 0 30px;
 }
 
+body.page-template-template-trade-in .available-cars__grid,
+body.page-template-template-leasing .available-cars__grid {
+    grid-template-columns: repeat(4, 1fr);
+}
+
 .car-card {
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -1492,7 +1497,7 @@ body.light-theme {
 }
 .our-values__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 30px;
 }
 .our-values__item {
@@ -1621,13 +1626,20 @@ body.light-theme {
 .content-styles h4,
 .content-styles h5,
 .content-styles h6 {
-    margin-top: 1.5em;
-    margin-bottom: 0.8em;
+    margin-top: 20px;
+    margin-bottom: 15px;
     line-height: 1.3;
 }
 
 .content-styles p {
-    margin-bottom: 1.2em;
+    margin-bottom: 15px;
+}
+
+.content-styles img {
+    width: 100%;
+    max-width: 800px;
+    margin-inline: auto;
+    border-radius: 8px;
 }
 
 .content-styles a {
@@ -1644,8 +1656,34 @@ body.light-theme {
 
 .content-styles ul,
 .content-styles ol {
-    margin-bottom: 1.5em;
+    margin-bottom: 15px;
     padding-left: 25px;
+}
+
+body.page-template-template-leasing .content-styles ul {
+    column-count: 2;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+body.page-template-template-leasing .content-styles ul li {
+    position: relative;
+    padding-left: 30px; /* Створює місце для іконки */
+    margin-bottom: 1em; /* Зберігає стандартний відступ між пунктами */
+}
+
+body.page-template-template-leasing .content-styles ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px; /* Регулює положення іконки по вертикалі */
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 36 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%232ECC71' d='M36 32a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28z'/%3E%3Cpath fill='%23FFF' d='M29.28 6.362a2.502 2.502 0 0 0-3.458.736L14.936 23.877l-5.029-4.65a2.5 2.5 0 1 0-3.394 3.671l7.209 6.666c.48.445 1.09.665 1.696.665c.673 0 1.534-.282 2.099-1.139c.332-.506 12.5-19.27 12.5-19.27a2.5 2.5 0 0 0-.737-3.458z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .content-styles ul {
@@ -1657,11 +1695,11 @@ body.light-theme {
 }
 
 .content-styles li {
-    margin-bottom: 0.8em;
+    margin-bottom: 8px;
 }
 
 .content-styles blockquote {
-    margin: 1.5em 0;
+    margin: 15px 0;
     padding: 20px;
     border-left: 3px solid var(--green);
     background-color: var(--border-color);
@@ -1758,6 +1796,11 @@ body.light-theme {
     transition: padding 0.3s ease;
 }
 
+.page-hero:not(.has-overlay) {
+    padding: 30px 0 20px;
+    border-bottom: none;
+}
+
 .page-hero__title {
     font-size: 52px;
     text-transform: uppercase;
@@ -1783,6 +1826,24 @@ body.light-theme {
     z-index: 1;
 }
 
+.page-hero:not(.has-overlay) .page-hero__title,
+.page-hero:not(.has-overlay) .breadcrumbs,
+.page-hero:not(.has-overlay) .breadcrumbs .separator,
+.page-hero:not(.has-overlay) .breadcrumbs a {
+    color: var(--text-color);
+}
+
+body.page-template-template-car-buyback .page-hero:not(.has-overlay) .page-hero__title,
+body.page-template-template-trade-in .page-hero:not(.has-overlay) .page-hero__title,
+body.page-template-template-leasing .page-hero:not(.has-overlay) .page-hero__title,
+body.page-template-template-commission .page-hero:not(.has-overlay) .page-hero__title {
+    display: none;
+}
+
+.page-hero:not(.has-overlay) .breadcrumbs ol {
+    justify-content: flex-start;
+}
+
 .page-hero .container {
     position: relative;
     z-index: 2;
@@ -1790,6 +1851,13 @@ body.light-theme {
 
 .page-content {
     padding: 80px 0;
+}
+
+body.page-template-template-car-buyback .page-hero:not(.has-overlay) ~ .page-content,
+body.page-template-template-trade-in .page-hero:not(.has-overlay) ~ .page-content,
+body.page-template-template-leasing .page-hero:not(.has-overlay) ~ .page-content,
+body.page-template-template-commission .page-hero:not(.has-overlay) ~ .page-content {
+    padding-top: 0;
 }
 
 .buyback-criteria,
@@ -1806,18 +1874,51 @@ body.light-theme {
     font-size: 42px;
 }
 
-/* Стили для сетки с этапами немного адаптируем, т.к. нет иконки */
-.buyback-steps .how-we-work__item-header {
-    justify-content: flex-end; /* Номер этапа будет справа */
-    margin-bottom: 25px;
+.buyback-steps__content,
+.buyback-criteria__content {
+    margin-top: 60px; /* Отступ от сетки с этапами */
+    max-width: 800px; /* Опционально: можно ограничить ширину для лучшей читаемости */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.buyback-steps__content ul {
+    column-count: 2;
+}
+
+/* --- Car Buyback Page - Content Grid --- */
+.buyback-content-grid,
+.tradein-content-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr; /* Текст занимает чуть больше места */
+    gap: 60px;
+    align-items: center;
+}
+
+.buyback-content-grid__button-wrapper {
+    margin-top: 30px;
+}
+
+.buyback-content-grid__media img,
+.buyback-content-grid__media video,
+.tradein-content-grid__media img,
+.tradein-content-grid__media video {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+}
+
+.tradein-button-wrapper {
+    margin: 15px 0;
 }
 
 /* --- 16. Car Archive / Catalog Page --- */
 .catalog-page-content {
     display: grid;
     grid-template-columns: 280px 1fr;
-    gap: 40px;
-    padding: 60px 30px;
+    gap: 20px 40px;
+    padding: 30px 30px 60px;
 }
 
 .catalog-page-content .breadcrumbs {
@@ -2403,7 +2504,7 @@ body.light-theme {
 
 /* --- 17. Single Car Page --- */
 .single-car-container {
-    padding: 40px 30px;
+    padding: 30px 30px 40px;
 }
 .single-car__title {
     margin-bottom: 15px;
@@ -2414,6 +2515,7 @@ body.light-theme {
     grid-template-columns: calc(calc(100% - 40px) * 0.6) calc(calc(100% - 40px) * 0.4);
     gap: 40px;
     margin-bottom: 60px;
+    margin-top: 30px;
 }
 .single-car__gallery .swiper-slide {
     aspect-ratio: 16 / 10;
@@ -2576,7 +2678,7 @@ body.light-theme {
 
 /* --- About Us Page Hero --- */
 .about-hero {
-    padding: 40px 0 80px;
+    padding: 30px 0 80px;
     background-color: var(--bg-color);
     border-bottom: 1px solid var(--border-color);
 }
@@ -2585,6 +2687,7 @@ body.light-theme {
     grid-template-columns: 1fr 1.2fr;
     gap: 60px;
     align-items: center;
+    margin-top: 30px;
 }
 .about-hero__image-wrapper {
     border-radius: 8px;
@@ -2969,6 +3072,86 @@ body.popup-open {
     overflow: hidden;
 }
 
+/* --- Commission Sale Page Styles --- */
+
+/* Intro Grid */
+.commission-intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 60px;
+    align-items: center;
+}
+.commission-intro-grid__media img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+}
+.commission-intro-grid__button-wrapper {
+    margin-top: 30px;
+}
+
+/* Included Services Section */
+.commission-included .our-values__item-description {
+    font-size: 16px; /* Збільшуємо шрифт для кращої читабельності */
+}
+.commission-included__note {
+    margin-top: 60px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+/* Other Ways to Sell Section */
+.commission-other-ways {
+    padding: 80px 0;
+    background-color: var(--bg-color);
+    border-top: 1px solid var(--border-color);
+}
+.commission-other-ways__title {
+    text-align: center;
+    margin-bottom: 60px;
+    font-size: 42px;
+}
+.commission-other-ways__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.other-way-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.other-way-card__icon {
+    width: 56px;
+    height: 56px;
+    color: var(--green);
+    margin-bottom: 25px;
+}
+.other-way-card__icon svg {
+    width: 100%;
+    height: 100%;
+}
+.other-way-card__title {
+    font-size: 24px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+.other-way-card__description {
+    font-size: 16px;
+    opacity: 0.8;
+    margin-bottom: 30px;
+    flex-grow: 1; /* Робить опис гнучким, щоб кнопка була внизу */
+}
+
 /* --- 6. Responsive Styles --- */
 @media (max-width: 1200px) {
     .car-features-grid {
@@ -3158,6 +3341,13 @@ body.popup-open {
         grid-template-columns: 100%;
     }
 
+    
+    .buyback-content-grid,
+    .tradein-content-grid {
+        grid-template-columns: 1fr; /* Сетка в одну колонку */
+        gap: 40px;
+    }
+
     .footer__main {
         grid-template-columns: 1fr 1fr;
     }
@@ -3256,6 +3446,17 @@ body.popup-open {
     
     .car-features-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .buyback-steps__content ul {
+        column-count: 1;
+    }
+    .commission-intro-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    .commission-intro-grid__media {
+        order: -1; /* Зображення буде зверху на мобільних */
     }
 }
 
@@ -3432,6 +3633,16 @@ body.popup-open {
     .car-features-grid {
         grid-template-columns: 1fr;
         gap: 30px;
+    }
+    .commission-other-ways__grid {
+        grid-template-columns: 1fr;
+    }
+    .commission-other-ways, .commission-included {
+        padding: 60px 0;
+    }
+    .commission-other-ways__title {
+        font-size: 32px;
+        margin-bottom: 40px;
     }
 
     .footer__main {

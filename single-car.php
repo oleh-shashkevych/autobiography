@@ -35,7 +35,9 @@ $power_string = '';
 
 if ($fuel_type_slug === 'hybrid' && $power_hp && $power_kw) {
     $power_string = sprintf(autobiography_translate_string('%1$s к.с. (ДВЗ) + %2$s кВт (Електро)', '%1$s hp (ICE) + %2$s kW (Electric)'), $power_hp, $power_kw);
-} elseif ($fuel_type_slug === 'electric' && $power_kw) {
+} elseif ($fuel_type_slug === 'elektro' && $power_kw) {
+    $power_string = sprintf(autobiography_translate_string('%s кВт', '%s kW'), $power_kw);
+} elseif ($fuel_type_slug === 'electro' && $power_kw) {
     $power_string = sprintf(autobiography_translate_string('%s кВт', '%s kW'), $power_kw);
 } elseif ($power_hp) {
     $power_string = sprintf(autobiography_translate_string('%s к.с.', '%s hp'), $power_hp);

@@ -39,6 +39,32 @@ $benefits_list = get_field('leasing_benefits_list');
     </section>
     <?php endif; ?>
 
+    <?php
+    // Отримуємо кастомні заголовок та текст кнопки для сторінки лізингу
+    $available_cars_title = get_field('leasing_cars_title') ?: autobiography_translate_string('Автомобілі доступні в лізинг', 'Cars available for lease');
+    $available_cars_button_text = get_field('leasing_cars_button_text') ?: autobiography_translate_string('Переглянути всі авто', 'View all cars');
+
+    // Запит до бази даних для отримання 4-х авто зі статусом "В наявності"
+    $cars_query = new WP_Query( array('post_type' => 'car', 'posts_per_page' => 4, 'meta_query' => array(array('key' => 'car_status', 'value' => 'available'))));
+    if ( $cars_query->have_posts() ) :
+    ?>
+    <section class="available-cars" style="border-top: 1px solid var(--border-color);">
+        <div class="container">
+            <h2 class="available-cars__title"><?php echo esc_html($available_cars_title); ?></h2>
+        </div>
+        <div class="available-cars__grid">
+            <?php while ( $cars_query->have_posts() ) : $cars_query->the_post(); ?>
+                <?php get_template_part('template-parts/content', 'car-card'); ?>
+            <?php endwhile; ?>
+        </div>
+        <div class="container">
+            <div class="available-cars__footer">
+                <a href="<?php echo get_post_type_archive_link( 'car' ); ?>" class="button button--primary"><?php echo esc_html($available_cars_button_text); ?></a>
+            </div>
+        </div>
+    </section>
+    <?php endif; wp_reset_postdata(); ?>
+
     <?php if ($benefits_list): ?>
     <section class="our-values"> <div class="container">
             <?php if ($benefits_title): ?>

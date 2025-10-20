@@ -348,6 +348,50 @@ function autobiography_acf_add_local_field_groups() {
             array('key' => 'field_buyback_hero_overlay', 'label' => 'Увімкнути оверлей', 'name' => 'buyback_hero_overlay', 'type' => 'true_false', 'ui' => 1, 'default_value' => 1),
             array('key' => 'field_buyback_content_tab', 'label' => 'Контент сторінки', 'type' => 'tab'),
             array('key' => 'field_buyback_seo_content', 'label' => 'SEO-опис послуги', 'name' => 'buyback_seo_content', 'type' => 'wysiwyg'),
+            array(
+                'key' => 'field_buyback_popup_button',
+                'label' => 'Кнопка під контентом',
+                'name' => 'buyback_popup_button',
+                'type' => 'link',
+                'instructions' => 'Додайте посилання на модальне вікно (напр. #form-ID) для виклику форми.',
+                'return_format' => 'array',
+            ),
+            array(
+                'key' => 'field_buyback_media_type',
+                'label' => 'Тип медіа (у правій колонці)',
+                'name' => 'buyback_media_type',
+                'type' => 'button_group',
+                'choices' => array(
+                    'image' => 'Зображення',
+                    'video' => 'Відео / Анімація',
+                ),
+                'default_value' => 'image',
+            ),
+            array(
+                'key' => 'field_buyback_content_image',
+                'label' => 'Зображення',
+                'name' => 'buyback_content_image',
+                'type' => 'image',
+                'return_format' => 'url',
+                'conditional_logic' => array(
+                    array(
+                        array('field' => 'field_buyback_media_type', 'operator' => '==', 'value' => 'image'),
+                    ),
+                ),
+            ),
+            array(
+                'key' => 'field_buyback_content_video',
+                'label' => 'Відео / Анімація',
+                'name' => 'buyback_content_video',
+                'type' => 'file',
+                'instructions' => 'Завантажте відео-файл (mp4) або анімацію (json для Lottie).',
+                'return_format' => 'url',
+                'conditional_logic' => array(
+                    array(
+                        array('field' => 'field_buyback_media_type', 'operator' => '==', 'value' => 'video'),
+                    ),
+                ),
+            ),
             array('key' => 'field_buyback_criteria_tab', 'label' => 'Критерії викупу', 'type' => 'tab'),
             array('key' => 'field_buyback_criteria_title', 'label' => 'Заголовок секції критеріїв', 'name' => 'buyback_criteria_title', 'type' => 'text'),
             array('key' => 'field_buyback_criteria_list', 'label' => 'Список критеріїв', 'name' => 'buyback_criteria_list', 'type' => 'repeater', 'sub_fields' => array(
@@ -355,12 +399,39 @@ function autobiography_acf_add_local_field_groups() {
                 array('key' => 'field_criteria_title', 'label' => 'Назва критерію', 'name' => 'title', 'type' => 'text'),
                 array('key' => 'field_criteria_description', 'label' => 'Опис критерію', 'name' => 'description', 'type' => 'textarea'),
             )),
+            array(
+                'key' => 'field_buyback_criteria_content',
+                'label' => 'Текст під критеріями',
+                'name' => 'buyback_criteria_content',
+                'type' => 'wysiwyg',
+                'instructions' => 'Цей текст буде відображено під сіткою з критеріями викупу.',
+                'tabs' => 'all',
+                'toolbar' => 'full',
+                'media_upload' => 1,
+            ),
             array('key' => 'field_buyback_steps_tab', 'label' => 'Етапи викупу', 'type' => 'tab'),
             array('key' => 'field_buyback_steps_title', 'label' => 'Заголовок секції етапів', 'name' => 'buyback_steps_title', 'type' => 'text'),
             array('key' => 'field_buyback_steps_list', 'label' => 'Список етапів', 'name' => 'buyback_steps_list', 'type' => 'repeater', 'sub_fields' => array(
+                array(
+                    'key' => 'field_buyback_step_icon',
+                    'label' => 'Іконка етапу (SVG)',
+                    'name' => 'icon',
+                    'type' => 'textarea',
+                ),
                 array('key' => 'field_step_title_new', 'label' => 'Назва етапу', 'name' => 'title', 'type' => 'text'),
                 array('key' => 'field_step_description_new', 'label' => 'Опис етапу', 'name' => 'description', 'type' => 'textarea'),
             )),
+            array(
+                'key' => 'field_buyback_steps_content',
+                'label' => 'Текст під етапами',
+                'name' => 'buyback_steps_content',
+                'type' => 'wysiwyg',
+                'instructions' => 'Цей текст буде відображено під сіткою з етапами викупу.',
+                'tabs' => 'all',
+                'toolbar' => 'full',
+                'media_upload' => 1,
+            ),
+
         ),
         'location' => array(array(array('param' => 'page_template', 'operator' => '==', 'value' => 'template-car-buyback.php'))),
     ));
@@ -402,6 +473,56 @@ function autobiography_acf_add_local_field_groups() {
                 'type' => 'wysiwyg',
             ),
             array(
+                'key' => 'field_tradein_media_type',
+                'label' => 'Тип медіа (у правій колонці)',
+                'name' => 'tradein_media_type',
+                'type' => 'button_group',
+                'choices' => array(
+                    'image' => 'Зображення',
+                    'video' => 'Відео / Анімація',
+                ),
+                'default_value' => 'image',
+            ),
+            array(
+                'key' => 'field_tradein_content_image',
+                'label' => 'Зображення',
+                'name' => 'tradein_content_image',
+                'type' => 'image',
+                'return_format' => 'url',
+                'conditional_logic' => array(
+                    array(
+                        array('field' => 'field_tradein_media_type', 'operator' => '==', 'value' => 'image'),
+                    ),
+                ),
+            ),
+            array(
+                'key' => 'field_tradein_content_video',
+                'label' => 'Відео / Анімація',
+                'name' => 'tradein_content_video',
+                'type' => 'file',
+                'instructions' => 'Завантажте відео-файл (mp4) або анімацію (json для Lottie).',
+                'return_format' => 'url',
+                'conditional_logic' => array(
+                    array(
+                        array('field' => 'field_tradein_media_type', 'operator' => '==', 'value' => 'video'),
+                    ),
+                ),
+            ),
+            array(
+                'key' => 'field_tradein_popup_button',
+                'label' => 'Кнопка для виклику форми',
+                'name' => 'tradein_popup_button',
+                'type' => 'link',
+                'instructions' => 'Додайте посилання на модальне вікно (напр. #form-ID). Текст кнопки буде взято з назви посилання.',
+                'return_format' => 'array',
+            ),
+            array(
+                'key' => 'field_tradein_secondary_content',
+                'label' => 'Додатковий опис (після кнопки)',
+                'name' => 'tradein_secondary_content',
+                'type' => 'wysiwyg',
+            ),
+            array(
                 'key' => 'field_tradein_steps_title',
                 'label' => 'Заголовок секції з етапами',
                 'name' => 'tradein_steps_title',
@@ -436,24 +557,23 @@ function autobiography_acf_add_local_field_groups() {
                 ),
             ),
             array(
-                'key' => 'field_tradein_gallery_tab',
-                'label' => 'Ілюстрації',
+                'key' => 'field_tradein_cars_tab',
+                'label' => 'Секція "Авто в наявності"',
                 'type' => 'tab',
             ),
             array(
-                'key' => 'field_tradein_gallery_title',
-                'label' => 'Заголовок секції з ілюстраціями',
-                'name' => 'tradein_gallery_title',
+                'key' => 'field_tradein_cars_title',
+                'label' => 'Заголовок секції',
+                'name' => 'tradein_cars_title',
                 'type' => 'text',
-                'default_value' => 'Схема роботи Trade-in',
+                'default_value' => 'Автомобілі для обміну',
             ),
             array(
-                'key' => 'field_tradein_gallery',
-                'label' => 'Галерея зображень',
-                'name' => 'tradein_gallery',
-                'type' => 'gallery',
-                'instructions' => 'Завантажте фотографії або схеми, що ілюструють процес.',
-                'return_format' => 'array',
+                'key' => 'field_tradein_cars_button_text',
+                'label' => 'Текст кнопки "Переглянути всі"',
+                'name' => 'tradein_cars_button_text',
+                'type' => 'text',
+                'default_value' => 'Переглянути всі авто',
             ),
         ),
         'location' => array(
@@ -541,6 +661,25 @@ function autobiography_acf_add_local_field_groups() {
                         'type' => 'textarea',
                     ),
                 ),
+            ),
+            array(
+                'key' => 'field_leasing_cars_tab',
+                'label' => 'Секція "Авто в наявності"',
+                'type' => 'tab',
+            ),
+            array(
+                'key' => 'field_leasing_cars_title',
+                'label' => 'Заголовок секції',
+                'name' => 'leasing_cars_title',
+                'type' => 'text',
+                'default_value' => 'Автомобілі доступні в лізинг',
+            ),
+            array(
+                'key' => 'field_leasing_cars_button_text',
+                'label' => 'Текст кнопки "Переглянути всі"',
+                'name' => 'leasing_cars_button_text',
+                'type' => 'text',
+                'default_value' => 'Переглянути всі авто',
             ),
         ),
         'location' => array(
@@ -759,6 +898,47 @@ function autobiography_acf_add_local_field_groups() {
                 ),
             ),
         ),
+    ));
+
+    // Group: Commission Sale Page
+    acf_add_local_field_group(array(
+        'key' => 'group_commission_sale_page',
+        'title' => 'Налаштування сторінки "Комісійний Продаж"',
+        'fields' => array(
+            array('key' => 'field_commission_hero_tab', 'label' => 'Hero секція', 'type' => 'tab'),
+            array('key' => 'field_commission_hero_image', 'label' => 'Фонове зображення', 'name' => 'commission_hero_image', 'type' => 'image', 'return_format' => 'url'),
+            array('key' => 'field_commission_hero_overlay', 'label' => 'Увімкнути оверлей', 'name' => 'commission_hero_overlay', 'type' => 'true_false', 'ui' => 1, 'default_value' => 1),
+            
+            array('key' => 'field_commission_intro_tab', 'label' => 'Вступна секція', 'type' => 'tab'),
+            array('key' => 'field_commission_intro_media', 'label' => 'Фото/Медіа (зліва)', 'name' => 'commission_intro_media', 'type' => 'image', 'return_format' => 'url'),
+            array('key' => 'field_commission_intro_text', 'label' => 'Текст (справа)', 'name' => 'commission_intro_text', 'type' => 'wysiwyg'),
+            array('key' => 'field_commission_intro_button', 'label' => 'Кнопка під текстом', 'name' => 'commission_intro_button', 'type' => 'link'),
+
+            array('key' => 'field_commission_procedure_tab', 'label' => 'Процедура', 'type' => 'tab'),
+            array('key' => 'field_commission_procedure_title', 'label' => 'Заголовок секції', 'name' => 'commission_procedure_title', 'type' => 'text', 'default_value' => 'Процедура прийому авто на комісійний продаж'),
+            array('key' => 'field_commission_procedure_steps', 'label' => 'Етапи процедури', 'name' => 'commission_procedure_steps', 'type' => 'repeater', 'button_label' => 'Додати етап', 'sub_fields' => array(
+                array('key' => 'field_procedure_step_title', 'label' => 'Назва етапу', 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_procedure_step_desc', 'label' => 'Опис етапу', 'name' => 'description', 'type' => 'textarea'),
+            )),
+
+            array('key' => 'field_commission_included_tab', 'label' => 'Що входить у послугу', 'type' => 'tab'),
+            array('key' => 'field_commission_included_title', 'label' => 'Заголовок секції', 'name' => 'commission_included_title', 'type' => 'text', 'default_value' => 'Що входить у послугу'),
+            array('key' => 'field_commission_included_items', 'label' => 'Список послуг', 'name' => 'commission_included_items', 'type' => 'repeater', 'button_label' => 'Додати пункт', 'sub_fields' => array(
+                array('key' => 'field_included_item_icon', 'label' => 'Іконка (SVG)', 'name' => 'icon', 'type' => 'textarea'),
+                array('key' => 'field_included_item_text', 'label' => 'Текст', 'name' => 'text', 'type' => 'textarea'),
+            )),
+            array('key' => 'field_commission_included_note', 'label' => 'Текст та примітка', 'name' => 'commission_included_note', 'type' => 'wysiwyg'),
+
+            array('key' => 'field_commission_other_ways_tab', 'label' => 'Інші способи продажу', 'type' => 'tab'),
+            array('key' => 'field_commission_other_ways_title', 'label' => 'Заголовок секції', 'name' => 'commission_other_ways_title', 'type' => 'text', 'default_value' => 'Інші способи продажу'),
+            array('key' => 'field_commission_other_ways_items', 'label' => 'Способи', 'name' => 'commission_other_ways_items', 'type' => 'repeater', 'button_label' => 'Додати спосіб', 'sub_fields' => array(
+                array('key' => 'field_other_way_icon', 'label' => 'Іконка (SVG)', 'name' => 'icon', 'type' => 'textarea'),
+                array('key' => 'field_other_way_title', 'label' => 'Назва', 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_other_way_desc', 'label' => 'Короткий опис', 'name' => 'description', 'type' => 'textarea'),
+                array('key' => 'field_other_way_link', 'label' => 'Посилання', 'name' => 'link', 'type' => 'link'),
+            )),
+        ),
+        'location' => array(array(array('param' => 'page_template', 'operator' => '==', 'value' => 'template-commission.php'))),
     ));
 }
 add_action('acf/init', 'autobiography_acf_add_local_field_groups');
@@ -1136,7 +1316,7 @@ function autobiography_allow_viber_protocol( $protocols ) {
 }
 add_filter( 'kses_allowed_protocols', 'autobiography_allow_viber_protocol' );
 
-// --- 9. BREADCRUMBS FUNCTION (Updated for Styling) ---
+// --- 9. BREADCRUMBS FUNCTION (Updated for Styling and Parent Pages) ---
 function autobiography_breadcrumbs() {
     // Настройки
     $separator_html = '<span class="separator">/</span>';
@@ -1145,6 +1325,7 @@ function autobiography_breadcrumbs() {
     echo '<nav class="breadcrumbs" aria-label="breadcrumb">';
     echo '<ol itemscope itemtype="https://schema.org/BreadcrumbList">';
 
+    // Ссылка на главную страницу (всегда первая)
     echo '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
     echo '<a itemprop="item" href="' . get_home_url() . '"><span itemprop="name">' . esc_html($home_title) . '</span></a>';
     echo '<meta itemprop="position" content="1" />';
@@ -1153,6 +1334,7 @@ function autobiography_breadcrumbs() {
     $position = 2;
 
     if (is_post_type_archive()) {
+        // Для страниц архивов (например, /cars/)
         echo $separator_html;
         echo '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
         echo '<span itemprop="name">' . post_type_archive_title('', false) . '</span>';
@@ -1160,6 +1342,7 @@ function autobiography_breadcrumbs() {
         echo '</li>';
     } 
     elseif (is_singular('car')) {
+        // Для одиночной записи типа "car"
         $post_type = get_post_type_object(get_post_type());
         if ($post_type) {
             echo $separator_html;
@@ -1175,13 +1358,33 @@ function autobiography_breadcrumbs() {
         echo '<meta itemprop="position" content="' . $position . '" />';
         echo '</li>';
     }
+    // START: ИЗМЕНЕННАЯ ЛОГИКА ДЛЯ СТРАНИЦ С РОДИТЕЛЯМИ
     elseif (is_page()) {
+        $post = get_post(get_the_ID());
+        if ($post->post_parent) {
+            // Если у страницы есть родители, получаем их ID
+            $ancestors = get_post_ancestors($post->ID);
+            // Переворачиваем массив, чтобы выводить от верхнего родителя к нижнему
+            $ancestors = array_reverse($ancestors);
+
+            // Выводим каждого родителя как ссылку
+            foreach ($ancestors as $ancestor_id) {
+                echo $separator_html;
+                echo '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
+                echo '<a itemprop="item" href="' . esc_url(get_permalink($ancestor_id)) . '"><span itemprop="name">' . esc_html(get_the_title($ancestor_id)) . '</span></a>';
+                echo '<meta itemprop="position" content="' . $position . '" />';
+                echo '</li>';
+                $position++;
+            }
+        }
+        // Выводим текущую страницу (уже без ссылки)
         echo $separator_html;
         echo '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
         echo '<span itemprop="name">' . get_the_title() . '</span>';
         echo '<meta itemprop="position" content="' . $position . '" />';
         echo '</li>';
     }
+    // END: ИЗМЕНЕННАЯ ЛОГИКА
 
     echo '</ol>';
     echo '</nav>';
