@@ -82,31 +82,32 @@ if ($power_string) {
 
                 <div class="single-car__details">
                     <h1 class="single-car__title"><?php echo strip_tags($brand); ?> <?php echo $model; ?>, <?php echo $year; ?></h1>
-                    <?php 
-                    $test_drive_button = get_field('test_drive_button');
-                    if ( $test_drive_button ):
-                        // Устанавливаем текст по умолчанию, если он не задан в админке
-                        $link_title = !empty($test_drive_button['title']) ? esc_html($test_drive_button['title']) : esc_html(autobiography_translate_string('Записатись на тест-драйв', 'Sign up for a test drive'));
-                        $link_url = esc_url($test_drive_button['url']);
-                        $link_target = esc_attr($test_drive_button['target'] ? $test_drive_button['target'] : '_self');
-                    ?>
-                    <div class="car-test-drive-block">
-                        <a href="<?php echo $link_url; ?>" target="<?php echo $link_target; ?>" class="button button--primary">
-                            <?php echo $link_title; ?>
-                        </a>
-                    </div>
-                    <?php endif; ?>
-                    <div class="car-price-block">
-                        <div class="car-price--current">
-                            <span class="price-usd">$<?php echo number_format_i18n($price_usd, 0); ?></span>
-                            <?php if ($price_uah): ?>
-                                <span class="price-uah">≈ <?php echo $price_uah; ?> <?php echo esc_html(autobiography_translate_string('грн', 'UAH')); ?></span>
-                            <?php endif; ?>
-
+                    <div class="car-price__wrapper-block">
+                        <div class="car-price-block">
                             <?php if ($old_price_usd): ?>
                                 <span class="car-price--old">$<?php echo number_format_i18n($old_price_usd, 0); ?></span>
                             <?php endif; ?>
+                            <div class="car-price--current">
+                                <span class="price-usd">$<?php echo number_format_i18n($price_usd, 0); ?></span>
+                                <?php if ($price_uah): ?>
+                                    <span class="price-uah">≈ <?php echo $price_uah; ?> <?php echo esc_html(autobiography_translate_string('грн', 'UAH')); ?></span>
+                                <?php endif; ?>
+                            </div>
                         </div>
+                        <?php 
+                        $test_drive_button = get_field('test_drive_button');
+                        if ( $test_drive_button ):
+                            // Устанавливаем текст по умолчанию, если он не задан в админке
+                            $link_title = !empty($test_drive_button['title']) ? esc_html($test_drive_button['title']) : esc_html(autobiography_translate_string('Записатись на тест-драйв', 'Sign up for a test drive'));
+                            $link_url = esc_url($test_drive_button['url']);
+                            $link_target = esc_attr($test_drive_button['target'] ? $test_drive_button['target'] : '_self');
+                        ?>
+                        <div class="car-test-drive-block">
+                            <a href="<?php echo $link_url; ?>" target="<?php echo $link_target; ?>" class="button button--primary">
+                                <?php echo $link_title; ?>
+                            </a>
+                        </div>
+                        <?php endif; ?>
                     </div>
 
                     <div class="car-specs-block">

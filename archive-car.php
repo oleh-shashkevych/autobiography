@@ -64,6 +64,19 @@ $models = $wpdb->get_col("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE 
                         </select>
                     </div>
                 </div>
+
+                <div class="filter-group">
+                    <div class="filter-group__header">
+                        <label><?php echo esc_html(autobiography_translate_string('Модель', 'Model')); ?></label>
+                        <span class="filter-group__toggle"></span>
+                    </div>
+                    <div class="filter-group__content">
+                        <select name="model" id="model">
+                            <option value=""><?php echo esc_html(autobiography_translate_string('Всі моделі', 'All models')); ?></option>
+                            <?php foreach ($models as $model) { echo '<option value="' . esc_attr($model) . '">' . esc_html($model) . '</option>'; } ?>
+                        </select>
+                    </div>
+                </div>
                 
                 <div class="filter-group filter-group-range">
                     <div class="filter-group__header">
@@ -76,19 +89,6 @@ $models = $wpdb->get_col("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE 
                             <input type="number" name="min_price" id="min_price" min="<?php echo $min_price; ?>" max="<?php echo $max_price; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('Від', 'From')); ?>">
                             <input type="number" name="max_price" id="max_price" min="<?php echo $min_price; ?>" max="<?php echo $max_price; ?>" placeholder="<?php echo esc_attr(autobiography_translate_string('До', 'To')); ?>">
                         </div>
-                    </div>
-                </div>
-
-                <div class="filter-group">
-                    <div class="filter-group__header">
-                        <label><?php echo esc_html(autobiography_translate_string('Модель', 'Model')); ?></label>
-                        <span class="filter-group__toggle"></span>
-                    </div>
-                    <div class="filter-group__content">
-                        <select name="model" id="model">
-                            <option value=""><?php echo esc_html(autobiography_translate_string('Всі моделі', 'All models')); ?></option>
-                            <?php foreach ($models as $model) { echo '<option value="' . esc_attr($model) . '">' . esc_html($model) . '</option>'; } ?>
-                        </select>
                     </div>
                 </div>
 

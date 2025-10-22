@@ -214,6 +214,13 @@ function autobiography_acf_add_local_field_groups() {
                 'instructions' => 'Буде відображатись зліва від форми.',
             ),
             array(
+                'key' => 'field_hero_content_title_small',
+                'label' => 'Заголовок Hero знизу',
+                'name' => 'hero_content_title_small',
+                'type' => 'text',
+                'instructions' => 'Буде відображатись зліва від форми нижче.',
+            ),
+            array(
                 'key' => 'field_hero_content_subtitle',
                 'label' => 'Підзаголовок Hero',
                 'name' => 'hero_content_subtitle',
@@ -718,11 +725,27 @@ function autobiography_acf_add_local_field_groups() {
                 'default_value' => 'Ваш надійний партнер у світі авто',
             ),
             array(
+                'key' => 'field_about_hero_title_small',
+                'label' => 'Головний заголовок знизу',
+                'name' => 'about_hero_title_small',
+                'type' => 'text',
+                'default_value' => 'Ваш надійний партнер у світі авто',
+            ),
+            array(
                 'key' => 'field_about_hero_subtitle',
                 'label' => 'Підзаголовок',
                 'name' => 'about_hero_subtitle',
                 'type' => 'textarea',
                 'default_value' => 'Ми не просто продаємо автомобілі. Ми будуємо довгострокові стосунки, засновані на довірі, прозорості та любові до нашої справи.',
+            ),
+            array(
+                'key' => 'field_about_video_banner',
+                'label' => 'Панорамний відеобанер',
+                'name' => 'about_video_banner',
+                'type' => 'file',
+                'instructions' => 'Завантажте відеофайл (mp4), який буде відображатися під Hero-секцією.',
+                'return_format' => 'url', // Повертатиме URL файлу
+                'mime_types' => 'mp4', // Дозволяємо тільки mp4
             ),
             array(
                 'key' => 'field_about_content_tab',

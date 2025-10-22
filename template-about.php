@@ -9,6 +9,7 @@ get_header();
 // Отримуємо дані для унікального Hero-блоку
 $hero_image = get_field('about_hero_image');
 $hero_title = get_field('about_hero_title');
+$hero_title_small = get_field('about_hero_title_small');
 $hero_subtitle = get_field('about_hero_subtitle');
 
 // Отримуємо дані для основного контенту
@@ -32,13 +33,22 @@ $services_list = get_field('about_services_list');
                 </div>
                 <?php endif; ?>
                 <div class="about-hero__content">
-                    <h1 class="about-hero__title"><?php echo esc_html($hero_title); ?></h1>
+                    <h1 class="about-hero__title"><?php echo esc_html($hero_title); ?><?php if ($hero_title_small): ?><span><?php echo esc_html($hero_title_small); ?></span><?php endif; ?></h1>
                     <?php if ($hero_subtitle): ?>
                     <p class="about-hero__subtitle"><?php echo esc_html($hero_subtitle); ?></p>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
+    </section>
+    <?php endif; ?>
+
+    <?php 
+    $video_banner_url = get_field('about_video_banner');
+    if ($video_banner_url):
+    ?>
+    <section class="about-video-banner">
+        <video src="<?php echo esc_url($video_banner_url); ?>" autoplay loop muted playsinline></video>
     </section>
     <?php endif; ?>
     
