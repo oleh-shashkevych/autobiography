@@ -48,7 +48,7 @@ get_header();
                 </div>
                 <div class="hero__text-content">
                     <?php if ($hero_content_title): ?>
-                        <h1 class="hero__main-title"><?php echo esc_html($hero_content_title); ?><?php if ($hero_content_title_small): ?><span><?php echo esc_html($hero_content_title_small); ?></span><?php endif; ?></h1>
+                        <h1 class="hero__main-title"><div><?php echo esc_html($hero_content_title); ?></div><?php if ($hero_content_title_small): ?><span><?php echo esc_html($hero_content_title_small); ?></span><?php endif; ?></h1>
                     <?php endif; ?>
                     <?php if ($hero_content_subtitle): ?>
                         <p class="hero__subtitle"><?php echo esc_html($hero_content_subtitle); ?></p>

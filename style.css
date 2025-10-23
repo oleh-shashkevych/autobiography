@@ -1168,8 +1168,11 @@ body.light-theme .footer__logo .logo-light {
     text-transform: uppercase;
     margin-bottom: 100px;
     color: var(--white);
-    opacity: 0.6;
     font-family: 'Alta Regular';
+}
+
+.hero__main-title div {
+    opacity: .35;
 }
 
 .hero__main-title span {
@@ -1180,6 +1183,7 @@ body.light-theme .footer__logo .logo-light {
     text-transform: lowercase;
     font-weight: 600;
     margin-top: -15px;
+    opacity: .6;
 }
 
 .hero__subtitle {
@@ -2765,11 +2769,16 @@ body.page-template-template-faq .page-hero:not(.has-overlay) ~ .page-content {
 .about-hero__image-wrapper {
     border-radius: 8px;
     overflow: hidden;
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 .about-hero__image-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    position: absolute;
+    inset: 0;
 }
 .about-hero__title {
     display: flex;
