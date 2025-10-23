@@ -853,7 +853,7 @@ body.light-theme .footer__logo .logo-light {
 
 /* --- 8. Contact Section --- */
 .contact-section {
-    padding: 80px 0;
+    padding: 60px 0;
     background-color: var(--bg-color);
     border-top: 1px solid var(--border-color);
 }
@@ -1321,7 +1321,7 @@ body.light-theme {
 
 /* --- 10. How We Work Section --- */
 .how-we-work {
-    padding: 80px 0;
+    padding: 60px 0;
     background-color: var(--bg-color);
 }
 
@@ -1393,8 +1393,12 @@ body.light-theme {
 
 /* --- 11. Available Cars Section (UPDATED) --- */
 .available-cars {
-    padding: 80px 0;
+    padding: 60px 0;
     background-color: var(--bg-color);
+}
+
+body.home .available-cars {
+    padding-top: 0;
 }
 
 .available-cars__title {
@@ -1522,7 +1526,7 @@ body.page-template-template-leasing .available-cars__grid {
 
 /* --- 12. Our Values Section (REWORKED) --- */
 .our-values {
-    padding: 80px 0 40px;
+    padding: 60px 0;
     background-color: var(--bg-color);
     border-top: 1px solid var(--border-color);
 }
@@ -1855,9 +1859,13 @@ body.page-template-template-faq .page-hero__title {
     font-size: 36px;
 }
 
+body.page-template-template-contacts .page-hero__title {
+    opacity: .5;
+}
+
 /* Стилі для фону та оверлею */
 .page-hero[style] { /* Застосовується тільки, якщо є фонове зображення */
-    padding: 120px 0;
+    padding: 60px 0;
     color: var(--white);
     border-bottom: none;
 }
@@ -1896,7 +1904,8 @@ body.page-template-template-faq .page-hero:not(.has-overlay) {
     margin-bottom: 20px;
 }
 
-.page-hero:not(.has-overlay) .breadcrumbs ol {
+.page-hero:not(.has-overlay) .breadcrumbs ol,
+.page-template-template-contacts .breadcrumbs ol {
     justify-content: flex-start;
 }
 
@@ -1923,16 +1932,25 @@ body.page-template-template-faq .page-hero:not(.has-overlay) ~ .page-content {
 }
 
 .buyback-criteria,
-.buyback-steps {
-    padding: 80px 0;
+.buyback-steps,
+.commission-steps {
+    padding: 60px 0;
     background-color: var(--bg-color);
     border-top: 1px solid var(--border-color);
+}
+
+.buyback-criteria {
+    border-top: none;
+}
+
+.buyback-steps {
+    padding-bottom: 0;
 }
 
 .buyback-criteria__title,
 .buyback-steps__title {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     font-size: 42px;
 }
 
@@ -1957,8 +1975,43 @@ body.page-template-template-faq .page-hero:not(.has-overlay) ~ .page-content {
     align-items: center;
 }
 
+.buyback-content-grid__text .content-styles ul {
+    column-count: 3;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.buyback-content-grid__text .content-styles ul li {
+    position: relative;
+    padding-left: 30px; /* Створює місце для іконки */
+    margin-bottom: 1em; /* Зберігає стандартний відступ між пунктами */
+}
+
+.buyback-content-grid__text .content-styles ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px; /* Регулює положення іконки по вертикалі */
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 36 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23018938' d='M36 32a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28z'/%3E%3Cpath fill='%23FFF' d='M29.28 6.362a2.502 2.502 0 0 0-3.458.736L14.936 23.877l-5.029-4.65a2.5 2.5 0 1 0-3.394 3.671l7.209 6.666c.48.445 1.09.665 1.696.665c.673 0 1.534-.282 2.099-1.139c.332-.506 12.5-19.27 12.5-19.27a2.5 2.5 0 0 0-.737-3.458z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .buyback-content-grid__button-wrapper {
     margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.buyback-content-grid__media,
+.tradein-content-grid__media {
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
 .buyback-content-grid__media img,
@@ -1971,8 +2024,19 @@ body.page-template-template-faq .page-hero:not(.has-overlay) ~ .page-content {
     display: block;
 }
 
+.buyback-content-grid__media img,
+.tradein-content-grid__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+}
+
 .tradein-button-wrapper {
     margin: 15px 0;
+    display: flex;
+    justify-content: center;
 }
 
 /* --- 16. Car Archive / Catalog Page --- */
@@ -2578,6 +2642,9 @@ body.page-template-template-faq .page-hero:not(.has-overlay) ~ .page-content {
     margin-bottom: 60px;
     margin-top: 30px;
 }
+.single-car__gallery {
+    position: relative;
+}
 .single-car__gallery .swiper-slide {
     aspect-ratio: 16 / 10;
 }
@@ -2586,6 +2653,15 @@ body.page-template-template-faq .page-hero:not(.has-overlay) ~ .page-content {
     height: 100%;
     object-fit: cover;
     border-radius: 8px;
+}
+/* --- Single Car Page Notify Button --- */
+.car-notify-block {
+    margin-bottom: 30px; /* Такий самий відступ, як у .car-price__wrapper-block */
+}
+
+.car-notify-block .button {
+    width: 100%;
+    text-align: center;
 }
 .swiper-main-gallery {
     margin-bottom: 15px;
@@ -3247,11 +3323,19 @@ body.popup-open {
     gap: 60px;
     align-items: center;
 }
+.commission-intro-grid__media {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
 .commission-intro-grid__media img {
     width: 100%;
-    height: auto;
+    height: 100%;
     border-radius: 8px;
     display: block;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
 }
 .commission-intro-grid__button-wrapper {
     margin-top: 30px;
@@ -3271,7 +3355,7 @@ body.popup-open {
 
 /* Other Ways to Sell Section */
 .commission-other-ways {
-    padding: 80px 0;
+    padding: 60px 0;
     background-color: var(--bg-color);
     border-top: 1px solid var(--border-color);
 }
@@ -3507,7 +3591,9 @@ body.popup-open {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .available-cars__grid {
+    .available-cars__grid,
+    body.page-template-template-trade-in .available-cars__grid, 
+    body.page-template-template-leasing .available-cars__grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -3655,9 +3741,48 @@ body.popup-open {
     .commission-intro-grid__media {
         order: -1; /* Зображення буде зверху на мобільних */
     }
+
+    .buyback-content-grid__media img, 
+    .tradein-content-grid__media img,
+    .about-hero__image-wrapper img {
+        aspect-ratio: 16 / 10;
+        position: unset;
+    }
 }
 
 @media (max-width: 768px) {
+    h1 {
+        font-size: 36px;
+    }
+
+    h2 {
+        font-size: 32px;
+    }
+
+    h3 {
+        font-size: 28px;
+    }
+
+    h4 {
+        font-size: 24px;
+    }
+
+    h5 {
+        font-size: 20px;
+    }
+
+    h6 {
+        font-size: 18px;
+    }
+
+    .content-styles h1, .content-styles h2, .content-styles h3, .content-styles h4, .content-styles h5, .content-styles h6, .content-styles p {
+        margin-bottom: 16px;
+    }
+
+    .buyback-content-grid__text .content-styles ul {
+        column-count: 1;
+    }
+
     .hero-form {
         max-width: 100%;
         margin-top: 50px; /* Отступ от верха на мобильных */
@@ -3707,7 +3832,9 @@ body.popup-open {
         margin-bottom: 40px;
     }
 
-    .available-cars__grid {
+    .available-cars__grid,
+    body.page-template-template-trade-in .available-cars__grid, 
+    body.page-template-template-leasing .available-cars__grid {
         grid-template-columns: 1fr;
     }
 
@@ -3782,7 +3909,8 @@ body.popup-open {
     }
     .page-content,
     .buyback-criteria,
-    .buyback-steps {
+    .buyback-steps,
+    .commission-steps {
         padding: 60px 0;
     }
     .buyback-criteria__title,
@@ -3795,7 +3923,9 @@ body.popup-open {
         padding: 30px 15px;
     }
     .car-listings-grid.view-grid,
-    .available-cars__grid {
+    .available-cars__grid,
+    body.page-template-template-trade-in .available-cars__grid, 
+    body.page-template-template-leasing .available-cars__grid {
         grid-template-columns: 1fr;
     }
     .sold-cars__title {
@@ -3823,8 +3953,8 @@ body.popup-open {
     }
 
     .car-card__pills {
-        flex-wrap: nowrap;
-        overflow-x: auto;
+        /* flex-wrap: nowrap;
+        overflow-x: auto; */
     }
 
     .car-card__pill {

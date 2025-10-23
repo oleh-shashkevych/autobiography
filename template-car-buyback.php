@@ -94,7 +94,7 @@ $steps_list = get_field('buyback_steps_list');
                         <?php if (!empty($step['icon'])): ?>
                             <div class="how-we-work__icon-wrapper"><?php echo $step['icon']; ?></div>
                         <?php endif; ?>
-                        <span class="how-we-work__step-number"><?php echo str_pad($index + 1, 2, '0', STR_PAD_LEFT); ?></span>
+                        <span class="how-we-work__step-number"><?php echo $index + 1; ?></span>
                     </div>
                     <?php if (!empty($step['title'])): ?>
                         <h3 class="how-we-work__item-title"><?php echo esc_html($step['title']); ?></h3>

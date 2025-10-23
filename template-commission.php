@@ -72,7 +72,7 @@ $other_ways_items = get_field('commission_other_ways_items');
     <?php endif; ?>
 
     <?php if ($procedure_steps): ?>
-    <section class="buyback-steps">
+    <section class="commission-steps">
         <div class="container">
             <?php if ($procedure_title): ?>
                 <h2 class="buyback-steps__title"><?php echo esc_html($procedure_title); ?></h2>
@@ -81,7 +81,7 @@ $other_ways_items = get_field('commission_other_ways_items');
                 <?php foreach ($procedure_steps as $index => $step): ?>
                 <div class="how-we-work__item">
                     <div class="how-we-work__item-header">
-                        <span class="how-we-work__step-number"><?php echo str_pad($index + 1, 2, '0', STR_PAD_LEFT); ?></span>
+                        <span class="how-we-work__step-number"><?php echo $index + 1; ?></span>
                     </div>
                     <?php if (!empty($step['title'])): ?>
                         <h3 class="how-we-work__item-title"><?php echo esc_html($step['title']); ?></h3>

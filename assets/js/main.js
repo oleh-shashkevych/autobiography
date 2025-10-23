@@ -393,9 +393,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Invalid Form ID.');
                     return;
                 }
+
+                // ✅ Зберігаємо назву авто з data-атрибута кнопки
+                const carTitle = trigger.dataset.carTitle || 'Не вказано'; // 'Не вказано' як запасний варіант
                 
                 // Показываем состояние загрузки
-                formContainer.innerHTML = '<h4>...</h4>';
+                formContainer.innerHTML = '<h4>Завантаження...</h4>';
                 openPopup();
 
                 // Готовим и отправляем AJAX запрос
@@ -412,19 +415,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Вставляем полученный HTML в контейнер
                     formContainer.innerHTML = html;
 
-                    // ✨ МАГИЯ ЗДЕСЬ: Находим все скрипты, которые пришли вместе с формой
+                    // ✨ МАГИЯ ЗДЕСЬ: Находим все скрипты... (цей код залишається)
                     const scripts = formContainer.querySelectorAll('script');
-                    
-                    // и выполняем их вручную
                     scripts.forEach(script => {
                         const newScript = document.createElement('script');
-                        // Копируем содержимое старого скрипта в новый
                         newScript.textContent = script.textContent; 
-                        // Добавляем новый скрипт на страницу, чтобы он выполнился
                         document.body.appendChild(newScript).remove();
                     });
 
-                    // Также нужно вручную применить маску для телефона, если он есть
+                    // ✅ НОВИЙ КОД: Знаходимо приховане поле і встановлюємо його значення
+                    const hiddenInput = formContainer.querySelector('input[name="car_identifier"]');
+                    if (hiddenInput) {
+                        hiddenInput.value = carTitle;
+                    } else {
+                        console.warn('Hidden field "car_identifier" not found in the loaded form.');
+                    }
+
+                    // Також потрібно вручну применити маску... (цей код залишається)
                     jQuery('.popup-form-container .custom-phone').inputmask({
                         "mask": "+380 (99) 999-99-99",
                         "clearIncomplete": true

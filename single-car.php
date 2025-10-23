@@ -32,6 +32,8 @@ $power_kw = get_field('engine_power_kw');
 $fuel_terms = wp_get_post_terms(get_the_ID(), 'fuel_type', array('fields' => 'slugs'));
 $fuel_type_slug = !empty($fuel_terms) ? $fuel_terms[0] : '';
 $power_string = '';
+$status_slug = get_field('car_status');
+$category_slug = get_field('car_category');
 
 if ($fuel_type_slug === 'hybrid' && $power_hp && $power_kw) {
     $power_string = sprintf(autobiography_translate_string('%1$s к.с. (ДВЗ) + %2$s кВт (Електро)', '%1$s hp (ICE) + %2$s kW (Electric)'), $power_hp, $power_kw);
@@ -54,6 +56,24 @@ if ($power_string) {
 
             <div class="single-car-grid">
                 <div class="single-car__gallery">
+                    <?php 
+                    // Ми вже отримали $status_slug на початку файлу
+                    $status_info = get_car_status_info($status_slug); 
+                    if ($status_info): 
+                    ?>
+                        <div class="car-card__status-badge status--<?php echo esc_attr($status_info['class']); ?>">
+                            <?php echo esc_html($status_info['label']); ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php 
+                    // Ми вже отримали $category_slug на початку файлу
+                    $category_info = get_car_category_info($category_slug); 
+                    if ($category_info): 
+                    ?>
+                        <div class="car-card__category-badge category--<?php echo esc_attr($category_info['class']); ?>">
+                            <?php echo esc_html($category_info['label']); ?>
+                        </div>
+                    <?php endif; ?>
                     <?php if ($gallery): ?>
                         <div class="swiper swiper-main-gallery">
                             <div class="swiper-wrapper">
@@ -82,33 +102,50 @@ if ($power_string) {
 
                 <div class="single-car__details">
                     <h1 class="single-car__title"><?php echo strip_tags($brand); ?> <?php echo $model; ?>, <?php echo $year; ?></h1>
-                    <div class="car-price__wrapper-block">
-                        <div class="car-price-block">
-                            <?php if ($old_price_usd): ?>
-                                <span class="car-price--old">$<?php echo number_format_i18n($old_price_usd, 0); ?></span>
-                            <?php endif; ?>
-                            <div class="car-price--current">
-                                <span class="price-usd">$<?php echo number_format_i18n($price_usd, 0); ?></span>
-                                <?php if ($price_uah): ?>
-                                    <span class="price-uah">≈ <?php echo $price_uah; ?> <?php echo esc_html(autobiography_translate_string('грн', 'UAH')); ?></span>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                        <?php 
-                        $test_drive_button = get_field('test_drive_button');
-                        if ( $test_drive_button ):
-                            // Устанавливаем текст по умолчанию, если он не задан в админке
-                            $link_title = !empty($test_drive_button['title']) ? esc_html($test_drive_button['title']) : esc_html(autobiography_translate_string('Записатись на тест-драйв', 'Sign up for a test drive'));
-                            $link_url = esc_url($test_drive_button['url']);
-                            $link_target = esc_attr($test_drive_button['target'] ? $test_drive_button['target'] : '_self');
-                        ?>
-                        <div class="car-test-drive-block">
-                            <a href="<?php echo $link_url; ?>" target="<?php echo $link_target; ?>" class="button button--primary">
-                                <?php echo $link_title; ?>
+                    <?php 
+                    // Перевіряємо статус автомобіля
+                    if ($status_slug === 'preparing'): 
+                        // Визначаємо ID форми та текст кнопки залежно від мови
+                        $form_id = (pll_current_language('slug') === 'uk') ? '9' : '10';
+                        $button_text = autobiography_translate_string('Повідомити про наявність', 'Notify when available');
+                        $popup_link = '#form-' . $form_id;
+                    ?>
+                        <div class="car-notify-block">
+                            <a href="<?php echo esc_attr($popup_link); ?>" class="button button--primary">
+                                <?php echo esc_html($button_text); ?>
                             </a>
                         </div>
-                        <?php endif; ?>
-                    </div>
+                    <?php 
+                    // Інакше (якщо статус НЕ 'preparing'), виводимо блок з ціною та кнопкою тест-драйву
+                    else: 
+                    ?>
+                        <div class="car-price__wrapper-block">
+                            <div class="car-price-block">
+                                <?php if ($old_price_usd): ?>
+                                    <span class="car-price--old">$<?php echo number_format_i18n($old_price_usd, 0); ?></span>
+                                <?php endif; ?>
+                                <div class="car-price--current">
+                                    <span class="price-usd">$<?php echo number_format_i18n($price_usd, 0); ?></span>
+                                    <?php if ($price_uah): ?>
+                                        <span class="price-uah">≈ <?php echo $price_uah; ?> <?php echo esc_html(autobiography_translate_string('грн', 'UAH')); ?></span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <?php 
+                            $test_drive_button = get_field('test_drive_button');
+                            if ( $test_drive_button ):
+                                $link_title = !empty($test_drive_button['title']) ? esc_html($test_drive_button['title']) : esc_html(autobiography_translate_string('Записатись на тест-драйв', 'Sign up for a test drive'));
+                                $link_url = esc_url($test_drive_button['url']);
+                                $link_target = esc_attr($test_drive_button['target'] ? $test_drive_button['target'] : '_self');
+                            ?>
+                            <div class="car-test-drive-block">
+                                <a href="<?php echo $link_url; ?>" target="<?php echo $link_target; ?>" class="button button--primary">
+                                    <?php echo $link_title; ?>
+                                </a>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; // Кінець перевірки статусу ?>
 
                     <div class="car-specs-block">
                         <h3 class="car-specs__title"><?php echo esc_html(autobiography_translate_string('Основні характеристики', 'Main Specifications')); ?></h3>

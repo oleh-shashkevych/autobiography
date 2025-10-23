@@ -86,7 +86,24 @@ $image_url = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'la
         </div>
         
         <div class="car-card__footer">
-            <?php if ($price_usd): ?>
+            <?php 
+            // Перевіряємо статус автомобіля
+            if ($status_slug === 'preparing'): 
+                // Визначаємо ID форми та текст кнопки залежно від мови
+                $form_id = (pll_current_language('slug') === 'uk') ? '9' : '10';
+                $button_text = autobiography_translate_string('Повідомити про наявність', 'Notify when available');
+                $popup_link = '#form-' . $form_id;
+                $car_full_title = strip_tags($brand) . ' ' . $model . ', ' . $year;
+            ?>
+                <div class="car-card__notify-button">
+                    <a href="<?php echo esc_attr($popup_link); ?>" class="button button--primary" data-car-title="<?php echo esc_attr($car_full_title); ?>">
+                        <?php echo esc_html($button_text); ?>
+                    </a>
+                </div>
+            <?php 
+            // Інакше (якщо статус НЕ 'preparing'), виводимо ціну
+            elseif ($price_usd): 
+            ?>
                 <div class="car-card__price-block">
                     <?php if ($old_price_usd): ?>
                         <span class="car-card__price--old">$<?php echo number_format_i18n($old_price_usd, 0); ?></span>

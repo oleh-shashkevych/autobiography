@@ -99,7 +99,7 @@ $gallery_images = get_field('tradein_gallery');
                     <?php if (!empty($step['step_icon'])): ?>
                         <div class="how-we-work__item-header">
                             <div class="how-we-work__icon-wrapper"><?php echo $step['step_icon']; ?></div>
-                             <span class="how-we-work__step-number"><?php echo str_pad($index + 1, 2, '0', STR_PAD_LEFT); ?></span>
+                            <span class="how-we-work__step-number"><?php echo $index + 1; ?></span>
                         </div>
                     <?php endif; ?>
                     <?php if (!empty($step['step_title'])): ?>
