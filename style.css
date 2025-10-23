@@ -1137,6 +1137,7 @@ body.light-theme .footer__logo .logo-light {
     margin-bottom: 20px;
     color: var(--text-color);
     text-align: center;
+    text-transform: uppercase;
 }
 
 .hero-form .fluentform .ff-el-group,
@@ -1148,7 +1149,7 @@ body.light-theme .footer__logo .logo-light {
     display: grid;
     grid-template-columns: 450px 1fr; /* Левая колонка чуть шире */
     gap: 60px;
-    align-items: center;
+    align-items: flex-end;
     position: relative;
     z-index: 2;
 }
@@ -1165,7 +1166,7 @@ body.light-theme .footer__logo .logo-light {
     font-weight: 300;
     font-size: 110px;
     text-transform: uppercase;
-    margin-bottom: 40px;
+    margin-bottom: 100px;
     color: var(--white);
     opacity: 0.6;
     font-family: 'Alta Regular';
@@ -1178,6 +1179,7 @@ body.light-theme .footer__logo .logo-light {
     font-family: var(--font-main);
     text-transform: lowercase;
     font-weight: 600;
+    margin-top: -15px;
 }
 
 .hero__subtitle {
@@ -1185,6 +1187,7 @@ body.light-theme .footer__logo .logo-light {
     opacity: 0.6;
     line-height: 1.6;
     text-align: center;
+    margin-bottom: 50px;
 }
 
 /* --- ОБЩИЕ СТИЛИ ДЛЯ ФОРМ (Hero + Footer) --- */
@@ -3455,6 +3458,7 @@ body.popup-open {
     .hero__grid {
         grid-template-columns: 1fr; /* Одна колонка */
         text-align: center;
+        align-items: center;
     }
     
     .hero-form {
@@ -3467,6 +3471,10 @@ body.popup-open {
         margin-bottom: 20px;
     }
 
+    .hero__subtitle {
+        margin-bottom: 0;
+    }
+
     .hero-form__title {
         text-transform: uppercase;
     }
@@ -3474,6 +3482,7 @@ body.popup-open {
     .hero__main-title span,
     .about-hero__title span {
         font-size: 18px;
+        margin-top: 0;
     }
 
     .contact-section__container {
