@@ -295,7 +295,13 @@ function autobiography_acf_add_local_field_groups() {
         array('key' => 'field_engine_power_hp', 'label' => 'Потужність двигуна (к.с.)', 'name' => 'engine_power_hp', 'type' => 'number', 'instructions' => 'Для бензинових/дизельних/гібридних авто'),
         array('key' => 'field_engine_power_kw', 'label' => 'Потужність електродвигуна (кВт)', 'name' => 'engine_power_kw', 'type' => 'number', 'instructions' => 'Для електромобілів та гібридів'),
         array('key' => 'field_car_vin', 'label' => 'VIN-код', 'name' => 'vin_code', 'type' => 'text'),
-        array('key' => 'field_car_origin', 'label' => 'Походження авто', 'name' => 'car_origin', 'type' => 'select', 'choices' => array('usa' => 'з США', 'europe' => 'з Європи', 'korea' => 'з Кореї', 'official' => 'Офіційне авто')),
+        array(
+            'key' => 'field_car_origin', 
+            'label' => 'Походження авто', 
+            'name' => 'car_origin', 
+            'type' => 'text', // <-- Змінено тип на text
+            'instructions' => 'Введіть походження авто, наприклад: з США, з Європи, Офіційне авто тощо.', // Додано інструкцію
+        ),
         array('key' => 'field_tab_photos', 'label' => 'Фотографії', 'type' => 'tab'),
         array('key' => 'field_car_gallery', 'label' => 'Галерея', 'name' => 'car_gallery', 'type' => 'gallery', 'instructions' => 'Перше фото буде головним.'),
         array('key' => 'field_tab_other', 'label' => 'Комплектація та кнопки', 'type' => 'tab'),

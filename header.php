@@ -99,8 +99,13 @@ $theme_switcher_text = pll__(get_field('theme_switcher_text', 'option'));
                     <?php endif; ?>
                 </div>
                 <div class="header__actions">
-                    <button class="header__button button button--primary"><?php echo esc_html($header_button_text); ?></button>
-                </div>
+					<?php
+						// Determine form ID based on language
+						$header_form_id = (function_exists('pll_current_language') && pll_current_language('slug') === 'uk') ? '3' : '5';
+						$header_popup_link = '#form-' . $header_form_id;
+					?>
+					<a href="<?php echo esc_attr($header_popup_link); ?>" class="header__button button button--primary"><?php echo esc_html($header_button_text); ?></a>
+				</div>
             </div>
             <button class="header__burger-button" aria-label="<?php esc_attr_e('Open menu', 'autobiography'); ?>" aria-expanded="false">
                 <span class="header__burger-line"></span>
@@ -144,8 +149,14 @@ $theme_switcher_text = pll__(get_field('theme_switcher_text', 'option'));
         </div>
         <div class="mobile-menu__footer">
             <div class="header__actions">
-                <button class="header__button button button--primary"><?php echo esc_html($header_button_text); ?></button>
-            </div>
+				<?php
+					// We can reuse the variables defined above if this is in the same scope,
+					// otherwise, redefine them here if needed.
+					// $header_form_id = (function_exists('pll_current_language') && pll_current_language('slug') === 'uk') ? '3' : '5';
+					// $header_popup_link = '#form-' . $header_form_id;
+				?>
+				<a href="<?php echo esc_attr($header_popup_link); ?>" class="header__button button button--primary"><?php echo esc_html($header_button_text); ?></a>
+			</div>
             <div class="header__contacts">
                  <?php if ($contact_phones) : ?>
                     <?php foreach($contact_phones as $phone_item) : 
