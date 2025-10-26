@@ -310,7 +310,7 @@ function autobiography_acf_add_local_field_groups() {
                 'label' => 'Кнопка "Записатись на тест-драйв"',
                 'name' => 'test_drive_button',
                 'type' => 'link',
-                'instructions' => 'Додайте посилання на модальне вікно (напр. #test-drive-popup). Текст кнопки можна змінити тут.',
+                'instructions' => 'Додайте посилання на модальне вікно (#form-ID). Замість ID - ставте ID вашої форми (у fluent forms) Текст кнопки можна змінити тут.',
                 'return_format' => 'array',
             ),
         array(
@@ -348,7 +348,7 @@ function autobiography_acf_add_local_field_groups() {
             ),
         array('key' => 'field_action_buttons', 'label' => 'Кнопки дій', 'name' => 'action_buttons', 'type' => 'repeater', 'button_label' => 'Додати кнопку', 'sub_fields' => array(
             array('key' => 'field_button_text', 'label' => 'Текст кнопки', 'name' => 'button_text', 'type' => 'text'),
-            array('key' => 'field_button_link', 'label' => 'Посилання або ID модального вікна', 'name' => 'button_link', 'type' => 'text'),
+            array('key' => 'field_button_link', 'label' => 'Посилання або ID модального вікна', 'name' => 'button_link', 'type' => 'text', 'instructions' => 'Додайте посилання на модальне вікно (#form-ID). Замість ID - ставте ID вашої форми (у fluent forms) Текст кнопки можна змінити тут.',),
         )),
     ), 'location' => array(array(array('param' => 'post_type', 'operator' => '==', 'value' => 'car')))));
     
@@ -1451,3 +1451,87 @@ function autobiography_load_fluent_form_ajax() {
 }
 add_action('wp_ajax_load_fluent_form', 'autobiography_load_fluent_form_ajax');
 add_action('wp_ajax_nopriv_load_fluent_form', 'autobiography_load_fluent_form_ajax');
+
+/**
+ * ===================================================================
+ * Автоматичне оновлення курсу валют USD/UAH для поля ACF
+ * ===================================================================
+ */
+
+// 1. Плануємо подію оновлення курсу, якщо вона ще не запланована
+function schedule_exchange_rate_update() {
+    // Перевіряємо, чи запланована наша подія
+    if ( ! wp_next_scheduled( 'update_uah_usd_rate_hook' ) ) {
+        // Якщо ні, плануємо її щоденне виконання
+        // 'daily' - означає раз на добу. Можна змінити на 'twicedaily' (двічі на добу)
+        wp_schedule_event( time(), 'daily', 'update_uah_usd_rate_hook' );
+    }
+}
+// Запускаємо планування після завантаження WordPress
+add_action( 'wp', 'schedule_exchange_rate_update' );
+
+// 2. Функція, яка буде виконуватися за розкладом
+function update_uah_usd_rate() {
+    // URL API Національного банку України для курсів валют
+    $api_url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json';
+
+    // Робимо запит до API
+    $response = wp_remote_get( $api_url );
+
+    // Перевіряємо, чи не виникла помилка під час запиту
+    if ( is_wp_error( $response ) ) {
+        error_log( 'Помилка отримання курсу валют НБУ: ' . $response->get_error_message() );
+        return; // Виходимо, якщо є помилка
+    }
+
+    // Отримуємо тіло відповіді
+    $body = wp_remote_retrieve_body( $response );
+    // Декодуємо JSON відповідь в PHP масив
+    $data = json_decode( $body );
+
+    // Перевіряємо, чи вдалося декодувати дані і чи це масив
+    if ( ! $data || ! is_array( $data ) ) {
+        error_log( 'Помилка декодування відповіді від API НБУ.' );
+        return; // Виходимо, якщо дані некоректні
+    }
+
+    $usd_rate = null;
+    // Шукаємо в масиві курс для долара США (USD)
+    foreach ( $data as $currency ) {
+        if ( isset( $currency->cc ) && $currency->cc === 'USD' ) {
+            $usd_rate = $currency->rate; // Зберігаємо курс
+            break; // Зупиняємо пошук, бо знайшли потрібне
+        }
+    }
+
+    // Перевіряємо, чи знайшли курс
+    if ( $usd_rate !== null ) {
+        // Оновлюємо значення поля ACF 'uah_to_usd_rate' на сторінці опцій
+        // 'option' - вказує, що поле знаходиться на сторінці налаштувань теми
+        update_field( 'uah_to_usd_rate', $usd_rate, 'option' );
+        // Можна додати запис в лог для перевірки (необов'язково)
+        // error_log( 'Курс USD/UAH успішно оновлено: ' . $usd_rate );
+    } else {
+        // Якщо курс USD не знайдено у відповіді API
+        error_log( 'Курс USD не знайдено у відповіді API НБУ.' );
+    }
+}
+// Прив'язуємо нашу функцію до запланованої події
+add_action( 'update_uah_usd_rate_hook', 'update_uah_usd_rate' );
+
+
+// 3. (Необов'язково) Додаємо примітку до поля в адмінці, що воно оновлюється автоматично
+function add_auto_update_notice_to_rate_field( $field ) {
+    // Додаємо текст до існуючих інструкцій поля
+    $field['instructions'] .= '<br><small><i>' . esc_html__( 'Цей курс оновлюється автоматично щодня згідно даних НБУ.', 'autobiography' ) . '</i></small>';
+    return $field; // Повертаємо змінений масив налаштувань поля
+}
+// Фільтруємо налаштування поля 'uah_to_usd_rate' перед його відображенням
+add_filter( 'acf/load_field/name=uah_to_usd_rate', 'add_auto_update_notice_to_rate_field' );
+
+
+// 4. (Рекомендовано) Видаляємо заплановану подію при деактивації теми
+function unschedule_exchange_rate_update() {
+    wp_clear_scheduled_hook( 'update_uah_usd_rate_hook' );
+}
+register_deactivation_hook( __FILE__, 'unschedule_exchange_rate_update' );

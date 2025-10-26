@@ -75,11 +75,13 @@ if ($power_string) {
                         </div>
                     <?php endif; ?>
                     <?php if ($gallery): ?>
-                        <div class="swiper swiper-main-gallery">
+                        <div class="swiper swiper-main-gallery lightbox-gallery"> 
                             <div class="swiper-wrapper">
                                 <?php foreach ($gallery as $image): ?>
                                     <div class="swiper-slide">
-                                        <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" />
+                                        <a href="<?php echo esc_url($image['url']); ?>">
+                                            <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" />
+                                        </a>
                                     </div>
                                 <?php endforeach; ?>
                             </div>

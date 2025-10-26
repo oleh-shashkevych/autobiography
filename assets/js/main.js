@@ -277,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 swiper: swiperThumbs,
             },
         });
+        baguetteBox.run('.lightbox-gallery');
     }
 
     // --- FAQ Accordion ---
