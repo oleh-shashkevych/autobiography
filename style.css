@@ -3762,7 +3762,8 @@ body.popup-open {
 
     .buyback-content-grid__media img, 
     .tradein-content-grid__media img,
-    .about-hero__image-wrapper img {
+    .about-hero__image-wrapper img,
+	.commission-intro-grid__media img {
         aspect-ratio: 16 / 10;
         position: unset;
     }

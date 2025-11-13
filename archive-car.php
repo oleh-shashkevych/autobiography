@@ -25,7 +25,25 @@ $min_mileage = $wpdb->get_var("SELECT min(cast(meta_value as unsigned)) FROM $wp
 $max_mileage = $wpdb->get_var("SELECT max(cast(meta_value as unsigned)) FROM $wpdb->postmeta WHERE meta_key = 'mileage'");
 $min_engine_volume = $wpdb->get_var("SELECT min(cast(meta_value as decimal(10,1))) FROM $wpdb->postmeta WHERE meta_key = 'engine_volume'");
 $max_engine_volume = $wpdb->get_var("SELECT max(cast(meta_value as decimal(10,1))) FROM $wpdb->postmeta WHERE meta_key = 'engine_volume'");
-$models = $wpdb->get_col("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = 'car_model' ORDER BY meta_value ASC");
+$model_brand_pairs = $wpdb->get_results(
+    $wpdb->prepare(
+        "SELECT DISTINCT pm1.meta_value AS model_name, t.slug AS brand_slug
+        FROM {$wpdb->posts} AS p
+        INNER JOIN {$wpdb->postmeta} AS pm1 ON (p.ID = pm1.post_id AND pm1.meta_key = 'car_model')
+        INNER JOIN {$wpdb->postmeta} AS pm2 ON (p.ID = pm2.post_id AND pm2.meta_key = 'car_status')
+        INNER JOIN {$wpdb->term_relationships} AS tr ON (p.ID = tr.object_id)
+        INNER JOIN {$wpdb->term_taxonomy} AS tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'brand')
+        INNER JOIN {$wpdb->terms} AS t ON (tt.term_id = t.term_id)
+        WHERE p.post_type = %s
+          AND p.post_status = %s
+          AND pm2.meta_value IN ('available', 'preparing')
+          AND pm1.meta_value IS NOT NULL
+          AND pm1.meta_value != ''
+        ", // 'ORDER BY' не нужен, мы отсортируем в PHP
+        'car',
+        'publish'
+    )
+);
 ?>
 
 <main id="primary" class="site-main">
@@ -65,16 +83,36 @@ $models = $wpdb->get_col("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE 
                     </div>
                 </div>
 
-                <div class="filter-group">
+                <div class="filter-group" id="model-filter-group" style="display: none;">
                     <div class="filter-group__header">
                         <label><?php echo esc_html(autobiography_translate_string('Модель', 'Model')); ?></label>
                         <span class="filter-group__toggle"></span>
                     </div>
                     <div class="filter-group__content">
-                        <select name="model" id="model">
+                        <?php // --- НАЧАЛО ИЗМЕНЕНИЙ --- ?>
+                        <select name="model" id="model" disabled> <?php // <-- ДОБАВЛЕНО 'disabled' ?>
                             <option value=""><?php echo esc_html(autobiography_translate_string('Всі моделі', 'All models')); ?></option>
-                            <?php foreach ($models as $model) { echo '<option value="' . esc_attr($model) . '">' . esc_html($model) . '</option>'; } ?>
+                            <?php 
+                            if ($model_brand_pairs) {
+                                // 1. Получаем все уникальные модели из нашего запроса
+                                $all_models = array_unique(wp_list_pluck($model_brand_pairs, 'model_name'));
+                                sort($all_models); // Сортируем по алфавиту
+
+                                // 2. Для каждой модели, находим все ее марки
+                                foreach ($all_models as $model_name) {
+                                    $brands_for_this_model = [];
+                                    foreach ($model_brand_pairs as $pair) {
+                                        if ($pair->model_name === $model_name) {
+                                            $brands_for_this_model[] = $pair->brand_slug;
+                                        }
+                                    }
+                                    // 3. Выводим option с data-brands, где перечисляем все связанные марки
+                                    echo '<option value="' . esc_attr($model_name) . '" data-brands="' . esc_attr(implode(',', array_unique($brands_for_this_model))) . '">' . esc_html($model_name) . '</option>';
+                                }
+                            } 
+                            ?>
                         </select>
+                        <?php // --- КОНЕЦ ИЗМЕНЕНИЙ --- ?>
                     </div>
                 </div>
                 

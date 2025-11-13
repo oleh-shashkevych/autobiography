@@ -181,8 +181,9 @@ document.addEventListener('DOMContentLoaded', function () {
         carFiltersForm.addEventListener('reset', (e) => {
             setTimeout(() => { // Allow form to reset fully
                 priceSlider.noUiSlider.set([priceSlider.dataset.min, priceSlider.dataset.max]);
-                yearSlider.noUiSlider.set([yearSlider.dataset.min, yearSlider.dataset.max]);
-                 carFiltersForm.querySelectorAll('input[name="status"]').forEach(cb => cb.checked = true);
+                // ! Мы убрали 'yearSlider' из этого кода, так как его нет в HTML
+                // yearSlider.noUiSlider.set([yearSlider.dataset.min, yearSlider.dataset.max]);
+                carFiltersForm.querySelectorAll('input[name="status"]').forEach(cb => cb.checked = true);
                 fetchCars();
             }, 50);
         });
@@ -209,11 +210,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // --- Range Sliders ---
         const priceSlider = document.getElementById('price-slider');
-        const yearSlider = document.getElementById('year-slider');
+        // ! 'yearSlider' нет в вашем HTML, поэтому эта строка закомментирована
+        // const yearSlider = document.getElementById('year-slider');
         const minPriceInput = document.getElementById('min_price');
         const maxPriceInput = document.getElementById('max_price');
-        const minYearInput = document.getElementById('min_year');
-        const maxYearInput = document.getElementById('max_year');
+        // ! 'minYearInput'/'maxYearInput' нет в вашем HTML
+        // const minYearInput = document.getElementById('min_year');
+        // const maxYearInput = document.getElementById('max_year');
 
         const createSlider = (sliderEl, minInput, maxInput) => {
              const minVal = parseInt(minInput.min);
@@ -327,15 +330,104 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        // 2. Initialize custom selects with Choices.js
+
+        // --- ✅ START: ИСПРАВЛЕННАЯ ЛОГИКА ДЛЯ ДИНАМИЧЕСКИХ МОДЕЛЕЙ ---
+
+        // 2.1 Получаем все элементы
+        const modelSelect = document.getElementById('model');
+        const brandSelect = document.getElementById('brand');
+        const modelFilterGroup = document.getElementById('model-filter-group');
+
+        // 2.2 Сохраняем все опции моделей
+        let allModelOptions = [];
+        if (modelSelect) {
+            modelSelect.querySelectorAll('option').forEach(opt => {
+                allModelOptions.push({
+                    value: opt.value,
+                    label: opt.textContent,
+                    brands: opt.dataset.brands ? opt.dataset.brands.split(',') : []
+                });
+            });
+        }
+
+        // 2.3 Инициализируем Choices.js и СОХРАНЯЕМ экземпляры
+        let brandChoicesInstance;
+        let modelChoicesInstance;
+
         const selectElements = document.querySelectorAll('.catalog-filters select, .catalog-sort select'); 
         selectElements.forEach(select => {
-            new Choices(select, {
+            // Создаем экземпляр
+            const choicesInstance = new Choices(select, {
                 searchEnabled: false, 
                 itemSelectText: '', 
                 shouldSort: false, 
             });
+
+            // Сохраняем экземпляры для 'brand' и 'model' в наши переменные
+            if (select.id === 'brand') {
+                brandChoicesInstance = choicesInstance;
+            } else if (select.id === 'model') {
+                modelChoicesInstance = choicesInstance;
+            }
         });
+
+        // 2.4 Логика Скрытия/Отображения/Фильтрации Модели
+        // Теперь мы проверяем наши переменные, а не .choicesInstance
+        if (brandSelect && modelFilterGroup && modelSelect && modelChoicesInstance) {
+            
+            // Эта функция будет фильтровать список моделей
+            const handleBrandChange = () => {
+                const selectedBrand = brandSelect.value; // e.g. "bmw"
+                
+                if (selectedBrand && selectedBrand !== "") {
+                    // 1. Марка выбрана
+                    
+                    // Фильтруем наш "оригинальный" список
+                    const availableModels = allModelOptions.filter(opt => {
+                        return opt.value === "" || opt.brands.includes(selectedBrand);
+                    });
+                    
+                    // Используем API Choices.js для обновления списка
+                    modelChoicesInstance.clearStore(); // Очищаем старые
+                    modelChoicesInstance.setChoices(availableModels, 'value', 'label', true); // true = перезаписать все
+                    modelChoicesInstance.setChoiceByValue(''); // Снова выбираем "Все модели"
+                    
+                    // Показываем группу и включаем селект
+                    modelFilterGroup.style.display = 'block';
+                    modelChoicesInstance.enable();
+
+                } else {
+                    // 2. Марка не выбрана (сброшена)
+                    
+                    // Сбрасываем список к полному (но он останется выключенным)
+                    modelChoicesInstance.clearStore();
+                    modelChoicesInstance.setChoices(allModelOptions, 'value', 'label', true);
+                    modelChoicesInstance.setChoiceByValue('');
+
+                    // Прячем группу и отключаем селект
+                    modelFilterGroup.style.display = 'none';
+                    modelChoicesInstance.disable();
+                }
+            };
+
+            // 2.5 Вешаем слушатель на событие 'change'
+            brandSelect.addEventListener('change', handleBrandChange);
+            
+            // 2.6 Обновляем обработчик 'reset'
+            const form = brandSelect.closest('form');
+            if (form) {
+                form.addEventListener('reset', () => {
+                    // Нужна задержка, чтобы форма успела сброситься
+                    setTimeout(() => {
+                        // Просто вызываем наш обработчик. 
+                        // Он увидит, что brandSelect.value пуст, и все скроет/выключит.
+                        handleBrandChange(); 
+                    }, 50); 
+                });
+            }
+        }
+        // --- ✅ END: ИСПРАВЛЕННАЯ ЛОГИКА ---
+
 
         // 3. Mobile Filters Toggle
         const filtersToggleButton = document.querySelector('.filters-toggle-button');
