@@ -73,11 +73,36 @@ $model_brand_pairs = $wpdb->get_results(
                         <select name="brand" id="brand">
                             <option value=""><?php echo esc_html(autobiography_translate_string('Всі марки', 'All brands')); ?></option>
                             <?php 
-                            $brands = get_terms(array('taxonomy' => 'brand', 'hide_empty' => false));
-                            foreach ($brands as $brand) {
-                                $disabled = $brand->count === 0 ? 'disabled' : '';
-                                echo '<option value="' . esc_attr($brand->slug) . '" ' . $disabled . '>' . esc_html($brand->name) . '</option>';
-                            } 
+                            global $wpdb;
+                            
+                            // SQL-запрос:
+                            // 1. Берем термины (бренды)
+                            // 2. Объединяем с таблицей связей (term_relationships)
+                            // 3. Объединяем с постами (posts), чтобы проверить тип 'car' и статус 'publish'
+                            // 4. Объединяем с мета-полями (postmeta), чтобы проверить статус авто
+                            $active_brands = $wpdb->get_results("
+                                SELECT DISTINCT t.slug, t.name
+                                FROM {$wpdb->terms} AS t
+                                INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
+                                INNER JOIN {$wpdb->term_relationships} AS tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
+                                INNER JOIN {$wpdb->posts} AS p ON tr.object_id = p.ID
+                                INNER JOIN {$wpdb->postmeta} AS pm ON p.ID = pm.post_id
+                                WHERE tt.taxonomy = 'brand'
+                                AND p.post_type = 'car'
+                                AND p.post_status = 'publish'
+                                AND pm.meta_key = 'car_status'
+                                AND pm.meta_value IN ('available', 'preparing')
+                                ORDER BY t.name ASC
+                            ");
+
+                            // Выводим только те бренды, которые вернул запрос
+                            if ( $active_brands ) {
+                                foreach ( $active_brands as $brand ) {
+                                    // Здесь нам больше не нужна проверка disabled, 
+                                    // так как SQL запрос уже отфильтровал пустые или проданные
+                                    echo '<option value="' . esc_attr($brand->slug) . '">' . esc_html($brand->name) . '</option>';
+                                }
+                            }
                             ?>
                         </select>
                     </div>
@@ -342,14 +367,28 @@ $model_brand_pairs = $wpdb->get_results(
     if ($sold_cars->have_posts()):
     ?>
     <section class="sold-cars-section">
-        <div class="container">
+<!--         <div class="container">
             <h2 class="sold-cars__title"><?php echo esc_html($sold_cars_title); ?></h2>
             <div class="available-cars__grid">
                 <?php while ($sold_cars->have_posts()): $sold_cars->the_post(); ?>
                     <?php get_template_part('template-parts/content', 'car-card'); ?>
                 <?php endwhile; wp_reset_postdata(); ?>
             </div>
-        </div>
+        </div> -->
+		<div class="container">
+            <h2 class="sold-cars__title"><?php echo esc_html($sold_cars_title); ?></h2>
+			<div class="sold-cars-slider-wrapper">
+				<div class="swiper sold-cars-slider">
+                    <div class="swiper-wrapper">
+                        <?php while ($sold_cars->have_posts()): $sold_cars->the_post(); ?>
+                                                        <div class="swiper-slide">
+                                <?php get_template_part('template-parts/content', 'car-card'); ?>
+                            </div>
+                        <?php endwhile; wp_reset_postdata(); ?>
+                    </div>
+                </div>
+            </div>
+		</div>
     </section>
     <?php endif; ?>
 

@@ -1330,14 +1330,31 @@ function autobiography_filter_cars_ajax_handler() {
     
     // Pagination
     $big = 999999999;
-    echo '<div class="pagination-wrapper">' . paginate_links(array(
-        'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-        'format' => '?paged=%#%',
-        'current' => max(1, $paged),
-        'total' => $cars_query->max_num_pages,
+    
+    // --- НАЧАЛО ИЗМЕНЕНИЙ ---
+    
+    // Генерируем ссылки пагинации
+    $pagination_links = paginate_links(array(
+        'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+        'format'    => '?paged=%#%',
+        'current'   => max(1, $paged),
+        'total'     => $cars_query->max_num_pages,
         'prev_text' => '&larr;',
         'next_text' => '&rarr;',
-    )) . '</div>';
+        'type'      => 'plain', // Важно: получаем просто ссылки, обертку добавим сами
+    ));
+
+    // Выводим пагинацию в той же структуре, что и standard the_posts_pagination()
+    if ($pagination_links) {
+        // JS ищет .navigation.pagination
+        echo '<nav class="navigation pagination" aria-label="' . esc_attr__('Пагінація записів', 'autobiography') . '">';
+        echo '<h2 class="screen-reader-text">' . esc_html__('Пагінація записів', 'autobiography') . '</h2>';
+        echo '<div class="nav-links">';
+        echo $pagination_links; 
+        echo '</div>';
+        echo '</nav>';
+    }
+    // --- КОНЕЦ ИЗМЕНЕНИЙ ---
 
     wp_reset_postdata();
     die();

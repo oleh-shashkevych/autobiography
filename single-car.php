@@ -22,6 +22,7 @@ $specs = array(
     autobiography_translate_string('Тип палива', 'Fuel Type')       => get_the_term_list(get_the_ID(), 'fuel_type', '', ', '),
     autobiography_translate_string('Об\'єм двигуна', 'Engine Volume')   => get_field('engine_volume') ? sprintf(autobiography_translate_string('%s л', '%s L'), get_field('engine_volume')) : null,
     autobiography_translate_string('Коробка передач', 'Transmission')  => get_the_term_list(get_the_ID(), 'transmission', '', ', '),
+	autobiography_translate_string('Привід', 'Drivetrain')          => get_the_term_list(get_the_ID(), 'drivetrain', '', ', '),
     autobiography_translate_string('Походження', 'Origin')      => get_field('car_origin'),
     autobiography_translate_string('VIN-код', 'VIN')         => get_field('vin_code'),
 );

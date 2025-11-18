@@ -93,7 +93,53 @@ document.addEventListener('DOMContentLoaded', function () {
             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
         });
     }
+	
+	// --- ✅ START: Sold Cars Slider ---
+    if (document.querySelector('.sold-cars-slider')) {
+        new Swiper('.sold-cars-slider', {
+            loop: true,
+            slidesPerView: 1,
+            spaceBetween: 15,
+			autoplay: { delay: 5000 },
+            breakpoints: {
+                // 2 карточки на планшетах
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 20
+                },
+                // 3 карточки на десктопах (исходя из ваших CSS)
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 30
+                }
+            }
+        });
+    }
+    // --- ✅ END: Sold Cars Slider ---
+    
+	// --- ✅ START: Remove Links from Sold Cars ---
+    document.querySelectorAll('.sold-cars-section .car-card').forEach(card => {
+        // 1. Находим ссылку-изображение
+        const imgLink = card.querySelector('.car-card__image-link');
+        if (imgLink) {
+            // Заменяем тег 'a' на 'div', сохраняя все классы и содержимое
+            const div = document.createElement('div');
+            div.className = imgLink.className;
+            div.innerHTML = imgLink.innerHTML;
+            imgLink.parentNode.replaceChild(div, imgLink);
+        }
 
+        // 2. Находим ссылку-заголовок
+        const titleLink = card.querySelector('.car-card__title a');
+        if (titleLink) {
+            // Заменяем тег 'a' на 'span', сохраняя текст
+            const span = document.createElement('span');
+            span.textContent = titleLink.textContent;
+            titleLink.parentNode.replaceChild(span, titleLink);
+        }
+    });
+    // --- ✅ END: Remove Links from Sold Cars ---
+	
     // --- Lightbox Gallery ---
     if (document.querySelector('.our-clients__gallery')) {
         baguetteBox.run('.our-clients__gallery');
@@ -154,7 +200,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 tempDiv.innerHTML = html;
                 
                 const newContent = tempDiv.querySelectorAll('.car-card');
-                const newPagination = tempDiv.querySelector('.page-numbers');
+                // ИЗМЕНЕНО: Ищем правильный контейнер навигации, а не отдельную кнопку
+                const newPagination = tempDiv.querySelector('.navigation.pagination'); 
                 const noResults = tempDiv.querySelector('.no-cars-found');
                 
                 listingsContainer.innerHTML = '';
@@ -164,13 +211,35 @@ document.addEventListener('DOMContentLoaded', function () {
                      listingsContainer.appendChild(noResults);
                 }
 
+                // ИЗМЕНЕНО: Корректная вставка HTML пагинации
                 paginationContainer.innerHTML = newPagination ? newPagination.outerHTML : '';
+                
                 listingsContainer.classList.remove('loading');
             })
             .catch(error => {
                 console.error('Error:', error);
                 listingsContainer.classList.remove('loading');
             });
+        };
+
+        // --- Helper: Extract Page Number ---
+        // НОВАЯ ФУНКЦИЯ: Парсит и /page/2/, и ?paged=2
+        const getPageNumberFromUrl = (url) => {
+            try {
+                const urlObj = new URL(url);
+                // 1. Пробуем найти ?paged=
+                const pagedParam = urlObj.searchParams.get('paged');
+                if (pagedParam) return parseInt(pagedParam);
+
+                // 2. Пробуем найти /page/X/
+                const matches = urlObj.pathname.match(/\/page\/(\d+)\/?/);
+                if (matches && matches[1]) return parseInt(matches[1]);
+
+                // 3. Если ссылка есть, но номера нет (например, ссылка на первую страницу), возвращаем 1
+                return 1;
+            } catch (e) {
+                return 1;
+            }
         };
 
         // --- Event Listeners ---
@@ -189,12 +258,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.querySelector('.catalog-pagination').addEventListener('click', (e) => {
-            if (e.target.matches('a.page-numbers')) {
+            // Ищем ближайшую ссылку, так как клик может быть по span или svg внутри a
+            const link = e.target.closest('a.page-numbers');
+            
+            if (link) {
                 e.preventDefault();
-                const url = new URL(e.target.href);
-                currentPage = url.searchParams.get('paged') || 1;
-                fetchCars();
-                document.querySelector('.catalog-main').scrollIntoView({ behavior: 'smooth' });
+                const pageNumber = getPageNumberFromUrl(link.href);
+                
+                if (pageNumber && pageNumber !== currentPage) {
+                    currentPage = pageNumber;
+                    fetchCars();
+                    document.querySelector('.catalog-main').scrollIntoView({ behavior: 'smooth' });
+                }
             }
         });
 
