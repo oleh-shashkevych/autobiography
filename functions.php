@@ -1144,12 +1144,12 @@ function autobiography_register_options_strings() {
 add_action('acf/init', 'autobiography_register_options_strings');
 
 
-// --- 8. AJAX HANDLER FOR CAR FILTERS (ОБНОВЛЕНО) ---
+// --- 8. AJAX HANDLER FOR CAR FILTERS ---
 function autobiography_filter_cars_ajax_handler() {
     $paged = isset($_POST['page']) ? intval($_POST['page']) : 1;
     $args = array(
         'post_type' => 'car',
-        'posts_per_page' => 20, // ИЗМЕНЕНО: с 4 на 20
+        'posts_per_page' => 20,
         'paged' => $paged
     );
 
@@ -1164,7 +1164,7 @@ function autobiography_filter_cars_ajax_handler() {
             'compare' => 'IN',
         );
     } else {
-        // If no statuses are selected, show nothing
+        // Если статусы не выбраны, ничего не показываем
         $args['post__in'] = array(0);
     }
 
@@ -1183,7 +1183,6 @@ function autobiography_filter_cars_ajax_handler() {
     $max_year = !empty($_POST['max_year']) ? sanitize_text_field($_POST['max_year']) : null;
 
     if ($min_year && $max_year) {
-        // Если заданы оба значения
         $meta_query[] = array(
             'key' => 'car_year',
             'value' => array($min_year, $max_year),
@@ -1191,7 +1190,6 @@ function autobiography_filter_cars_ajax_handler() {
             'compare' => 'BETWEEN',
         );
     } elseif ($min_year) {
-        // Если задано только "от"
         $meta_query[] = array(
             'key' => 'car_year',
             'value' => $min_year,
@@ -1199,7 +1197,6 @@ function autobiography_filter_cars_ajax_handler() {
             'compare' => '>=',
         );
     } elseif ($max_year) {
-        // Если задано только "до"
         $meta_query[] = array(
             'key' => 'car_year',
             'value' => $max_year,
@@ -1290,9 +1287,17 @@ function autobiography_filter_cars_ajax_handler() {
         $args['tax_query'] = $tax_query;
     }
 
-    // Sorting
+    // --- Sorting (Modified Logic) ---
+    $is_default_sort = true; // Флаг: используем ли сортировку по умолчанию
+
     if (isset($_POST['sort']) && !empty($_POST['sort'])) {
         $sort_val = sanitize_text_field($_POST['sort']);
+        
+        // Если выбрана конкретная сортировка (не пусто), снимаем флаг дефолтной
+        if ($sort_val !== '') {
+            $is_default_sort = false;
+        }
+
         switch ($sort_val) {
             case 'price_asc':
                 $args['meta_key'] = 'price_usd';
@@ -1314,10 +1319,24 @@ function autobiography_filter_cars_ajax_handler() {
                 $args['orderby'] = 'meta_value_num';
                 $args['order'] = 'ASC';
                 break;
+            // Если значение пустое или неизвестное, $is_default_sort останется true
         }
     }
 
+    // Применяем кастомные фильтры ТОЛЬКО если это сортировка по умолчанию
+    if ($is_default_sort) {
+        add_filter('posts_join', 'autobiography_car_archive_join');
+        add_filter('posts_orderby', 'autobiography_car_archive_orderby');
+    }
+
     $cars_query = new WP_Query($args);
+
+    // Сразу удаляем фильтры, чтобы не влиять на другие запросы
+    if ($is_default_sort) {
+        remove_filter('posts_join', 'autobiography_car_archive_join');
+        remove_filter('posts_orderby', 'autobiography_car_archive_orderby');
+    }
+    // --------------------------------
 
     if ($cars_query->have_posts()) {
         while ($cars_query->have_posts()) {
@@ -1331,9 +1350,6 @@ function autobiography_filter_cars_ajax_handler() {
     // Pagination
     $big = 999999999;
     
-    // --- НАЧАЛО ИЗМЕНЕНИЙ ---
-    
-    // Генерируем ссылки пагинации
     $pagination_links = paginate_links(array(
         'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
         'format'    => '?paged=%#%',
@@ -1341,12 +1357,10 @@ function autobiography_filter_cars_ajax_handler() {
         'total'     => $cars_query->max_num_pages,
         'prev_text' => '&larr;',
         'next_text' => '&rarr;',
-        'type'      => 'plain', // Важно: получаем просто ссылки, обертку добавим сами
+        'type'      => 'plain',
     ));
 
-    // Выводим пагинацию в той же структуре, что и standard the_posts_pagination()
     if ($pagination_links) {
-        // JS ищет .navigation.pagination
         echo '<nav class="navigation pagination" aria-label="' . esc_attr__('Пагінація записів', 'autobiography') . '">';
         echo '<h2 class="screen-reader-text">' . esc_html__('Пагінація записів', 'autobiography') . '</h2>';
         echo '<div class="nav-links">';
@@ -1354,7 +1368,6 @@ function autobiography_filter_cars_ajax_handler() {
         echo '</div>';
         echo '</nav>';
     }
-    // --- КОНЕЦ ИЗМЕНЕНИЙ ---
 
     wp_reset_postdata();
     die();
