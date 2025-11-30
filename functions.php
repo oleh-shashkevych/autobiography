@@ -1,87 +1,95 @@
 <?php
 /**
  * Autobiography functions and definitions
-*/
+ */
 
 // --- 1. ENQUEUE SCRIPTS AND STYLES ---
-function autobiography_scripts() {
+function autobiography_scripts()
+{
     // CSS
-    wp_enqueue_style( 'autobiography-style', get_stylesheet_uri(), array(), '1.0.5' );
-    wp_enqueue_style( 'swiper-css', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', array(), '11.0' );
-    wp_enqueue_style( 'baguettebox-css', 'https://cdn.jsdelivr.net/npm/baguettebox.js@1.11.1/dist/baguetteBox.min.css', array(), '1.11.1' );
+    wp_enqueue_style('autobiography-style', get_stylesheet_uri(), array(), '1.0.5');
+    wp_enqueue_style('swiper-css', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', array(), '11.0');
+    wp_enqueue_style('baguettebox-css', 'https://cdn.jsdelivr.net/npm/baguettebox.js@1.11.1/dist/baguetteBox.min.css', array(), '1.11.1');
     // noUiSlider for price range filter
-    wp_enqueue_style( 'nouislider-css', 'https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css', array(), '15.7.1' );
-    wp_enqueue_style( 'choices-css', 'https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css', array(), '10.2.0' );
+    wp_enqueue_style('nouislider-css', 'https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css', array(), '15.7.1');
+    wp_enqueue_style('choices-css', 'https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css', array(), '10.2.0');
 
     // JS
-    wp_enqueue_script( 'swiper-js', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11.0', true );
-    wp_enqueue_script( 'baguettebox-js', 'https://cdn.jsdelivr.net/npm/baguettebox.js@1.11.1/dist/baguetteBox.min.js', array(), '1.11.1', true );
+    wp_enqueue_script('swiper-js', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11.0', true);
+    wp_enqueue_script('baguettebox-js', 'https://cdn.jsdelivr.net/npm/baguettebox.js@1.11.1/dist/baguetteBox.min.js', array(), '1.11.1', true);
     // noUiSlider JS
-    wp_enqueue_script( 'nouislider-js', 'https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js', array(), '15.7.1', true );
-    wp_enqueue_script( 'inputmask-js', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js', array('jquery'), '5.0.8', true );
-    wp_enqueue_script( 'choices-js', 'https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js', array(), '10.2.0', true );
-    
+    wp_enqueue_script('nouislider-js', 'https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js', array(), '15.7.1', true);
+    wp_enqueue_script('inputmask-js', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js', array('jquery'), '5.0.8', true);
+    wp_enqueue_script('choices-js', 'https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js', array(), '10.2.0', true);
+
     // Main JS file
-    wp_enqueue_script( 'autobiography-main-js', get_template_directory_uri() . '/assets/js/main.js', array('swiper-js', 'baguettebox-js', 'nouislider-js', 'choices-js'), '1.0.6', true );
+    wp_enqueue_script('autobiography-main-js', get_template_directory_uri() . '/assets/js/main.js', array('swiper-js', 'baguettebox-js', 'nouislider-js', 'choices-js'), '1.0.6', true);
 
     // Localize script for AJAX
-    wp_localize_script( 'autobiography-main-js', 'autobiography_ajax', array(
-        'ajax_url' => admin_url( 'admin-ajax.php' )
+    wp_localize_script('autobiography-main-js', 'autobiography_ajax', array(
+        'ajax_url' => admin_url('admin-ajax.php')
     ));
 }
-add_action( 'wp_enqueue_scripts', 'autobiography_scripts' );
+add_action('wp_enqueue_scripts', 'autobiography_scripts');
 
 
 // --- 2. THEME SETUP ---
-function autobiography_setup() {
-    load_theme_textdomain( 'autobiography', get_template_directory() . '/languages' );
-    add_theme_support( 'title-tag' );
-    add_theme_support( 'post-thumbnails' );
-    add_theme_support( 'custom-logo' );
+function autobiography_setup()
+{
+    load_theme_textdomain('autobiography', get_template_directory() . '/languages');
+    add_theme_support('title-tag');
+    add_theme_support('post-thumbnails');
+    add_theme_support('custom-logo');
 }
-add_action( 'after_setup_theme', 'autobiography_setup' );
+add_action('after_setup_theme', 'autobiography_setup');
 
 
 // --- 3. REGISTER MENUS ---
-function autobiography_menus() {
-    register_nav_menus( array(
-        'header_menu'          => 'Головне меню в шапці',
+function autobiography_menus()
+{
+    register_nav_menus(array(
+        'header_menu' => 'Головне меню в шапці',
         'footer_services_menu' => 'Меню послуг в футері',
-        'footer_sitemap_menu'  => 'Карта сайту в футері'
-    ) );
+        'footer_sitemap_menu' => 'Карта сайту в футері'
+    ));
 }
-add_action( 'init', 'autobiography_menus' );
+add_action('init', 'autobiography_menus');
 
 
 // --- 4. CPT & TAXONOMIES ---
-function autobiography_register_car_post_type() {
+function autobiography_register_car_post_type()
+{
     $labels = array('name' => 'Автомобілі', 'singular_name' => 'Автомобіль', 'menu_name' => 'Каталог Авто', 'add_new' => 'Додати авто', 'all_items' => 'Всі автомобілі');
-    $args = array('labels' => $labels, 'public' => true, 'has_archive' => true, 'rewrite' => array( 'slug' => 'cars' ), 'supports' => array( 'title', 'editor', 'thumbnail' ), 'menu_icon' => 'dashicons-car');
-    register_post_type( 'car', $args );
+    $args = array('labels' => $labels, 'public' => true, 'has_archive' => true, 'rewrite' => array('slug' => 'cars'), 'supports' => array('title', 'editor', 'thumbnail'), 'menu_icon' => 'dashicons-car');
+    register_post_type('car', $args);
 }
-add_action( 'init', 'autobiography_register_car_post_type' );
+add_action('init', 'autobiography_register_car_post_type');
 
-function autobiography_register_car_taxonomies() {
+function autobiography_register_car_taxonomies()
+{
     register_taxonomy('brand', 'car', array('label' => 'Марка', 'rewrite' => array('slug' => 'brand'), 'hierarchical' => true));
     register_taxonomy('body_type', 'car', array('label' => 'Тип кузова', 'rewrite' => array('slug' => 'body-type'), 'hierarchical' => true));
     register_taxonomy('fuel_type', 'car', array('label' => 'Тип палива', 'rewrite' => array('slug' => 'fuel-type'), 'hierarchical' => true));
     register_taxonomy('transmission', 'car', array('label' => 'Коробка передач', 'rewrite' => array('slug' => 'transmission'), 'hierarchical' => true));
     register_taxonomy('drivetrain', 'car', array('label' => 'Привід', 'rewrite' => array('slug' => 'drivetrain'), 'hierarchical' => true));
 }
-add_action( 'init', 'autobiography_register_car_taxonomies' );
+add_action('init', 'autobiography_register_car_taxonomies');
 
 
 // --- 5. ACF CONFIGURATION ---
-if ( function_exists('acf_add_options_page') ) {
+if (function_exists('acf_add_options_page')) {
     acf_add_options_page(array('page_title' => 'Загальні налаштування теми', 'menu_title' => 'Налаштування теми', 'menu_slug' => 'theme-general-settings'));
 }
 
-function autobiography_acf_add_local_field_groups() {
-    if( !function_exists('acf_add_local_field_group') ) return;
-    
+function autobiography_acf_add_local_field_groups()
+{
+    if (!function_exists('acf_add_local_field_group'))
+        return;
+
     // Group: Theme Settings
     acf_add_local_field_group(array(
-        'key' => 'group_header_settings', 'title' => 'Налаштування теми',
+        'key' => 'group_header_settings',
+        'title' => 'Налаштування теми',
         'fields' => array(
             array('key' => 'field_tab_general_settings', 'label' => 'Загальні', 'type' => 'tab'),
             array('key' => 'field_uah_to_usd_rate', 'label' => 'Курс UAH до USD', 'name' => 'uah_to_usd_rate', 'type' => 'number', 'instructions' => 'Вкажіть поточний курс гривні до долара для конвертації цін. Використовуйте крапку як роздільник.', 'prepend' => '1 USD =', 'append' => 'UAH'),
@@ -179,6 +187,15 @@ function autobiography_acf_add_local_field_groups() {
             ),
             // END: НОВІ ПОЛЯ
             array('key' => 'field_tab_catalog_settings', 'label' => 'Сторінка каталогу', 'type' => 'tab'),
+            array(
+                'key' => 'field_catalog_posts_per_page',
+                'label' => 'Кількість авто на сторінці',
+                'name' => 'catalog_posts_per_page',
+                'type' => 'number',
+                'instructions' => 'Скільки автомобілів показувати на одній сторінці каталогу.',
+                'default_value' => 20, // Значення за замовчуванням
+                'min' => 1,
+            ),
             array('key' => 'field_catalog_title', 'label' => 'Заголовок сторінки каталогу', 'name' => 'catalog_title', 'type' => 'text'),
             array('key' => 'field_catalog_seo_text', 'label' => 'SEO-текст під каталогом', 'name' => 'catalog_seo_text', 'type' => 'wysiwyg'),
             array('key' => 'field_sold_cars_title', 'label' => 'Заголовок блоку проданих авто', 'name' => 'sold_cars_title', 'type' => 'text'),
@@ -187,17 +204,24 @@ function autobiography_acf_add_local_field_groups() {
         ),
         'location' => array(array(array('param' => 'options_page', 'operator' => '==', 'value' => 'theme-general-settings'))),
     ));
-    
+
     // ... (РЕШТА ВАШИХ ACF ГРУП БЕЗ ЗМІН)
     // Group: Front Page Settings
     acf_add_local_field_group(array(
-        'key' => 'group_front_page_settings', 'title' => 'Налаштування Головної Сторінки',
+        'key' => 'group_front_page_settings',
+        'title' => 'Налаштування Головної Сторінки',
         'fields' => array(
-            array('key' => 'field_hero_slider', 'label' => 'Слайдер в шапці', 'name' => 'hero_slider', 'type' => 'repeater', 'sub_fields' => array(
-                array('key' => 'field_slide_background_type', 'label' => 'Тип фону', 'name' => 'background_type', 'type' => 'button_group', 'choices' => array('image' => 'Зображення', 'video' => 'Відео')),
-                array('key' => 'field_slide_image', 'label' => 'Фонове зображення', 'name' => 'image', 'type' => 'image', 'return_format' => 'url', 'conditional_logic' => array(array(array('field' => 'field_slide_background_type', 'operator' => '==', 'value' => 'image')))),
-                array('key' => 'field_slide_video', 'label' => 'Фонове відео', 'name' => 'video', 'type' => 'file', 'return_format' => 'url', 'conditional_logic' => array(array(array('field' => 'field_slide_background_type', 'operator' => '==', 'value' => 'video')))),
-            )),
+            array(
+                'key' => 'field_hero_slider',
+                'label' => 'Слайдер в шапці',
+                'name' => 'hero_slider',
+                'type' => 'repeater',
+                'sub_fields' => array(
+                    array('key' => 'field_slide_background_type', 'label' => 'Тип фону', 'name' => 'background_type', 'type' => 'button_group', 'choices' => array('image' => 'Зображення', 'video' => 'Відео')),
+                    array('key' => 'field_slide_image', 'label' => 'Фонове зображення', 'name' => 'image', 'type' => 'image', 'return_format' => 'url', 'conditional_logic' => array(array(array('field' => 'field_slide_background_type', 'operator' => '==', 'value' => 'image')))),
+                    array('key' => 'field_slide_video', 'label' => 'Фонове відео', 'name' => 'video', 'type' => 'file', 'return_format' => 'url', 'conditional_logic' => array(array(array('field' => 'field_slide_background_type', 'operator' => '==', 'value' => 'video')))),
+                )
+            ),
             array(
                 'key' => 'field_hero_form_title',
                 'label' => 'Заголовок форми в шапці',
@@ -229,11 +253,17 @@ function autobiography_acf_add_local_field_groups() {
             ),
             array('key' => 'field_tab_how_we_work', 'label' => 'Секція "Як ми працюємо"', 'type' => 'tab'),
             array('key' => 'field_how_we_work_title', 'label' => 'Заголовок секції', 'name' => 'how_we_work_title', 'type' => 'text'),
-            array('key' => 'field_how_we_work_steps', 'label' => 'Етапи роботи', 'name' => 'how_we_work_steps', 'type' => 'repeater', 'sub_fields' => array(
-                array('key' => 'field_step_icon', 'label' => 'Іконка етапу (SVG)', 'name' => 'step_icon', 'type' => 'textarea'),
-                array('key' => 'field_step_title', 'label' => 'Назва етапу', 'name' => 'step_title', 'type' => 'text'),
-                array('key' => 'field_step_description', 'label' => 'Опис етапу', 'name' => 'step_description', 'type' => 'textarea'),
-            )),
+            array(
+                'key' => 'field_how_we_work_steps',
+                'label' => 'Етапи роботи',
+                'name' => 'how_we_work_steps',
+                'type' => 'repeater',
+                'sub_fields' => array(
+                    array('key' => 'field_step_icon', 'label' => 'Іконка етапу (SVG)', 'name' => 'step_icon', 'type' => 'textarea'),
+                    array('key' => 'field_step_title', 'label' => 'Назва етапу', 'name' => 'step_title', 'type' => 'text'),
+                    array('key' => 'field_step_description', 'label' => 'Опис етапу', 'name' => 'step_description', 'type' => 'textarea'),
+                )
+            ),
             array(
                 'key' => 'field_how_we_work_button',
                 'label' => 'Кнопка під секцією',
@@ -248,64 +278,79 @@ function autobiography_acf_add_local_field_groups() {
             array('key' => 'field_tab_our_values', 'label' => 'Секція "Наші цінності"', 'type' => 'tab'),
             array('key' => 'field_our_values_title', 'label' => 'Заголовок секції', 'name' => 'our_values_title', 'type' => 'text'),
             array('key' => 'field_our_values_subtitle', 'label' => 'Підзаголовок', 'name' => 'our_values_subtitle', 'type' => 'text'),
-            array('key' => 'field_our_values_list', 'label' => 'Список цінностей', 'name' => 'our_values_list', 'type' => 'repeater', 'sub_fields' => array(
-                array('key' => 'field_value_icon', 'label' => 'Іконка (SVG)', 'name' => 'value_icon', 'type' => 'textarea'),
-                array('key' => 'field_value_title', 'label' => 'Назва цінності', 'name' => 'value_title', 'type' => 'text'),
-                array('key' => 'field_value_description', 'label' => 'Короткий опис', 'name' => 'value_description', 'type' => 'textarea'),
-            )),
+            array(
+                'key' => 'field_our_values_list',
+                'label' => 'Список цінностей',
+                'name' => 'our_values_list',
+                'type' => 'repeater',
+                'sub_fields' => array(
+                    array('key' => 'field_value_icon', 'label' => 'Іконка (SVG)', 'name' => 'value_icon', 'type' => 'textarea'),
+                    array('key' => 'field_value_title', 'label' => 'Назва цінності', 'name' => 'value_title', 'type' => 'text'),
+                    array('key' => 'field_value_description', 'label' => 'Короткий опис', 'name' => 'value_description', 'type' => 'textarea'),
+                )
+            ),
             array('key' => 'field_our_values_seo_content', 'label' => 'SEO-текст', 'name' => 'our_values_seo_content', 'type' => 'wysiwyg'),
             array('key' => 'field_tab_our_clients', 'label' => 'Секція "Наші клієнти"', 'type' => 'tab'),
             array('key' => 'field_our_clients_title', 'label' => 'Заголовок секції', 'name' => 'our_clients_title', 'type' => 'text'),
             array('key' => 'field_our_clients_gallery', 'label' => 'Фото клієнтів', 'name' => 'our_clients_gallery', 'type' => 'gallery'),
             array('key' => 'field_tab_our_services', 'label' => 'Секція "Наші Послуги"', 'type' => 'tab'),
             array('key' => 'field_services_section_title', 'label' => 'Заголовок секції послуг', 'name' => 'services_section_title', 'type' => 'text'),
-            array('key' => 'field_our_services_list', 'label' => 'Список послуг', 'name' => 'our_services_list', 'type' => 'repeater', 'sub_fields' => array(
-                array('key' => 'field_service_title', 'label' => 'Назва послуги', 'name' => 'service_title', 'type' => 'text'),
-                array('key' => 'field_service_description', 'label' => 'Опис послуги', 'name' => 'service_description', 'type' => 'wysiwyg'),
-                array('key' => 'field_service_link', 'label' => 'Посилання', 'name' => 'service_link', 'type' => 'link'),
-            )),
+            array(
+                'key' => 'field_our_services_list',
+                'label' => 'Список послуг',
+                'name' => 'our_services_list',
+                'type' => 'repeater',
+                'sub_fields' => array(
+                    array('key' => 'field_service_title', 'label' => 'Назва послуги', 'name' => 'service_title', 'type' => 'text'),
+                    array('key' => 'field_service_description', 'label' => 'Опис послуги', 'name' => 'service_description', 'type' => 'wysiwyg'),
+                    array('key' => 'field_service_link', 'label' => 'Посилання', 'name' => 'service_link', 'type' => 'link'),
+                )
+            ),
         ),
         'location' => array(array(array('param' => 'page_type', 'operator' => '==', 'value' => 'front_page'))),
     ));
 
     // Group: Car Details
-    acf_add_local_field_group(array('key' => 'group_car_details', 'title' => 'Інформація про автомобіль', 'fields' => array(
-        array('key' => 'field_tab_main_info', 'label' => 'Основна інформація', 'type' => 'tab'),
-        array('key' => 'field_car_model', 'label' => 'Модель', 'name' => 'car_model', 'type' => 'text', 'required' => 1),
-        array('key' => 'field_car_year', 'label' => 'Рік випуску', 'name' => 'car_year', 'type' => 'number', 'required' => 1),
-        array('key' => 'field_car_price_usd', 'label' => 'Ціна ($)', 'name' => 'price_usd', 'type' => 'number', 'required' => 1),
-        array('key' => 'field_car_old_price_usd', 'label' => 'Стара ціна ($)', 'name' => 'old_price_usd', 'type' => 'number'),
-        array('key' => 'field_car_status', 'label' => 'Статус', 'name' => 'car_status', 'type' => 'select', 'choices' => array('available' => 'В наявності', 'preparing' => 'В підготовці', 'reserved' => 'Заброньовано', 'sold' => 'Продано'), 'required' => 1),
-        array(
-            'key' => 'field_car_category',
-            'label' => 'Категорія авто',
-            'name' => 'car_category',
-            'type' => 'select',
-            'instructions' => 'Вкажіть категорію для внутрішнього обліку та відображення на сайті.',
-            'choices' => array(
-                'our_car' => 'Наше авто',
-                'verified_car' => 'Перевірене авто',
+    acf_add_local_field_group(array(
+        'key' => 'group_car_details',
+        'title' => 'Інформація про автомобіль',
+        'fields' => array(
+            array('key' => 'field_tab_main_info', 'label' => 'Основна інформація', 'type' => 'tab'),
+            array('key' => 'field_car_model', 'label' => 'Модель', 'name' => 'car_model', 'type' => 'text', 'required' => 1),
+            array('key' => 'field_car_year', 'label' => 'Рік випуску', 'name' => 'car_year', 'type' => 'number', 'required' => 1),
+            array('key' => 'field_car_price_usd', 'label' => 'Ціна ($)', 'name' => 'price_usd', 'type' => 'number', 'required' => 1),
+            array('key' => 'field_car_old_price_usd', 'label' => 'Стара ціна ($)', 'name' => 'old_price_usd', 'type' => 'number'),
+            array('key' => 'field_car_status', 'label' => 'Статус', 'name' => 'car_status', 'type' => 'select', 'choices' => array('available' => 'В наявності', 'preparing' => 'В підготовці', 'reserved' => 'Заброньовано', 'sold' => 'Продано'), 'required' => 1),
+            array(
+                'key' => 'field_car_category',
+                'label' => 'Категорія авто',
+                'name' => 'car_category',
+                'type' => 'select',
+                'instructions' => 'Вкажіть категорію для внутрішнього обліку та відображення на сайті.',
+                'choices' => array(
+                    'our_car' => 'Наше авто',
+                    'verified_car' => 'Перевірене авто',
+                ),
+                'allow_null' => 1, // Разрешить пустое значение
+                'ui' => 1, // Улучшенный интерфейс
             ),
-            'allow_null' => 1, // Разрешить пустое значение
-            'ui' => 1, // Улучшенный интерфейс
-        ),
-        array('key' => 'field_tab_specifications', 'label' => 'Характеристики', 'type' => 'tab'),
-        array('key' => 'field_car_mileage', 'label' => 'Пробіг (тис. км)', 'name' => 'mileage', 'type' => 'number'),
-        array('key' => 'field_car_engine_volume', 'label' => 'Об\'єм двигуна (л)', 'name' => 'engine_volume', 'type' => 'number', 'step' => '0.1', 'instructions' => 'Для бензинових/дизельних/гібридних авто'),
-        array('key' => 'field_engine_power_hp', 'label' => 'Потужність двигуна (к.с.)', 'name' => 'engine_power_hp', 'type' => 'number', 'instructions' => 'Для бензинових/дизельних/гібридних авто'),
-        array('key' => 'field_engine_power_kw', 'label' => 'Потужність електродвигуна (кВт)', 'name' => 'engine_power_kw', 'type' => 'number', 'instructions' => 'Для електромобілів та гібридів'),
-        array('key' => 'field_car_vin', 'label' => 'VIN-код', 'name' => 'vin_code', 'type' => 'text'),
-        array(
-            'key' => 'field_car_origin', 
-            'label' => 'Походження авто', 
-            'name' => 'car_origin', 
-            'type' => 'text', // <-- Змінено тип на text
-            'instructions' => 'Введіть походження авто, наприклад: з США, з Європи, Офіційне авто тощо.', // Додано інструкцію
-        ),
-        array('key' => 'field_tab_photos', 'label' => 'Фотографії', 'type' => 'tab'),
-        array('key' => 'field_car_gallery', 'label' => 'Галерея', 'name' => 'car_gallery', 'type' => 'gallery', 'instructions' => 'Перше фото буде головним.'),
-        array('key' => 'field_tab_other', 'label' => 'Комплектація та кнопки', 'type' => 'tab'),
-        array(
+            array('key' => 'field_tab_specifications', 'label' => 'Характеристики', 'type' => 'tab'),
+            array('key' => 'field_car_mileage', 'label' => 'Пробіг (тис. км)', 'name' => 'mileage', 'type' => 'number'),
+            array('key' => 'field_car_engine_volume', 'label' => 'Об\'єм двигуна (л)', 'name' => 'engine_volume', 'type' => 'number', 'step' => '0.1', 'instructions' => 'Для бензинових/дизельних/гібридних авто'),
+            array('key' => 'field_engine_power_hp', 'label' => 'Потужність двигуна (к.с.)', 'name' => 'engine_power_hp', 'type' => 'number', 'instructions' => 'Для бензинових/дизельних/гібридних авто'),
+            array('key' => 'field_engine_power_kw', 'label' => 'Потужність електродвигуна (кВт)', 'name' => 'engine_power_kw', 'type' => 'number', 'instructions' => 'Для електромобілів та гібридів'),
+            array('key' => 'field_car_vin', 'label' => 'VIN-код', 'name' => 'vin_code', 'type' => 'text'),
+            array(
+                'key' => 'field_car_origin',
+                'label' => 'Походження авто',
+                'name' => 'car_origin',
+                'type' => 'text', // <-- Змінено тип на text
+                'instructions' => 'Введіть походження авто, наприклад: з США, з Європи, Офіційне авто тощо.', // Додано інструкцію
+            ),
+            array('key' => 'field_tab_photos', 'label' => 'Фотографії', 'type' => 'tab'),
+            array('key' => 'field_car_gallery', 'label' => 'Галерея', 'name' => 'car_gallery', 'type' => 'gallery', 'instructions' => 'Перше фото буде головним.'),
+            array('key' => 'field_tab_other', 'label' => 'Комплектація та кнопки', 'type' => 'tab'),
+            array(
                 'key' => 'field_car_test_drive_button',
                 'label' => 'Кнопка "Записатись на тест-драйв"',
                 'name' => 'test_drive_button',
@@ -313,7 +358,7 @@ function autobiography_acf_add_local_field_groups() {
                 'instructions' => 'Додайте посилання на модальне вікно (#form-ID). Замість ID - ставте ID вашої форми (у fluent forms) Текст кнопки можна змінити тут.',
                 'return_format' => 'array',
             ),
-        array(
+            array(
                 'key' => 'field_car_features_repeater',
                 'label' => 'Комплектація (за категоріями)',
                 'name' => 'car_features',
@@ -346,15 +391,25 @@ function autobiography_acf_add_local_field_groups() {
                     ),
                 ),
             ),
-        array('key' => 'field_action_buttons', 'label' => 'Кнопки дій', 'name' => 'action_buttons', 'type' => 'repeater', 'button_label' => 'Додати кнопку', 'sub_fields' => array(
-            array('key' => 'field_button_text', 'label' => 'Текст кнопки', 'name' => 'button_text', 'type' => 'text'),
-            array('key' => 'field_button_link', 'label' => 'Посилання або ID модального вікна', 'name' => 'button_link', 'type' => 'text', 'instructions' => 'Додайте посилання на модальне вікно (#form-ID). Замість ID - ставте ID вашої форми (у fluent forms) Текст кнопки можна змінити тут.',),
-        )),
-    ), 'location' => array(array(array('param' => 'post_type', 'operator' => '==', 'value' => 'car')))));
-    
+            array(
+                'key' => 'field_action_buttons',
+                'label' => 'Кнопки дій',
+                'name' => 'action_buttons',
+                'type' => 'repeater',
+                'button_label' => 'Додати кнопку',
+                'sub_fields' => array(
+                    array('key' => 'field_button_text', 'label' => 'Текст кнопки', 'name' => 'button_text', 'type' => 'text'),
+                    array('key' => 'field_button_link', 'label' => 'Посилання або ID модального вікна', 'name' => 'button_link', 'type' => 'text', 'instructions' => 'Додайте посилання на модальне вікно (#form-ID). Замість ID - ставте ID вашої форми (у fluent forms) Текст кнопки можна змінити тут.', ),
+                )
+            ),
+        ),
+        'location' => array(array(array('param' => 'post_type', 'operator' => '==', 'value' => 'car')))
+    ));
+
     // Group: Car Buyback Page
     acf_add_local_field_group(array(
-        'key' => 'group_car_buyback_page', 'title' => 'Налаштування сторінки "Викуп Авто"',
+        'key' => 'group_car_buyback_page',
+        'title' => 'Налаштування сторінки "Викуп Авто"',
         'fields' => array(
             array('key' => 'field_buyback_hero_tab', 'label' => 'Налаштування заголовка', 'type' => 'tab'),
             array('key' => 'field_buyback_hero_image', 'label' => 'Фонове зображення заголовка', 'name' => 'buyback_hero_image', 'type' => 'image', 'return_format' => 'url'),
@@ -407,11 +462,17 @@ function autobiography_acf_add_local_field_groups() {
             ),
             array('key' => 'field_buyback_criteria_tab', 'label' => 'Критерії викупу', 'type' => 'tab'),
             array('key' => 'field_buyback_criteria_title', 'label' => 'Заголовок секції критеріїв', 'name' => 'buyback_criteria_title', 'type' => 'text'),
-            array('key' => 'field_buyback_criteria_list', 'label' => 'Список критеріїв', 'name' => 'buyback_criteria_list', 'type' => 'repeater', 'sub_fields' => array(
-                array('key' => 'field_criteria_icon', 'label' => 'Іконка (SVG)', 'name' => 'icon', 'type' => 'textarea'),
-                array('key' => 'field_criteria_title', 'label' => 'Назва критерію', 'name' => 'title', 'type' => 'text'),
-                array('key' => 'field_criteria_description', 'label' => 'Опис критерію', 'name' => 'description', 'type' => 'textarea'),
-            )),
+            array(
+                'key' => 'field_buyback_criteria_list',
+                'label' => 'Список критеріїв',
+                'name' => 'buyback_criteria_list',
+                'type' => 'repeater',
+                'sub_fields' => array(
+                    array('key' => 'field_criteria_icon', 'label' => 'Іконка (SVG)', 'name' => 'icon', 'type' => 'textarea'),
+                    array('key' => 'field_criteria_title', 'label' => 'Назва критерію', 'name' => 'title', 'type' => 'text'),
+                    array('key' => 'field_criteria_description', 'label' => 'Опис критерію', 'name' => 'description', 'type' => 'textarea'),
+                )
+            ),
             array(
                 'key' => 'field_buyback_criteria_content',
                 'label' => 'Текст під критеріями',
@@ -424,16 +485,22 @@ function autobiography_acf_add_local_field_groups() {
             ),
             array('key' => 'field_buyback_steps_tab', 'label' => 'Етапи викупу', 'type' => 'tab'),
             array('key' => 'field_buyback_steps_title', 'label' => 'Заголовок секції етапів', 'name' => 'buyback_steps_title', 'type' => 'text'),
-            array('key' => 'field_buyback_steps_list', 'label' => 'Список етапів', 'name' => 'buyback_steps_list', 'type' => 'repeater', 'sub_fields' => array(
-                array(
-                    'key' => 'field_buyback_step_icon',
-                    'label' => 'Іконка етапу (SVG)',
-                    'name' => 'icon',
-                    'type' => 'textarea',
-                ),
-                array('key' => 'field_step_title_new', 'label' => 'Назва етапу', 'name' => 'title', 'type' => 'text'),
-                array('key' => 'field_step_description_new', 'label' => 'Опис етапу', 'name' => 'description', 'type' => 'textarea'),
-            )),
+            array(
+                'key' => 'field_buyback_steps_list',
+                'label' => 'Список етапів',
+                'name' => 'buyback_steps_list',
+                'type' => 'repeater',
+                'sub_fields' => array(
+                    array(
+                        'key' => 'field_buyback_step_icon',
+                        'label' => 'Іконка етапу (SVG)',
+                        'name' => 'icon',
+                        'type' => 'textarea',
+                    ),
+                    array('key' => 'field_step_title_new', 'label' => 'Назва етапу', 'name' => 'title', 'type' => 'text'),
+                    array('key' => 'field_step_description_new', 'label' => 'Опис етапу', 'name' => 'description', 'type' => 'textarea'),
+                )
+            ),
             array(
                 'key' => 'field_buyback_steps_content',
                 'label' => 'Текст під етапами',
@@ -954,7 +1021,7 @@ function autobiography_acf_add_local_field_groups() {
             array('key' => 'field_commission_hero_tab', 'label' => 'Hero секція', 'type' => 'tab'),
             array('key' => 'field_commission_hero_image', 'label' => 'Фонове зображення', 'name' => 'commission_hero_image', 'type' => 'image', 'return_format' => 'url'),
             array('key' => 'field_commission_hero_overlay', 'label' => 'Увімкнути оверлей', 'name' => 'commission_hero_overlay', 'type' => 'true_false', 'ui' => 1, 'default_value' => 1),
-            
+
             array('key' => 'field_commission_intro_tab', 'label' => 'Вступна секція', 'type' => 'tab'),
             array('key' => 'field_commission_intro_media', 'label' => 'Фото/Медіа (зліва)', 'name' => 'commission_intro_media', 'type' => 'image', 'return_format' => 'url'),
             array('key' => 'field_commission_intro_text', 'label' => 'Текст (справа)', 'name' => 'commission_intro_text', 'type' => 'wysiwyg'),
@@ -962,27 +1029,48 @@ function autobiography_acf_add_local_field_groups() {
 
             array('key' => 'field_commission_procedure_tab', 'label' => 'Процедура', 'type' => 'tab'),
             array('key' => 'field_commission_procedure_title', 'label' => 'Заголовок секції', 'name' => 'commission_procedure_title', 'type' => 'text', 'default_value' => 'Процедура прийому авто на комісійний продаж'),
-            array('key' => 'field_commission_procedure_steps', 'label' => 'Етапи процедури', 'name' => 'commission_procedure_steps', 'type' => 'repeater', 'button_label' => 'Додати етап', 'sub_fields' => array(
-                array('key' => 'field_procedure_step_title', 'label' => 'Назва етапу', 'name' => 'title', 'type' => 'text'),
-                array('key' => 'field_procedure_step_desc', 'label' => 'Опис етапу', 'name' => 'description', 'type' => 'textarea'),
-            )),
+            array(
+                'key' => 'field_commission_procedure_steps',
+                'label' => 'Етапи процедури',
+                'name' => 'commission_procedure_steps',
+                'type' => 'repeater',
+                'button_label' => 'Додати етап',
+                'sub_fields' => array(
+                    array('key' => 'field_procedure_step_title', 'label' => 'Назва етапу', 'name' => 'title', 'type' => 'text'),
+                    array('key' => 'field_procedure_step_desc', 'label' => 'Опис етапу', 'name' => 'description', 'type' => 'textarea'),
+                )
+            ),
 
             array('key' => 'field_commission_included_tab', 'label' => 'Що входить у послугу', 'type' => 'tab'),
             array('key' => 'field_commission_included_title', 'label' => 'Заголовок секції', 'name' => 'commission_included_title', 'type' => 'text', 'default_value' => 'Що входить у послугу'),
-            array('key' => 'field_commission_included_items', 'label' => 'Список послуг', 'name' => 'commission_included_items', 'type' => 'repeater', 'button_label' => 'Додати пункт', 'sub_fields' => array(
-                array('key' => 'field_included_item_icon', 'label' => 'Іконка (SVG)', 'name' => 'icon', 'type' => 'textarea'),
-                array('key' => 'field_included_item_text', 'label' => 'Текст', 'name' => 'text', 'type' => 'textarea'),
-            )),
+            array(
+                'key' => 'field_commission_included_items',
+                'label' => 'Список послуг',
+                'name' => 'commission_included_items',
+                'type' => 'repeater',
+                'button_label' => 'Додати пункт',
+                'sub_fields' => array(
+                    array('key' => 'field_included_item_icon', 'label' => 'Іконка (SVG)', 'name' => 'icon', 'type' => 'textarea'),
+                    array('key' => 'field_included_item_text', 'label' => 'Текст', 'name' => 'text', 'type' => 'textarea'),
+                )
+            ),
             array('key' => 'field_commission_included_note', 'label' => 'Текст та примітка', 'name' => 'commission_included_note', 'type' => 'wysiwyg'),
 
             array('key' => 'field_commission_other_ways_tab', 'label' => 'Інші способи продажу', 'type' => 'tab'),
             array('key' => 'field_commission_other_ways_title', 'label' => 'Заголовок секції', 'name' => 'commission_other_ways_title', 'type' => 'text', 'default_value' => 'Інші способи продажу'),
-            array('key' => 'field_commission_other_ways_items', 'label' => 'Способи', 'name' => 'commission_other_ways_items', 'type' => 'repeater', 'button_label' => 'Додати спосіб', 'sub_fields' => array(
-                array('key' => 'field_other_way_icon', 'label' => 'Іконка (SVG)', 'name' => 'icon', 'type' => 'textarea'),
-                array('key' => 'field_other_way_title', 'label' => 'Назва', 'name' => 'title', 'type' => 'text'),
-                array('key' => 'field_other_way_desc', 'label' => 'Короткий опис', 'name' => 'description', 'type' => 'textarea'),
-                array('key' => 'field_other_way_link', 'label' => 'Посилання', 'name' => 'link', 'type' => 'link'),
-            )),
+            array(
+                'key' => 'field_commission_other_ways_items',
+                'label' => 'Способи',
+                'name' => 'commission_other_ways_items',
+                'type' => 'repeater',
+                'button_label' => 'Додати спосіб',
+                'sub_fields' => array(
+                    array('key' => 'field_other_way_icon', 'label' => 'Іконка (SVG)', 'name' => 'icon', 'type' => 'textarea'),
+                    array('key' => 'field_other_way_title', 'label' => 'Назва', 'name' => 'title', 'type' => 'text'),
+                    array('key' => 'field_other_way_desc', 'label' => 'Короткий опис', 'name' => 'description', 'type' => 'textarea'),
+                    array('key' => 'field_other_way_link', 'label' => 'Посилання', 'name' => 'link', 'type' => 'link'),
+                )
+            ),
         ),
         'location' => array(array(array('param' => 'page_template', 'operator' => '==', 'value' => 'template-commission.php'))),
     ));
@@ -991,32 +1079,35 @@ add_action('acf/init', 'autobiography_acf_add_local_field_groups');
 
 
 // --- 6. HELPERS & UTILITIES ---
-function autobiography_add_chevron_to_menu_items($title, $item, $args, $depth) {
-    if ( 'header_menu' === $args->theme_location && in_array('menu-item-has-children', $item->classes) ) {
+function autobiography_add_chevron_to_menu_items($title, $item, $args, $depth)
+{
+    if ('header_menu' === $args->theme_location && in_array('menu-item-has-children', $item->classes)) {
         $title .= '<svg class="header__menu-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 9L12 15L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
     }
     return $title;
 }
 add_filter('nav_menu_item_title', 'autobiography_add_chevron_to_menu_items', 10, 4);
 
-function get_car_status_info($status_slug) {
+function get_car_status_info($status_slug)
+{
     $statuses = array(
         'available' => array('label' => autobiography_translate_string('В наявності', 'Available'), 'class' => 'available'),
         'preparing' => array('label' => autobiography_translate_string('В підготовці', 'Preparing'), 'class' => 'preparing'),
-        'reserved'  => array('label' => autobiography_translate_string('Заброньовано', 'Reserved'), 'class' => 'reserved'),
-        'sold'      => array('label' => autobiography_translate_string('Продано', 'Sold'), 'class' => 'sold'),
+        'reserved' => array('label' => autobiography_translate_string('Заброньовано', 'Reserved'), 'class' => 'reserved'),
+        'sold' => array('label' => autobiography_translate_string('Продано', 'Sold'), 'class' => 'sold'),
     );
     return isset($statuses[$status_slug]) ? $statuses[$status_slug] : null;
 }
 
-function get_car_category_info($category_slug) {
+function get_car_category_info($category_slug)
+{
     $categories = array(
         'our_car' => array(
-            'label' => autobiography_translate_string('Наше авто', 'Our Car'), 
+            'label' => autobiography_translate_string('Наше авто', 'Our Car'),
             'class' => 'our-car'
         ),
         'verified_car' => array(
-            'label' => autobiography_translate_string('Перевірене авто', 'Verified Car'), 
+            'label' => autobiography_translate_string('Перевірене авто', 'Verified Car'),
             'class' => 'verified-car'
         ),
     );
@@ -1024,38 +1115,41 @@ function get_car_category_info($category_slug) {
 }
 
 // --- 🏆 ОБНОВЛЕННАЯ ФУНКЦИЯ: Устанавливает кол-во постов, ИСКЛЮЧАЕТ "ПРОДАННЫЕ" и "ЗАБРОНИРОВАННЫЕ", и ЗАДАЕТ ПРИОРИТЕТНУЮ СОРТИРОВКУ ---
-function autobiography_set_cars_per_page( $query ) {
-    if ( ! is_admin() && $query->is_main_query() && is_post_type_archive( 'car' ) ) {
-        
-        // Устанавливаем количество постов на странице
-        $query->set( 'posts_per_page', 20 );
-        
+function autobiography_set_cars_per_page($query)
+{
+    if (!is_admin() && $query->is_main_query() && is_post_type_archive('car')) {
+
+        // Отримуємо значення з ACF, якщо його немає - ставимо 20 за замовчуванням
+        $per_page = get_field('catalog_posts_per_page', 'option') ?: 20;
+        $query->set('posts_per_page', $per_page);
+
         // 1. Исключаем проданные и забронированные авто
-        $meta_query = $query->get( 'meta_query' );
-        if ( ! is_array( $meta_query ) ) {
+        $meta_query = $query->get('meta_query');
+        if (!is_array($meta_query)) {
             $meta_query = [];
         }
-        
+
         $meta_query[] = array(
-            'key'     => 'car_status',
-            'value'   => array('sold', 'reserved'), // --- ИЗМЕНЕНО ---
+            'key' => 'car_status',
+            'value' => array('sold', 'reserved'), // --- ИЗМЕНЕНО ---
             'compare' => 'NOT IN',
         );
-        
-        $query->set( 'meta_query', $meta_query );
+
+        $query->set('meta_query', $meta_query);
 
         // 2. Добавляем сложную сортировку через SQL-фильтры
         // Эта проверка нужна, чтобы наша сортировка не применялась при AJAX-фильтрации
-        if ( ! wp_doing_ajax() ) {
-            add_filter( 'posts_join', 'autobiography_car_archive_join' );
-            add_filter( 'posts_orderby', 'autobiography_car_archive_orderby' );
+        if (!wp_doing_ajax()) {
+            add_filter('posts_join', 'autobiography_car_archive_join');
+            add_filter('posts_orderby', 'autobiography_car_archive_orderby');
         }
     }
 }
-add_action( 'pre_get_posts', 'autobiography_set_cars_per_page' );
+add_action('pre_get_posts', 'autobiography_set_cars_per_page');
 
 // Новая функция для присоединения таблиц метаданных
-function autobiography_car_archive_join( $join ) {
+function autobiography_car_archive_join($join)
+{
     global $wpdb;
     $join .= " LEFT JOIN {$wpdb->postmeta} AS mt_category ON ({$wpdb->posts}.ID = mt_category.post_id AND mt_category.meta_key = 'car_category')";
     $join .= " LEFT JOIN {$wpdb->postmeta} AS mt_status ON ({$wpdb->posts}.ID = mt_status.post_id AND mt_status.meta_key = 'car_status')";
@@ -1063,7 +1157,8 @@ function autobiography_car_archive_join( $join ) {
 }
 
 // Новая функция для кастомной сортировки
-function autobiography_car_archive_orderby( $orderby ) {
+function autobiography_car_archive_orderby($orderby)
+{
     global $wpdb;
     $orderby = " CASE
         WHEN mt_category.meta_value = 'our_car' AND mt_status.meta_value = 'available' THEN 1
@@ -1073,16 +1168,17 @@ function autobiography_car_archive_orderby( $orderby ) {
     END, {$wpdb->posts}.post_date DESC";
 
     // Убираем фильтры после использования, чтобы они не влияли на другие запросы
-    remove_filter( 'posts_join', 'autobiography_car_archive_join' );
-    remove_filter( 'posts_orderby', 'autobiography_car_archive_orderby' );
+    remove_filter('posts_join', 'autobiography_car_archive_join');
+    remove_filter('posts_orderby', 'autobiography_car_archive_orderby');
 
     return $orderby;
 }
 
 
 // --- 7. POLYLANG STRING REGISTRATION ---
-function autobiography_register_options_strings() {
-    if ( function_exists('pll_register_string') ) {
+function autobiography_register_options_strings()
+{
+    if (function_exists('pll_register_string')) {
         // Theme Options
         pll_register_string('theme_option_phone_number', get_field('phone_number', 'option'), 'Налаштування теми', false);
         pll_register_string('theme_option_address', get_field('address', 'option'), 'Налаштування теми', true);
@@ -1106,35 +1202,35 @@ function autobiography_register_options_strings() {
         pll_register_string('theme_option_catalog_seo', get_field('catalog_seo_text', 'option'), 'Налаштування теми', true);
         pll_register_string('theme_option_catalog_sold_title', get_field('sold_cars_title', 'option'), 'Налаштування теми', false);
     }
-    
+
     $working_hours = get_field('working_hours', 'option');
-    if ( $working_hours ) {
-        foreach ( $working_hours as $index => $row ) {
-            if ( ! empty( $row['days'] ) ) {
-                pll_register_string( 'wh_days_' . $index, $row['days'], 'Графік роботи' );
+    if ($working_hours) {
+        foreach ($working_hours as $index => $row) {
+            if (!empty($row['days'])) {
+                pll_register_string('wh_days_' . $index, $row['days'], 'Графік роботи');
             }
-            if ( ! empty( $row['hours'] ) ) {
-                pll_register_string( 'wh_hours_' . $index, $row['hours'], 'Графік роботи' );
+            if (!empty($row['hours'])) {
+                pll_register_string('wh_hours_' . $index, $row['hours'], 'Графік роботи');
             }
         }
     }
 
     // START: РЕЄСТРАЦІЯ НОВИХ РЯДКІВ
-    if ( function_exists('pll_register_string') ) {
+    if (function_exists('pll_register_string')) {
         $contact_phones = get_field('contact_phones', 'option');
-        if ( $contact_phones ) {
-            foreach ( $contact_phones as $index => $row ) {
-                if ( ! empty( $row['phone_number'] ) ) {
-                    pll_register_string( 'contact_phone_' . $index, $row['phone_number'], 'Контактні телефони' );
+        if ($contact_phones) {
+            foreach ($contact_phones as $index => $row) {
+                if (!empty($row['phone_number'])) {
+                    pll_register_string('contact_phone_' . $index, $row['phone_number'], 'Контактні телефони');
                 }
             }
         }
 
         $contact_emails = get_field('contact_emails', 'option');
-        if ( $contact_emails ) {
-            foreach ( $contact_emails as $index => $row ) {
-                if ( ! empty( $row['email'] ) ) {
-                    pll_register_string( 'contact_email_' . $index, $row['email'], 'Контактні E-mails' );
+        if ($contact_emails) {
+            foreach ($contact_emails as $index => $row) {
+                if (!empty($row['email'])) {
+                    pll_register_string('contact_email_' . $index, $row['email'], 'Контактні E-mails');
                 }
             }
         }
@@ -1145,20 +1241,23 @@ add_action('acf/init', 'autobiography_register_options_strings');
 
 
 // --- 8. AJAX HANDLER FOR CAR FILTERS ---
-function autobiography_filter_cars_ajax_handler() {
+function autobiography_filter_cars_ajax_handler()
+{
     $paged = isset($_POST['page']) ? intval($_POST['page']) : 1;
+    $per_page = get_field('catalog_posts_per_page', 'option') ?: 20;
+
     $args = array(
         'post_type' => 'car',
-        'posts_per_page' => 20,
+        'posts_per_page' => $per_page, // Використовуємо змінну
         'paged' => $paged
     );
 
     $meta_query = array('relation' => 'AND');
     $tax_query = array('relation' => 'AND');
-    
+
     // Status Filter
     if (isset($_POST['status']) && !empty($_POST['status'])) {
-         $meta_query[] = array(
+        $meta_query[] = array(
             'key' => 'car_status',
             'value' => explode(',', $_POST['status']),
             'compare' => 'IN',
@@ -1177,7 +1276,7 @@ function autobiography_filter_cars_ajax_handler() {
             'compare' => 'BETWEEN',
         );
     }
-    
+
     // Year Filter
     $min_year = !empty($_POST['min_year']) ? sanitize_text_field($_POST['min_year']) : null;
     $max_year = !empty($_POST['max_year']) ? sanitize_text_field($_POST['max_year']) : null;
@@ -1260,7 +1359,7 @@ function autobiography_filter_cars_ajax_handler() {
     }
 
     // Model Filter
-    if(isset($_POST['model']) && !empty($_POST['model'])) {
+    if (isset($_POST['model']) && !empty($_POST['model'])) {
         $meta_query[] = array(
             'key' => 'car_model',
             'value' => sanitize_text_field($_POST['model']),
@@ -1279,7 +1378,7 @@ function autobiography_filter_cars_ajax_handler() {
             );
         }
     }
-    
+
     if (count($meta_query) > 1) {
         $args['meta_query'] = $meta_query;
     }
@@ -1292,7 +1391,7 @@ function autobiography_filter_cars_ajax_handler() {
 
     if (isset($_POST['sort']) && !empty($_POST['sort'])) {
         $sort_val = sanitize_text_field($_POST['sort']);
-        
+
         // Если выбрана конкретная сортировка (не пусто), снимаем флаг дефолтной
         if ($sort_val !== '') {
             $is_default_sort = false;
@@ -1346,25 +1445,25 @@ function autobiography_filter_cars_ajax_handler() {
     } else {
         echo '<p class="no-cars-found">' . esc_html__('За вашими критеріями автомобілів не знайдено.', 'autobiography') . '</p>';
     }
-    
+
     // Pagination
     $big = 999999999;
-    
+
     $pagination_links = paginate_links(array(
-        'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-        'format'    => '?paged=%#%',
-        'current'   => max(1, $paged),
-        'total'     => $cars_query->max_num_pages,
+        'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+        'format' => '?paged=%#%',
+        'current' => max(1, $paged),
+        'total' => $cars_query->max_num_pages,
         'prev_text' => '&larr;',
         'next_text' => '&rarr;',
-        'type'      => 'plain',
+        'type' => 'plain',
     ));
 
     if ($pagination_links) {
         echo '<nav class="navigation pagination" aria-label="' . esc_attr__('Пагінація записів', 'autobiography') . '">';
         echo '<h2 class="screen-reader-text">' . esc_html__('Пагінація записів', 'autobiography') . '</h2>';
         echo '<div class="nav-links">';
-        echo $pagination_links; 
+        echo $pagination_links;
         echo '</div>';
         echo '</nav>';
     }
@@ -1375,7 +1474,8 @@ function autobiography_filter_cars_ajax_handler() {
 add_action('wp_ajax_filter_cars', 'autobiography_filter_cars_ajax_handler');
 add_action('wp_ajax_nopriv_filter_cars', 'autobiography_filter_cars_ajax_handler');
 
-function autobiography_translate_string($uk, $en) {
+function autobiography_translate_string($uk, $en)
+{
     if (function_exists('pll_current_language')) {
         $lang = pll_current_language('slug');
         if ($lang === 'uk') {
@@ -1386,14 +1486,16 @@ function autobiography_translate_string($uk, $en) {
     return $en;
 }
 
-function autobiography_allow_viber_protocol( $protocols ) {
+function autobiography_allow_viber_protocol($protocols)
+{
     $protocols[] = 'viber';
     return $protocols;
 }
-add_filter( 'kses_allowed_protocols', 'autobiography_allow_viber_protocol' );
+add_filter('kses_allowed_protocols', 'autobiography_allow_viber_protocol');
 
 // --- 9. BREADCRUMBS FUNCTION (Updated for Styling and Parent Pages) ---
-function autobiography_breadcrumbs() {
+function autobiography_breadcrumbs()
+{
     // Настройки
     $separator_html = '<span class="separator">/</span>';
     $home_title = autobiography_translate_string('Головна', 'Home');
@@ -1416,8 +1518,7 @@ function autobiography_breadcrumbs() {
         echo '<span itemprop="name">' . post_type_archive_title('', false) . '</span>';
         echo '<meta itemprop="position" content="' . $position . '" />';
         echo '</li>';
-    } 
-    elseif (is_singular('car')) {
+    } elseif (is_singular('car')) {
         // Для одиночной записи типа "car"
         $post_type = get_post_type_object(get_post_type());
         if ($post_type) {
@@ -1467,17 +1568,18 @@ function autobiography_breadcrumbs() {
 }
 
 // --- AJAX HANDLER FOR LOADING FLUENT FORMS IN POPUP ---
-function autobiography_load_fluent_form_ajax() {
+function autobiography_load_fluent_form_ajax()
+{
     // Проверяем, передан ли ID формы и является ли он числом
-    if ( isset($_POST['form_id']) && is_numeric($_POST['form_id']) ) {
+    if (isset($_POST['form_id']) && is_numeric($_POST['form_id'])) {
         $form_id = intval($_POST['form_id']);
-        
+
         // Создаем шорткод и выводим его HTML
         echo do_shortcode('[fluentform id="' . $form_id . '"]');
     }
-    
+
     // Важно завершить выполнение, чтобы не выводить лишний код (0 или -1)
-    wp_die(); 
+    wp_die();
 }
 add_action('wp_ajax_load_fluent_form', 'autobiography_load_fluent_form_ajax');
 add_action('wp_ajax_nopriv_load_fluent_form', 'autobiography_load_fluent_form_ajax');
@@ -1489,79 +1591,83 @@ add_action('wp_ajax_nopriv_load_fluent_form', 'autobiography_load_fluent_form_aj
  */
 
 // 1. Плануємо подію оновлення курсу, якщо вона ще не запланована
-function schedule_exchange_rate_update() {
+function schedule_exchange_rate_update()
+{
     // Перевіряємо, чи запланована наша подія
-    if ( ! wp_next_scheduled( 'update_uah_usd_rate_hook' ) ) {
+    if (!wp_next_scheduled('update_uah_usd_rate_hook')) {
         // Якщо ні, плануємо її щоденне виконання
         // 'daily' - означає раз на добу. Можна змінити на 'twicedaily' (двічі на добу)
-        wp_schedule_event( time(), 'daily', 'update_uah_usd_rate_hook' );
+        wp_schedule_event(time(), 'daily', 'update_uah_usd_rate_hook');
     }
 }
 // Запускаємо планування після завантаження WordPress
-add_action( 'wp', 'schedule_exchange_rate_update' );
+add_action('wp', 'schedule_exchange_rate_update');
 
 // 2. Функція, яка буде виконуватися за розкладом
-function update_uah_usd_rate() {
+function update_uah_usd_rate()
+{
     // URL API Національного банку України для курсів валют
     $api_url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json';
 
     // Робимо запит до API
-    $response = wp_remote_get( $api_url );
+    $response = wp_remote_get($api_url);
 
     // Перевіряємо, чи не виникла помилка під час запиту
-    if ( is_wp_error( $response ) ) {
-        error_log( 'Помилка отримання курсу валют НБУ: ' . $response->get_error_message() );
+    if (is_wp_error($response)) {
+        error_log('Помилка отримання курсу валют НБУ: ' . $response->get_error_message());
         return; // Виходимо, якщо є помилка
     }
 
     // Отримуємо тіло відповіді
-    $body = wp_remote_retrieve_body( $response );
+    $body = wp_remote_retrieve_body($response);
     // Декодуємо JSON відповідь в PHP масив
-    $data = json_decode( $body );
+    $data = json_decode($body);
 
     // Перевіряємо, чи вдалося декодувати дані і чи це масив
-    if ( ! $data || ! is_array( $data ) ) {
-        error_log( 'Помилка декодування відповіді від API НБУ.' );
+    if (!$data || !is_array($data)) {
+        error_log('Помилка декодування відповіді від API НБУ.');
         return; // Виходимо, якщо дані некоректні
     }
 
     $usd_rate = null;
     // Шукаємо в масиві курс для долара США (USD)
-    foreach ( $data as $currency ) {
-        if ( isset( $currency->cc ) && $currency->cc === 'USD' ) {
+    foreach ($data as $currency) {
+        if (isset($currency->cc) && $currency->cc === 'USD') {
             $usd_rate = $currency->rate; // Зберігаємо курс
             break; // Зупиняємо пошук, бо знайшли потрібне
         }
     }
 
     // Перевіряємо, чи знайшли курс
-    if ( $usd_rate !== null ) {
+    if ($usd_rate !== null) {
         // Оновлюємо значення поля ACF 'uah_to_usd_rate' на сторінці опцій
         // 'option' - вказує, що поле знаходиться на сторінці налаштувань теми
-        update_field( 'uah_to_usd_rate', $usd_rate, 'option' );
+        update_field('uah_to_usd_rate', $usd_rate, 'option');
         // Можна додати запис в лог для перевірки (необов'язково)
         // error_log( 'Курс USD/UAH успішно оновлено: ' . $usd_rate );
     } else {
         // Якщо курс USD не знайдено у відповіді API
-        error_log( 'Курс USD не знайдено у відповіді API НБУ.' );
+        error_log('Курс USD не знайдено у відповіді API НБУ.');
     }
 }
 // Прив'язуємо нашу функцію до запланованої події
-add_action( 'update_uah_usd_rate_hook', 'update_uah_usd_rate' );
+add_action('update_uah_usd_rate_hook', 'update_uah_usd_rate');
 
 
 // 3. (Необов'язково) Додаємо примітку до поля в адмінці, що воно оновлюється автоматично
-function add_auto_update_notice_to_rate_field( $field ) {
+function add_auto_update_notice_to_rate_field($field)
+{
     // Додаємо текст до існуючих інструкцій поля
-    $field['instructions'] .= '<br><small><i>' . esc_html__( 'Цей курс оновлюється автоматично щодня згідно даних НБУ.', 'autobiography' ) . '</i></small>';
+    $field['instructions'] .= '<br><small><i>' . esc_html__('Цей курс оновлюється автоматично щодня згідно даних НБУ.', 'autobiography') . '</i></small>';
     return $field; // Повертаємо змінений масив налаштувань поля
 }
 // Фільтруємо налаштування поля 'uah_to_usd_rate' перед його відображенням
-add_filter( 'acf/load_field/name=uah_to_usd_rate', 'add_auto_update_notice_to_rate_field' );
+add_filter('acf/load_field/name=uah_to_usd_rate', 'add_auto_update_notice_to_rate_field');
 
 
 // 4. (Рекомендовано) Видаляємо заплановану подію при деактивації теми
-function unschedule_exchange_rate_update() {
-    wp_clear_scheduled_hook( 'update_uah_usd_rate_hook' );
+function unschedule_exchange_rate_update()
+{
+    wp_clear_scheduled_hook('update_uah_usd_rate_hook');
 }
-register_deactivation_hook( __FILE__, 'unschedule_exchange_rate_update' );
+register_deactivation_hook(__FILE__, 'unschedule_exchange_rate_update');

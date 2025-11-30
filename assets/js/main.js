@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function applyTheme(theme) {
         const isLightTheme = theme === 'light-theme';
-        
+
         document.body.classList.toggle('light-theme', isLightTheme);
         document.body.classList.toggle('dark-theme', !isLightTheme);
 
@@ -40,12 +40,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }).catch(err => console.error('Could not copy text: ', err));
         });
     });
-    
+
     // --- Mobile Menu Toggle & Accordion ---
     const burgerButton = document.querySelector('.header__burger-button');
     const mobilePanel = document.querySelector('.mobile-menu-panel');
     if (burgerButton && mobilePanel) {
-        burgerButton.addEventListener('click', function() {
+        burgerButton.addEventListener('click', function () {
             this.classList.toggle('is-open');
             mobilePanel.classList.toggle('is-open');
             this.setAttribute('aria-expanded', this.classList.contains('is-open'));
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.querySelectorAll('.mobile-menu-panel .menu-item-has-children > a').forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const parentLi = this.parentElement;
             const submenu = parentLi.querySelector('.sub-menu');
@@ -93,14 +93,14 @@ document.addEventListener('DOMContentLoaded', function () {
             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
         });
     }
-	
-	// --- ✅ START: Sold Cars Slider ---
+
+    // --- ✅ START: Sold Cars Slider ---
     if (document.querySelector('.sold-cars-slider')) {
         new Swiper('.sold-cars-slider', {
             loop: true,
             slidesPerView: 1,
             spaceBetween: 15,
-			autoplay: { delay: 5000 },
+            autoplay: { delay: 5000 },
             breakpoints: {
                 // 2 карточки на планшетах
                 768: {
@@ -116,8 +116,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     // --- ✅ END: Sold Cars Slider ---
-    
-	// --- ✅ START: Remove Links from Sold Cars ---
+
+    // --- ✅ START: Remove Links from Sold Cars ---
     document.querySelectorAll('.sold-cars-section .car-card').forEach(card => {
         // 1. Находим ссылку-изображение
         const imgLink = card.querySelector('.car-card__image-link');
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     // --- ✅ END: Remove Links from Sold Cars ---
-	
+
     // --- Lightbox Gallery ---
     if (document.querySelector('.our-clients__gallery')) {
         baguetteBox.run('.our-clients__gallery');
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const tabButtons = servicesSection.querySelectorAll('.our-services__tab-item');
         const tabPanels = servicesSection.querySelectorAll('.our-services__panel');
         tabButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 tabButtons.forEach(btn => btn.classList.remove('is-active'));
                 tabPanels.forEach(panel => panel.classList.remove('is-active'));
                 this.classList.add('is-active');
@@ -159,11 +159,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-    
+
     // --- Parallax for Page Hero ---
     const heroWithImage = document.querySelector('.page-hero[style*="background-image"]');
     if (heroWithImage) {
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             heroWithImage.style.backgroundPosition = `center calc(50% + ${scrollTop * 0.3}px)`;
         });
@@ -187,39 +187,39 @@ document.addEventListener('DOMContentLoaded', function () {
             const statusCheckboxes = carFiltersForm.querySelectorAll('input[name="status"]:checked');
             const statusValues = Array.from(statusCheckboxes).map(cb => cb.value);
             formData.set('status', statusValues.join(','));
-            
+
             listingsContainer.classList.add('loading');
 
             fetch(autobiography_ajax.ajax_url, {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.text())
-            .then(html => {
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-                
-                const newContent = tempDiv.querySelectorAll('.car-card');
-                // ИЗМЕНЕНО: Ищем правильный контейнер навигации, а не отдельную кнопку
-                const newPagination = tempDiv.querySelector('.navigation.pagination'); 
-                const noResults = tempDiv.querySelector('.no-cars-found');
-                
-                listingsContainer.innerHTML = '';
-                if(newContent.length) {
-                    newContent.forEach(item => listingsContainer.appendChild(item));
-                } else if (noResults) {
-                     listingsContainer.appendChild(noResults);
-                }
+                .then(response => response.text())
+                .then(html => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
 
-                // ИЗМЕНЕНО: Корректная вставка HTML пагинации
-                paginationContainer.innerHTML = newPagination ? newPagination.outerHTML : '';
-                
-                listingsContainer.classList.remove('loading');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                listingsContainer.classList.remove('loading');
-            });
+                    const newContent = tempDiv.querySelectorAll('.car-card');
+                    // ИЗМЕНЕНО: Ищем правильный контейнер навигации, а не отдельную кнопку
+                    const newPagination = tempDiv.querySelector('.navigation.pagination');
+                    const noResults = tempDiv.querySelector('.no-cars-found');
+
+                    listingsContainer.innerHTML = '';
+                    if (newContent.length) {
+                        newContent.forEach(item => listingsContainer.appendChild(item));
+                    } else if (noResults) {
+                        listingsContainer.appendChild(noResults);
+                    }
+
+                    // ИЗМЕНЕНО: Корректная вставка HTML пагинации
+                    paginationContainer.innerHTML = newPagination ? newPagination.outerHTML : '';
+
+                    listingsContainer.classList.remove('loading');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    listingsContainer.classList.remove('loading');
+                });
         };
 
         // --- Helper: Extract Page Number ---
@@ -260,11 +260,11 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('.catalog-pagination').addEventListener('click', (e) => {
             // Ищем ближайшую ссылку, так как клик может быть по span или svg внутри a
             const link = e.target.closest('a.page-numbers');
-            
+
             if (link) {
                 e.preventDefault();
                 const pageNumber = getPageNumberFromUrl(link.href);
-                
+
                 if (pageNumber && pageNumber !== currentPage) {
                     currentPage = pageNumber;
                     fetchCars();
@@ -294,10 +294,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // const maxYearInput = document.getElementById('max_year');
 
         const createSlider = (sliderEl, minInput, maxInput) => {
-             const minVal = parseInt(minInput.min);
-             const maxVal = parseInt(maxInput.max);
-             sliderEl.dataset.min = minVal;
-             sliderEl.dataset.max = maxVal;
+            const minVal = parseInt(minInput.min);
+            const maxVal = parseInt(maxInput.max);
+            sliderEl.dataset.min = minVal;
+            sliderEl.dataset.max = maxVal;
 
             noUiSlider.create(sliderEl, {
                 start: [minVal, maxVal],
@@ -314,8 +314,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 minInput.value = values[0];
                 maxInput.value = values[1];
             });
-            
-             sliderEl.noUiSlider.on('change', () => fetchCars()); // Trigger AJAX on slider change
+
+            sliderEl.noUiSlider.on('change', () => fetchCars()); // Trigger AJAX on slider change
 
             minInput.addEventListener('change', () => sliderEl.noUiSlider.set([minInput.value, null]));
             maxInput.addEventListener('change', () => sliderEl.noUiSlider.set([null, maxInput.value]));
@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // --- Phone Number Input Mask (using Inputmask library) ---
-    jQuery(document).ready(function($) {
+    jQuery(document).ready(function ($) {
         if ($('.custom-phone').length > 0) {
             $('.custom-phone').inputmask({
                 "mask": "+380 (99) 999-99-99",
@@ -429,13 +429,14 @@ document.addEventListener('DOMContentLoaded', function () {
         let brandChoicesInstance;
         let modelChoicesInstance;
 
-        const selectElements = document.querySelectorAll('.catalog-filters select, .catalog-sort select'); 
+        const selectElements = document.querySelectorAll('.catalog-filters select, .catalog-sort select');
         selectElements.forEach(select => {
             // Создаем экземпляр
             const choicesInstance = new Choices(select, {
-                searchEnabled: false, 
-                itemSelectText: '', 
-                shouldSort: false, 
+                searchEnabled: false,
+                itemSelectText: '',
+                shouldSort: false,
+                position: 'bottom',
             });
 
             // Сохраняем экземпляры для 'brand' и 'model' в наши переменные
@@ -449,31 +450,31 @@ document.addEventListener('DOMContentLoaded', function () {
         // 2.4 Логика Скрытия/Отображения/Фильтрации Модели
         // Теперь мы проверяем наши переменные, а не .choicesInstance
         if (brandSelect && modelFilterGroup && modelSelect && modelChoicesInstance) {
-            
+
             // Эта функция будет фильтровать список моделей
             const handleBrandChange = () => {
                 const selectedBrand = brandSelect.value; // e.g. "bmw"
-                
+
                 if (selectedBrand && selectedBrand !== "") {
                     // 1. Марка выбрана
-                    
+
                     // Фильтруем наш "оригинальный" список
                     const availableModels = allModelOptions.filter(opt => {
                         return opt.value === "" || opt.brands.includes(selectedBrand);
                     });
-                    
+
                     // Используем API Choices.js для обновления списка
                     modelChoicesInstance.clearStore(); // Очищаем старые
                     modelChoicesInstance.setChoices(availableModels, 'value', 'label', true); // true = перезаписать все
                     modelChoicesInstance.setChoiceByValue(''); // Снова выбираем "Все модели"
-                    
+
                     // Показываем группу и включаем селект
                     modelFilterGroup.style.display = 'block';
                     modelChoicesInstance.enable();
 
                 } else {
                     // 2. Марка не выбрана (сброшена)
-                    
+
                     // Сбрасываем список к полному (но он останется выключенным)
                     modelChoicesInstance.clearStore();
                     modelChoicesInstance.setChoices(allModelOptions, 'value', 'label', true);
@@ -487,17 +488,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 2.5 Вешаем слушатель на событие 'change'
             brandSelect.addEventListener('change', handleBrandChange);
-            
+
             // 2.6 Обновляем обработчик 'reset'
             const form = brandSelect.closest('form');
             if (form) {
                 form.addEventListener('reset', () => {
-                    // Нужна задержка, чтобы форма успела сброситься
+                    // --- ИСПРАВЛЕНИЕ: Явно сбрасываем Choices.js для Бренда ---
+                    if (brandChoicesInstance) {
+                        // Устанавливаем значение в пустую строку (value="" - это "Всі марки")
+                        brandChoicesInstance.setChoiceByValue('');
+                    }
+
+                    // Нужна задержка, чтобы форма и Choices.js успели обновиться
                     setTimeout(() => {
-                        // Просто вызываем наш обработчик. 
-                        // Он увидит, что brandSelect.value пуст, и все скроет/выключит.
-                        handleBrandChange(); 
-                    }, 50); 
+                        // Вызываем обработчик, чтобы скрыть поле моделей
+                        handleBrandChange();
+                    }, 50);
                 });
             }
         }
@@ -549,10 +555,10 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         // Слушаем клики по всему документу
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             // Ищем ближайшую ссылку-триггер
             const trigger = e.target.closest('a[href^="#form-"]');
-            
+
             if (trigger) {
                 e.preventDefault();
                 const formId = trigger.getAttribute('href').replace('#form-', '');
@@ -564,7 +570,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // ✅ Зберігаємо назву авто з data-атрибута кнопки
                 const carTitle = trigger.dataset.carTitle || 'Не вказано'; // 'Не вказано' як запасний варіант
-                
+
                 // Показываем состояние загрузки
                 formContainer.innerHTML = '<h4>Завантаження...</h4>';
                 openPopup();
@@ -578,37 +584,37 @@ document.addEventListener('DOMContentLoaded', function () {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.text())
-                .then(html => {
-                    // Вставляем полученный HTML в контейнер
-                    formContainer.innerHTML = html;
+                    .then(response => response.text())
+                    .then(html => {
+                        // Вставляем полученный HTML в контейнер
+                        formContainer.innerHTML = html;
 
-                    // ✨ МАГИЯ ЗДЕСЬ: Находим все скрипты... (цей код залишається)
-                    const scripts = formContainer.querySelectorAll('script');
-                    scripts.forEach(script => {
-                        const newScript = document.createElement('script');
-                        newScript.textContent = script.textContent; 
-                        document.body.appendChild(newScript).remove();
+                        // ✨ МАГИЯ ЗДЕСЬ: Находим все скрипты... (цей код залишається)
+                        const scripts = formContainer.querySelectorAll('script');
+                        scripts.forEach(script => {
+                            const newScript = document.createElement('script');
+                            newScript.textContent = script.textContent;
+                            document.body.appendChild(newScript).remove();
+                        });
+
+                        // ✅ НОВИЙ КОД: Знаходимо приховане поле і встановлюємо його значення
+                        const hiddenInput = formContainer.querySelector('input[name="car_identifier"]');
+                        if (hiddenInput) {
+                            hiddenInput.value = carTitle;
+                        } else {
+                            console.warn('Hidden field "car_identifier" not found in the loaded form.');
+                        }
+
+                        // Також потрібно вручну применити маску... (цей код залишається)
+                        jQuery('.popup-form-container .custom-phone').inputmask({
+                            "mask": "+380 (99) 999-99-99",
+                            "clearIncomplete": true
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        formContainer.innerHTML = '<p>Помилка завантаження форми.</p>';
                     });
-
-                    // ✅ НОВИЙ КОД: Знаходимо приховане поле і встановлюємо його значення
-                    const hiddenInput = formContainer.querySelector('input[name="car_identifier"]');
-                    if (hiddenInput) {
-                        hiddenInput.value = carTitle;
-                    } else {
-                        console.warn('Hidden field "car_identifier" not found in the loaded form.');
-                    }
-
-                    // Також потрібно вручну применити маску... (цей код залишається)
-                    jQuery('.popup-form-container .custom-phone').inputmask({
-                        "mask": "+380 (99) 999-99-99",
-                        "clearIncomplete": true
-                    });
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    formContainer.innerHTML = '<p>Помилка завантаження форми.</p>';
-                });
             }
         });
 
@@ -618,13 +624,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // ✅ START: НОВЫЙ КОД ДЛЯ УПРАВЛЕНИЯ ЗАКРЫТИЕМ ПОПАПА
         // Используем jQuery, так как Fluent Forms работает на нем
-        jQuery(document).on('fluentform_submission_success', function(event, data) {
+        jQuery(document).on('fluentform_submission_success', function (event, data) {
             // data.formId содержит ID отправленной формы
             // data.response.message содержит текст успешного сообщения
-            
+
             // Ждем 3 секунды, чтобы пользователь успел прочитать сообщение,
             // а затем плавно закрываем попап.
-            setTimeout(function() {
+            setTimeout(function () {
                 closePopup();
             }, 3000); // 3000 миллисекунд = 3 секунды
         });
@@ -638,28 +644,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Якщо є хоча б одна категорія
         if (categoryTitles.length > 0) {
-            
+
             // Функція для перетворення кирилиці в URL-дружній рядок (slug)
             function slugify(text) {
-                const a = {"Ё":"YO","Й":"I","Ц":"TS","У":"U","К":"K","Е":"E","Н":"N","Г":"G","Ш":"SH","Щ":"SCH","З":"Z","Х":"H","Ъ":"","Ф":"F","Ы":"Y","В":"V","А":"a","П":"P","Р":"R","О":"O","Л":"L","Д":"D","Ж":"ZH","Э":"E","Я":"Ya","Ч":"CH","С":"S","М":"M","И":"I","Т":"T","Ь":"","Б":"B","Ю":"YU","ё":"yo","й":"i","ц":"ts","у":"u","к":"k","е":"e","н":"n","г":"g","ш":"sh","щ":"sch","з":"z","х":"h","ъ":"","ф":"f","ы":"y","в":"v","а":"a","п":"p","р":"r","о":"o","л":"l","д":"d","ж":"zh","э":"e","я":"ya","ч":"ch","с":"s","м":"m","и":"i","т":"t","ь":"","б":"b","ю":"yu", "і":"i", "ї":"yi", "є":"ye"};
+                const a = { "Ё": "YO", "Й": "I", "Ц": "TS", "У": "U", "К": "K", "Е": "E", "Н": "N", "Г": "G", "Ш": "SH", "Щ": "SCH", "З": "Z", "Х": "H", "Ъ": "", "Ф": "F", "Ы": "Y", "В": "V", "А": "a", "П": "P", "Р": "R", "О": "O", "Л": "L", "Д": "D", "Ж": "ZH", "Э": "E", "Я": "Ya", "Ч": "CH", "С": "S", "М": "M", "И": "I", "Т": "T", "Ь": "", "Б": "B", "Ю": "YU", "ё": "yo", "й": "i", "ц": "ts", "у": "u", "к": "k", "е": "e", "н": "n", "г": "g", "ш": "sh", "щ": "sch", "з": "z", "х": "h", "ъ": "", "ф": "f", "ы": "y", "в": "v", "а": "a", "п": "p", "р": "r", "о": "o", "л": "l", "д": "d", "ж": "zh", "э": "e", "я": "ya", "ч": "ch", "с": "s", "м": "m", "и": "i", "т": "t", "ь": "", "б": "b", "ю": "yu", "і": "i", "ї": "yi", "є": "ye" };
 
                 return text.split('').map(function (char) {
                     return a[char] || char;
                 }).join("").toLowerCase()
-                  .replace(/\s+/g, '-')       // Замінити пробіли на -
-                  .replace(/[^\w\-]+/g, '')   // Видалити всі не-словесні символи
-                  .replace(/\-\-+/g, '-')     // Замінити кілька - на один -
-                  .replace(/^-+/, '')          // Обрізати - з початку
-                  .replace(/-+$/, '');         // Обрізати - з кінця
+                    .replace(/\s+/g, '-')       // Замінити пробіли на -
+                    .replace(/[^\w\-]+/g, '')   // Видалити всі не-словесні символи
+                    .replace(/\-\-+/g, '-')     // Замінити кілька - на один -
+                    .replace(/^-+/, '')          // Обрізати - з початку
+                    .replace(/-+$/, '');         // Обрізати - з кінця
             }
 
             // Створюємо контейнер для нашого меню
             const anchorContainer = document.createElement('div');
             anchorContainer.className = 'faq-anchors';
-            
+
             const anchorList = document.createElement('div');
             anchorList.className = 'faq-anchors__list';
-            
+
             // Проходимо по кожному знайденому заголовку
             categoryTitles.forEach(title => {
                 const titleText = title.textContent;
@@ -672,7 +678,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const link = document.createElement('a');
                 link.href = `#${anchorId}`;
                 link.textContent = titleText;
-                
+
                 // 3. Додаємо посилання до списку
                 anchorList.appendChild(link);
             });
